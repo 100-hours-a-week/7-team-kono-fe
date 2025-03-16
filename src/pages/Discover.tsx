@@ -1,5 +1,11 @@
+import SearchBar from '../components/common/SearchBar';
+
 const Discover = () => {
-  return <div>Discover</div>;
+  return (
+    <div>
+      <SearchBar />
+    </div>
+  );
 };
 
 export default Discover;
