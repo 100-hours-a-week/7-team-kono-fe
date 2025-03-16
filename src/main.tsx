@@ -13,6 +13,7 @@ import CoinDetail from './pages/CoinDetail.tsx';
 import Profile from './pages/Profile.tsx';
 import Trade from './pages/Trade.tsx';
 import Transaction from './pages/Transaction.tsx';
+import Login from './pages/Login.tsx';
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Favorites />,
+      },
+      {
+        path: 'login',
+        element: <Login />,
       },
       {
         path: 'wallet',

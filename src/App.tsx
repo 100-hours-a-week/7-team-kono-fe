@@ -1,16 +1,7 @@
-import { Outlet } from 'react-router-dom';
-import BottomNavigation from './components/layout/BottomNavigation';
-import './App.css';
+import Layout from './components/layout/Layout';
 
-import Header from './components/layout/Header';
 function App() {
-  return (
-    <>
-      <Header />
-      <Outlet />
-      <BottomNavigation />
-    </>
-  );
+  return <Layout />;
 }
 
 export default App;
