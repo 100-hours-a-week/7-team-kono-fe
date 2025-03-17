@@ -24,7 +24,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         onChange={(e) => onChange(e.target.value)}
       />
 
-      <button className="absolute right-0 top-1/2 transform -translate-y-1/2 text-grayBg hover:text-gray-400">
+      <button className="absolute right-0 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-konoBlue">
         <IoIosSearch className="text-2xl" />
       </button>
     </div>
