@@ -6,14 +6,16 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import NotFound from './pages/NotFound.tsx';
 import Wallet from './pages/Wallet.tsx';
 import Discover from './pages/Discover.tsx';
-import Favorites from './pages/Favorites.tsx';
-import Rankings from './pages/Rankings.tsx';
+import Favorite from './pages/Favorite.tsx';
+import Ranking from './pages/Ranking.tsx';
 import Settings from './pages/Settings.tsx';
 import CoinDetail from './pages/CoinDetail.tsx';
 import Profile from './pages/Profile.tsx';
 import Trade from './pages/Trade.tsx';
 import Transaction from './pages/Transaction.tsx';
 import Login from './pages/Login.tsx';
+import KakaoCallback from './pages/KakaoCallback.tsx';
+import { ThemeProvider } from './contexts/ThemeContext.tsx';
 
 const router = createBrowserRouter([
   {
@@ -23,7 +25,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Favorites />,
+        element: <Favorite />,
       },
       {
         path: 'login',
@@ -39,11 +41,11 @@ const router = createBrowserRouter([
       },
       {
         path: 'favorites',
-        element: <Favorites />,
+        element: <Favorite />,
       },
       {
         path: 'rankings',
-        element: <Rankings />,
+        element: <Ranking />,
       },
       {
         path: 'settings',
@@ -54,16 +56,40 @@ const router = createBrowserRouter([
         element: <Profile />,
       },
       {
-        path: 'trade',
-        element: <Trade />,
+        path: 'users/:nickname',
+        element: <Profile />,
       },
+      // {
+      //   path: 'trade',
+      //   element: <Trade />,
+      // },
+      // {
+      //   path: 'trade/:ticker',
+      //   element: <Trade />,
+      // },
       {
         path: 'transaction',
         element: <Transaction />,
       },
+      // {
+      //   path: 'coins/:ticker/buy',
+      //   element: <Trade />,
+      // },
+      // {
+      //   path: 'coins/:ticker/sell',
+      //   element: <Trade />,
+      // },
       {
-        path: 'coin/:ticker',
+        path: 'coins/:ticker/:type',
+        element: <Trade />,
+      },
+      {
+        path: 'coins/:ticker',
         element: <CoinDetail />,
+      },
+      {
+        path: 'oauth/kakao/callback',
+        element: <KakaoCallback />,
       },
     ],
   },
@@ -71,6 +97,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <ThemeProvider>
+      <RouterProvider router={router} />
+    </ThemeProvider>
   </StrictMode>,
 );
