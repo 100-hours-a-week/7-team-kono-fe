@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## <small>1.0.1 (2025-03-18)</small>
+
+* docs: add pr template and add labels to issue templates ([fbe0a42](https://github.com/100-hours-a-week/7-team-secretjuju-kono-fe/commit/fbe0a42))
+
 ## 1.0.0 (2025-03-16)
 
 * chore: add issue template ([641cfe6](https://github.com/100-hours-a-week/7-team-secretjuju-kono-fe/commit/641cfe6))
