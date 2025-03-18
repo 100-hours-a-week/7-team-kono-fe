@@ -130,7 +130,7 @@ export default function Discover() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100">
+    <div className="flex flex-col min-h-screen">
       <Header title="탐색" />
       <div className="p-4 sticky top-0 z-10 rounded-xl mb-4">
         <div className="relative">
@@ -153,7 +153,7 @@ export default function Discover() {
       </div>
 
       {/* 정렬 탭 */}
-      <div className="flex mx-4 border-b bg-white sticky top-[116px] z-10 rounded-t-xl">
+      <div className="flex mx-4 border-b bg-white sticky top-[116px] z-10 rounded-t-xl dark:bg-gray-800 dark:text-white dark:border-gray-700">
         {(['시가총액', '가격', '등락률'] as SortType[]).map((tab) => (
           <button
             key={tab}
@@ -171,12 +171,11 @@ export default function Discover() {
 
       {/* 코인 리스트 */}
       <div className="mx-4 flex-1 rounded-b-xl overflow-hidden mb-4">
-        {sortedCoins.map((coin, index) => (
+        {sortedCoins.map((coin) => (
           <div
             key={coin.id}
-            className={`p-4 border-b border-gray-200 bg-white flex items-center ${
-              index === sortedCoins.length - 1 ? 'rounded-b-xl border-b-0' : ''
-            }`}
+            className={`p-4 border-b border-gray-200 bg-white flex items-center dark:border-gray-700 dark:bg-gray-800 dark:text-white last:border-0
+            `}
             onClick={() => navigate(`/coins/${coin.symbol}`)}
           >
             <img

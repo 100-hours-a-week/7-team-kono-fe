@@ -1,10 +1,9 @@
 import { useState, useEffect, useRef, useCallback, memo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { IoIosArrowBack } from 'react-icons/io';
-import { FaStar, FaRegStar } from 'react-icons/fa';
-import { useUpbitWebSocket } from '../hooks/useUpbitWebSocket';
+import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import Header from '../components/layout/Header';
-import { FaHeart } from 'react-icons/fa';
+// TradingViewWidget 컴포넌트 임포트
+import TradingViewWidget from '../components/TradingViewWidget';
 
 interface CoinData {
   id: string;
@@ -22,41 +21,35 @@ interface CoinData {
 // 차트 컴포넌트를 메모이제이션하여 불필요한 리렌더링 방지
 const Chart = memo(
   ({ ticker, timeframe }: { ticker: string; timeframe: string }) => {
-    const chartContainerRef = useRef<HTMLDivElement>(null);
-    const chartInitializedRef = useRef(false);
-
-    useEffect(() => {
-      if (!ticker || !chartContainerRef.current || chartInitializedRef.current)
-        return;
-
-      try {
-        // 간단한 차트 대체 (TradingView 대신)
-        const chartElement = document.createElement('div');
-        chartElement.className =
-          'w-full h-full flex items-center justify-center';
-        chartElement.textContent = `${ticker} 차트 (${timeframe})`;
-
-        // 기존 내용 제거 후 추가
-        if (chartContainerRef.current) {
-          chartContainerRef.current.innerHTML = '';
-          chartContainerRef.current.appendChild(chartElement);
-          chartInitializedRef.current = true;
-        }
-      } catch (error) {
-        console.error('차트 초기화 오류:', error);
+    // 타임프레임을 TradingView 형식으로 변환
+    const getTradingViewInterval = (tf: string) => {
+      switch (tf) {
+        case '1D':
+          return '60'; // 1시간 간격
+        case '1W':
+          return '240'; // 4시간 간격
+        case '1M':
+          return 'D'; // 일 간격
+        case '1Y':
+          return 'W'; // 주 간격
+        default:
+          return '60';
       }
+    };
 
-      return () => {
-        chartInitializedRef.current = false;
-      };
-    }, [ticker, timeframe]);
+    // 심볼 형식 변환 (BTC -> UPBIT:BTCKRW)
+    const symbol = `UPBIT:${ticker}KRW`;
 
     return (
-      <div
-        ref={chartContainerRef}
-        className="w-full h-[400px] border-b bg-gray-50 flex items-center justify-center"
-      >
-        {ticker} 차트 영역 (개발 중)
+      <div className="w-full h-[400px] border-b bg-gray-50">
+        <TradingViewWidget
+          symbol={symbol}
+          theme="light"
+          interval={getTradingViewInterval(timeframe)}
+          locale="kr"
+          width="100%"
+          height="100%"
+        />
       </div>
     );
   },
@@ -91,6 +84,15 @@ const PriceInfo = memo(({ coin }: { coin: CoinData }) => {
   );
 });
 
+// TradingView 타입 정의
+declare global {
+  interface Window {
+    TradingView: {
+      widget: any;
+    };
+  }
+}
+
 export default function CoinDetail() {
   const { ticker } = useParams<{ ticker: string }>();
   const navigate = useNavigate();
@@ -100,9 +102,6 @@ export default function CoinDetail() {
   const [error, setError] = useState<string | null>(null);
   const [timeframe, setTimeframe] = useState<'1D' | '1W' | '1M' | '1Y'>('1D');
 
-  // 웹소켓 데이터 가져오기 - ticker가 있을 때만 연결
-  const tickerData = useUpbitWebSocket(ticker ? [ticker] : []);
-
   // 초기 코인 데이터 로드
   useEffect(() => {
     if (!ticker) return;
@@ -110,7 +109,7 @@ export default function CoinDetail() {
     const fetchCoinData = async () => {
       try {
         setLoading(true);
-        // API 호출 대신 임시 데이터 사용
+        // 더미 데이터 사용
         const mockData: CoinData = {
           id: '1',
           name:
@@ -153,6 +152,31 @@ export default function CoinDetail() {
         };
 
         setCoin(mockData);
+
+        // 가격 변동 시뮬레이션 (웹소켓 대체)
+        const simulatePriceChanges = setInterval(() => {
+          setCoin((prevCoin) => {
+            if (!prevCoin) return null;
+
+            // 랜덤한 가격 변동 (-0.5% ~ +0.5%)
+            const priceChange = prevCoin.price * (Math.random() * 0.01 - 0.005);
+            const newPrice = Math.max(prevCoin.price + priceChange, 0);
+
+            // 새로운 가격 변동률 계산 (-3% ~ +3%)
+            const newPriceChange =
+              prevCoin.priceChange24h + (Math.random() * 0.2 - 0.1);
+
+            return {
+              ...prevCoin,
+              price: newPrice,
+              priceChange24h: newPriceChange,
+              high24h: Math.max(prevCoin.high24h, newPrice),
+              low24h: Math.min(prevCoin.low24h, newPrice),
+            };
+          });
+        }, 5000); // 5초마다 가격 변동
+
+        return () => clearInterval(simulatePriceChanges);
       } catch (err) {
         setError('코인 정보를 불러오는데 실패했습니다.');
         console.error(err);
@@ -163,33 +187,6 @@ export default function CoinDetail() {
 
     fetchCoinData();
   }, [ticker]);
-
-  // 웹소켓 데이터로 코인 정보 업데이트 - 최적화 버전
-  const lastPriceRef = useRef<number | null>(null);
-
-  useEffect(() => {
-    if (!ticker || !tickerData[ticker] || !coin) return;
-
-    const data = tickerData[ticker];
-
-    // 가격이 이전과 동일하면 업데이트하지 않음
-    if (lastPriceRef.current === data.trade_price) return;
-
-    // 가격이 변경된 경우에만 업데이트
-    lastPriceRef.current = data.trade_price;
-
-    setCoin((prevCoin) => {
-      if (!prevCoin) return null;
-      return {
-        ...prevCoin,
-        price: data.trade_price,
-        priceChange24h: data.signed_change_rate * 100,
-        high24h: data.high_price,
-        low24h: data.low_price,
-        volume24h: data.acc_trade_price_24h || data.acc_trade_price,
-      };
-    });
-  }, [ticker, tickerData]);
 
   // 즐겨찾기 토글 함수
   const toggleFavorite = useCallback(() => {
@@ -204,7 +201,7 @@ export default function CoinDetail() {
 
   if (loading) {
     return (
-      <div className="flex flex-col min-h-screen bg-white">
+      <div className="flex flex-col min-h-screen">
         <Header title="로딩 중..." />
         <div className="flex-1 flex items-center justify-center">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
@@ -215,7 +212,7 @@ export default function CoinDetail() {
 
   if (error || !coin) {
     return (
-      <div className="flex flex-col min-h-screen bg-white">
+      <div className="flex flex-col min-h-screen">
         <Header title="오류" />
         <div className="flex-1 flex items-center justify-center p-4">
           <div className="text-center">
@@ -235,16 +232,16 @@ export default function CoinDetail() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex flex-col min-h-screen">
       {/* 헤더 */}
       <Header
         title={coin.name}
         rightElement={
           <button onClick={toggleFavorite} className="p-2">
             {coin.isFavorite ? (
-              <FaStar className="text-yellow-400 text-xl" />
+              <FaHeart className="text-red-400 text-xl" />
             ) : (
-              <FaRegStar className="text-gray-400 text-xl" />
+              <FaHeart className="text-gray-400 text-xl" />
             )}
           </button>
         }
@@ -315,13 +312,4 @@ export default function CoinDetail() {
       </div>
     </div>
   );
-}
-
-// TradingView 타입 정의
-declare global {
-  interface Window {
-    TradingView: {
-      widget: any;
-    };
-  }
 }

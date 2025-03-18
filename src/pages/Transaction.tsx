@@ -102,7 +102,7 @@ export default function Transaction() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100">
+    <div className="flex flex-col min-h-screen">
       {/* 헤더 */}
       <Header title="매매 내역" />
 

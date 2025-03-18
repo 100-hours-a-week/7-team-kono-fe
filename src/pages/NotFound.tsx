@@ -4,7 +4,7 @@ export default function NotFound() {
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex flex-col min-h-screen">
       <div className="flex-1 flex flex-col items-center justify-center p-4">
         <h1 className="text-4xl font-bold mb-4">404</h1>
         <p className="text-xl mb-8">페이지를 찾을 수 없습니다</p>

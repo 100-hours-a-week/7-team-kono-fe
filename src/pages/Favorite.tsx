@@ -120,14 +120,14 @@ export default function Favorites() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100">
+    <div className="flex flex-col min-h-screen">
       <Header title="관심종목" />
       <div className="p-4 sticky top-0 z-10 rounded-full mx-2 mb-4">
         <div className="relative">
           <input
             type="text"
             placeholder="코인 검색"
-            className="w-full p-3 bg-white dark:bg-gray-800 rounded-full px-6"
+            className="w-full p-3 bg-white dark:bg-gray-800 rounded-full px-6 dark:text-white"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -145,14 +145,10 @@ export default function Favorites() {
       {/* 코인 리스트 */}
       <div className="flex-1 mx-4 rounded-2xl overflow-hidden mb-4">
         {filteredCoins.length > 0 ? (
-          filteredCoins.map((coin, index) => (
+          filteredCoins.map((coin) => (
             <div
               key={coin.id}
-              className={`p-4 border-b border-gray-200 bg-white flex items-center ${
-                index === filteredCoins.length - 1
-                  ? 'rounded-b-xl border-b-0'
-                  : ''
-              }`}
+              className={`p-4 border-b border-gray-200 bg-white flex items-center last:border-0 dark:border-gray-700 dark:bg-gray-800 dark:text-white`}
               onClick={() => navigate(`/coins/${coin.symbol}`)}
             >
               <img

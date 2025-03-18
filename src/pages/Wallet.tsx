@@ -171,18 +171,18 @@ const Wallet = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100">
+    <div className="flex flex-col min-h-screen">
       <Header
         title="지갑"
         rightElement={
           <button onClick={goToTransaction}>
-            <FaHistory className="mr-1 text-xl text-gray-500" />
+            <FaHistory className="mr-1 text-xl text-gray-500 dark:text-white" />
           </button>
         }
       />
 
       {/* 잔액 정보 카드 */}
-      <div className="mx-4 mt-4 p-4 bg-white rounded-xl shadow-sm">
+      <div className="mx-4 mt-4 p-4 bg-white rounded-xl shadow-sm dark:bg-gray-800 dark:text-white">
         <div className="text-2xl font-bold">
           {totalAsset.toLocaleString()} KRW
           <span
@@ -192,14 +192,14 @@ const Wallet = () => {
             {profitRate.toFixed(2)}%)
           </span>
         </div>
-        <div className="flex justify-between mt-4 text-gray-600">
+        <div className="flex justify-between mt-4 text-gray-600 dark:text-white">
           <div>
             <div>투자금</div>
             <div className="font-medium">
               {initialInvestment.toLocaleString()} KRW
             </div>
           </div>
-          <div className="text-right">
+          <div className="text-left">
             <div>현금</div>
             <div className="font-medium">
               {cashBalance.toLocaleString()} KRW
@@ -209,7 +209,7 @@ const Wallet = () => {
       </div>
 
       {/* 포트폴리오 차트 섹션 */}
-      <div className="flex flex-col mt-6 bg-white mx-4 rounded-xl p-4">
+      <div className="flex flex-col mt-6 bg-white mx-4 rounded-xl p-4 dark:bg-gray-800 dark:text-white">
         <h2 className="text-lg font-bold mb-4">자산 분배</h2>
         <div
           className="w-full max-w-[200px] mx-auto"
@@ -248,14 +248,14 @@ const Wallet = () => {
       </div>
 
       {/* 보유 코인 목록 */}
-      <div className="mx-4 mt-6 bg-white rounded-xl mb-4">
-        <div className="p-4 border-b">
+      <div className="mx-4 mt-6 bg-white rounded-xl mb-4 dark:bg-gray-800 dark:text-white">
+        <div className="p-4 border-b dark:border-gray-700">
           <h2 className="text-lg font-bold">보유 코인</h2>
         </div>
         {holdingCoins.map((coin) => (
           <div
             key={coin.id}
-            className="p-4 border-b flex items-center"
+            className="p-4 border-b dark:border-gray-700 last:border-b-0 flex items-center"
             onClick={() => navigate(`/coins/${coin.symbol}`)}
           >
             <img

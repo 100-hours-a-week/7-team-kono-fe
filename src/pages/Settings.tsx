@@ -59,7 +59,7 @@ const Settings = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900 dark:text-white">
+    <div className="flex flex-col min-h-screen">
       <Header title="설정" />
 
       {/* 다크 모드 설정 */}

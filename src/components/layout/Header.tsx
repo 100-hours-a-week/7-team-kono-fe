@@ -10,14 +10,14 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ title, rightElement }) => {
   const navigate = useNavigate();
   return (
-    <header className="fixed top-0 left-0 right-0 z-20 bg-white border-b border-gray-200">
+    <header className="fixed top-0 left-0 right-0 z-20 bg-white border-b border-gray-200 dark:border-0 dark:bg-gray-900 dark:text-white">
       {/* 내부 컨테이너 - 최대 너비 제한 */}
       <div className="max-w-[430px] w-full mx-auto flex justify-between items-center h-14 px-4 relative">
         <button
           onClick={() => navigate(-1)}
-          className="w-10 h-10 flex items-center justify-center -ml-1"
+          className="w-10 h-10 flex items-center justify-center -ml-1 "
         >
-          <IoIosArrowBack className="text-2xl text-gray-500" />
+          <IoIosArrowBack className="text-2xl text-gray-500 dark:text-white" />
         </button>
 
         {/* 중앙 제목 */}
@@ -35,27 +35,3 @@ const Header: React.FC<HeaderProps> = ({ title, rightElement }) => {
 };
 
 export default Header;
-
-// import React from 'react';
-
-// interface HeaderProps {
-//   title: string;
-//   leftElement?: React.ReactNode;
-//   rightElement?: React.ReactNode;
-// }
-
-// const Header: React.FC<HeaderProps> = ({
-//   title,
-//   leftElement,
-//   rightElement,
-// }) => {
-//   return (
-//     <div className="bg-white p-4 flex items-center justify-between">
-//       <div className="w-24">{leftElement}</div>
-//       <h1 className="text-xl font-bold">{title}</h1>
-//       <div className="w-24 flex justify-end">{rightElement}</div>
-//     </div>
-//   );
-// };
-
-// export default Header;

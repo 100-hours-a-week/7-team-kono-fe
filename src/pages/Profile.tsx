@@ -1,222 +1,196 @@
-import { useState, useRef, ChangeEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { IoIosArrowBack, IoIosClose } from 'react-icons/io';
-import { API_ENDPOINTS } from '../config/apiEndpoints';
-import Header from '../components/layout/Header';
+import React, { useState, useEffect, useRef } from 'react';
+import { useAuth } from '../contexts/AuthContext';
+import {
+  getUserProfile,
+  updateProfileImage,
+  updateNickname,
+} from '../api/user';
+import { toast } from 'react-toastify';
 
-export default function Profile() {
-  const navigate = useNavigate();
+interface ProfileData {
+  id: string;
+  nickname: string;
+  email: string;
+  profileImage: string;
+}
+
+const Profile: React.FC = () => {
+  const { refreshAuth } = useAuth();
+  const [profile, setProfile] = useState<ProfileData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(true);
+  const [nickname, setNickname] = useState('');
+  const [isEditingNickname, setIsEditingNickname] = useState(false);
+  const [imageUploading, setImageUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // 상태 관리
-  const [nickname, setNickname] = useState('코인마스터');
-  const [profileImage, setProfileImage] = useState<string | null>(
-    'https://static.upbit.com/logos/BTC.png',
-  );
-  const [isEditing, setIsEditing] = useState(false);
-  const [tempNickname, setTempNickname] = useState(nickname);
-  const [error, setError] = useState('');
-
-  // 허용된 이미지 타입
-  const allowedImageTypes = [
-    'image/jpeg',
-    'image/jpg',
-    'image/png',
-    'image/webp',
-  ];
-
-  // 프로필 이미지 선택
-  const handleImageClick = () => {
-    fileInputRef.current?.click();
+  // 더미 프로필 데이터 추가
+  const dummyProfile = {
+    nickname: '사용자',
+    profileImage: 'https://via.placeholder.com/150',
   };
 
-  // 이미지 파일 변경 처리
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      // 파일 크기 체크 (5MB 제한)
-      if (file.size > 5 * 1024 * 1024) {
-        setError('이미지 크기는 5MB 이하여야 합니다.');
-        return;
-      }
+  const [useRealData, setUseRealData] = useState(false);
+  const [profileData, setProfileData] = useState(null);
 
-      // 이미지 타입 체크
-      if (!allowedImageTypes.includes(file.type)) {
-        setError('JPG, JPEG, PNG, WEBP 형식의 이미지만 업로드 가능합니다.');
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onload = () => {
-        setProfileImage(reader.result as string);
-        setError('');
-      };
-      reader.readAsDataURL(file);
+  // 실제 데이터를 가져오는 함수 (필요한 경우 구현)
+  const fetchProfileData = async () => {
+    setLoading(true);
+    try {
+      // API 호출 등을 통해 실제 데이터 가져오기
+      // const response = await api.getProfile();
+      // setProfileData(response.data);
+    } catch (error) {
+      console.error('프로필 데이터를 가져오는 중 오류 발생:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // 닉네임 수정 모드 시작
-  const startEditing = () => {
-    setIsEditing(true);
-    setTempNickname(nickname);
-  };
+  // 실제 데이터를 사용할 경우에만 데이터 가져오기
+  useEffect(() => {
+    if (useRealData) {
+      fetchProfileData();
+    }
+  }, [useRealData]);
 
-  // 닉네임 수정 취소
-  const cancelEditing = () => {
-    setIsEditing(false);
-    setTempNickname(nickname);
-    setError('');
-  };
+  // 더미 데이터 또는 실제 데이터 사용
+  const displayProfile = error || !profileData ? dummyProfile : profileData;
 
-  // 닉네임 저장
-  const saveNickname = () => {
-    // 닉네임 유효성 검사
-    if (!tempNickname.trim()) {
-      setError('닉네임을 입력해주세요.');
+  // 프로필 정보 로드
+  useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        setLoading(true);
+        const data = await getUserProfile();
+        setProfile(data);
+        setNickname(data.nickname);
+      } catch (err) {
+        setError(true);
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProfile();
+  }, []);
+
+  // 프로필 이미지 변경 핸들러
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    const file = files[0];
+    // 이미지 파일 타입 검증
+    if (!file.type.startsWith('image/')) {
+      toast.error('이미지 파일만 업로드 가능합니다.');
       return;
     }
 
-    if (tempNickname.length < 2 || tempNickname.length > 10) {
-      setError('닉네임은 2~10자 사이여야 합니다.');
+    try {
+      setImageUploading(true);
+      await updateProfileImage(file);
+
+      // 프로필 정보 다시 로드
+      const updatedProfile = await getUserProfile();
+      setProfile(updatedProfile);
+
+      // 인증 컨텍스트 갱신
+      await refreshAuth();
+
+      toast.success('프로필 이미지가 업데이트되었습니다.');
+    } catch (err) {
+      toast.error('이미지 업로드에 실패했습니다.');
+      console.error(err);
+    } finally {
+      setImageUploading(false);
+    }
+  };
+
+  // 닉네임 변경 핸들러
+  const handleNicknameSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!nickname.trim()) {
+      toast.error('닉네임을 입력해주세요.');
       return;
     }
 
-    // 닉네임 저장 로직
-    setNickname(tempNickname);
-    setIsEditing(false);
-    setError('');
+    try {
+      await updateNickname(nickname);
 
-    // API 호출 (실제 구현 시)
-    // fetch(API_ENDPOINTS.USERS.NICKNAME, {
-    //   method: 'PUT',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ nickname: tempNickname })
-    // });
+      // 프로필 정보 다시 로드
+      const updatedProfile = await getUserProfile();
+      setProfile(updatedProfile);
+
+      // 인증 컨텍스트 갱신
+      await refreshAuth();
+
+      setIsEditingNickname(false);
+      toast.success('닉네임이 업데이트되었습니다.');
+    } catch (err) {
+      toast.error('닉네임 변경에 실패했습니다.');
+      console.error(err);
+    }
   };
 
-  // 프로필 저장
-  const saveProfile = () => {
-    // 프로필 저장 로직 (실제 구현 시)
-    // 이미지와 닉네임 모두 저장
-    navigate('/settings');
-  };
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div
+          className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full"
+          role="status"
+        >
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100">
-      <Header title="프로필 수정" />
-
-      {/* 프로필 이미지 섹션 */}
-      <div className="flex flex-col items-center mt-8">
-        <div className="relative">
-          <div
-            className="w-24 h-24 rounded-full overflow-hidden border-2 border-gray-200 bg-gray-100 flex items-center justify-center"
-            onClick={handleImageClick}
-          >
-            {profileImage ? (
-              <img
-                src={profileImage}
-                alt="프로필"
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <span className="text-gray-400 text-4xl">BTC</span>
-            )}
+    <div
+      className="profile-container"
+      style={{ padding: '20px', textAlign: 'center' }}
+    >
+      {error ? (
+        // 에러 상태일 때 더미 데이터로 프로필 표시
+        <div>
+          <div style={{ marginBottom: '20px', color: '#888' }}>
+            (더미 데이터를 사용하여 표시 중입니다)
           </div>
-
-          {/* 이미지 변경 버튼 */}
-          <button
-            className="absolute bottom-0 right-0 bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center"
-            onClick={handleImageClick}
-          >
-            +
-          </button>
-
-          {/* 숨겨진 파일 입력 */}
-          <input
-            type="file"
-            ref={fileInputRef}
-            className="hidden"
-            accept="image/jpeg,image/jpg,image/png,image/webp"
-            onChange={handleImageChange}
+          <div className="profile-content">
+            <img
+              src={displayProfile.profileImage}
+              alt="프로필 이미지"
+              style={{
+                width: '150px',
+                height: '150px',
+                borderRadius: '50%',
+                marginBottom: '15px',
+              }}
+            />
+            <h2 style={{ color: '#fff' }}>{displayProfile.nickname}</h2>
+          </div>
+        </div>
+      ) : (
+        // 정상 상태일 때 실제 프로필 표시
+        <div className="profile-content">
+          <img
+            src={displayProfile.profileImage}
+            alt="프로필 이미지"
+            style={{
+              width: '150px',
+              height: '150px',
+              borderRadius: '50%',
+              marginBottom: '15px',
+            }}
           />
+          <h2 style={{ color: '#fff' }}>{displayProfile.nickname}</h2>
         </div>
-
-        <button
-          className="mt-2 text-blue-500 text-sm"
-          onClick={handleImageClick}
-        >
-          프로필 이미지 변경
-        </button>
-
-        {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
-      </div>
-
-      {/* 닉네임 섹션 */}
-      <div className="mx-4 mt-8 bg-white rounded-xl p-4">
-        <div className="flex justify-between items-center mb-2">
-          <h2 className="font-medium">닉네임</h2>
-          {!isEditing && (
-            <button className="text-blue-500 text-sm" onClick={startEditing}>
-              수정
-            </button>
-          )}
-        </div>
-
-        {isEditing ? (
-          <div>
-            <div className="relative">
-              <input
-                type="text"
-                value={tempNickname}
-                onChange={(e) => setTempNickname(e.target.value)}
-                className="w-full p-3 bg-gray-100 rounded-xl pr-10"
-                maxLength={10}
-              />
-              {tempNickname && (
-                <button
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2"
-                  onClick={() => setTempNickname('')}
-                >
-                  <IoIosClose className="text-2xl" />
-                </button>
-              )}
-            </div>
-
-            {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-
-            <div className="text-right text-sm text-gray-500 mt-1">
-              {tempNickname.length}/10
-            </div>
-
-            <div className="flex gap-3 mt-4">
-              <button
-                className="flex-1 py-3 rounded-xl bg-gray-200 text-gray-700 font-medium"
-                onClick={cancelEditing}
-              >
-                취소
-              </button>
-              <button
-                className="flex-1 py-3 rounded-xl bg-blue-500 text-white font-medium"
-                onClick={saveNickname}
-              >
-                저장
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div className="p-3 bg-gray-100 rounded-xl">{nickname}</div>
-        )}
-      </div>
-
-      {/* 저장 버튼 */}
-      <div className="fixed bottom-16 left-0 right-0 max-w-[430px] mx-auto p-4">
-        <button
-          className="w-full py-4 rounded-xl bg-blue-500 text-white font-bold"
-          onClick={saveProfile}
-        >
-          수정하기
-        </button>
-      </div>
+      )}
     </div>
   );
-}
+};
+
+export default Profile;

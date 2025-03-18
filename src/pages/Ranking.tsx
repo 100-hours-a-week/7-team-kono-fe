@@ -117,11 +117,11 @@ export default function Ranking() {
   const myRanking = users.find((user) => user.name === '나');
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100">
+    <div className="flex flex-col min-h-screen">
       <Header title="랭킹" />
 
       {/* 기간 선택 탭 */}
-      <div className="flex border-b bg-white sticky top-0 z-10 rounded-t-xl">
+      <div className="mx-4 flex border-b bg-white sticky top-0 z-10 rounded-t-xl dark:bg-gray-800 dark:text-white dark:border-gray-700">
         {(['일간', '전체'] as RankingPeriod[]).map((period) => (
           <button
             key={period}
@@ -138,7 +138,7 @@ export default function Ranking() {
       </div>
 
       {/* 상위 3명 */}
-      <div className="bg-white p-4 py-6 rounded-b-xl mb-2">
+      <div className="bg-white p-4 py-6 rounded-b-xl mb-2 dark:bg-gray-800 dark:text-white mx-4">
         <div className="flex justify-around items-end">
           {/* 2등 */}
           <div className="flex flex-col items-center">
@@ -209,17 +209,20 @@ export default function Ranking() {
       </div>
 
       {/* 랭킹 기간 정보 */}
-      <div className="bg-white p-4 border-b rounded-t-xl">
-        <div className="text-gray-500 text-sm">
+      <div className="bg-white p-4 border-b rounded-t-xl dark:bg-gray-800 dark:text-white mx-4 dark:border-gray-600">
+        <div className="text-gray-500 text-sm dark:text-gray-400">
           {activePeriod === '일간' && '2025년 3월 17일 기준'}
           {activePeriod === '전체' && '가입일부터 현재까지'}
         </div>
       </div>
 
       {/* 나머지 랭킹 */}
-      <div className="flex-1 bg-white rounded-b-xl">
+      <div className="flex-1 bg-white rounded-b-xl dark:bg-gray-800 dark:text-white mx-4">
         {otherUsers.map((user) => (
-          <div key={user.id} className="flex items-center p-4 border-b">
+          <div
+            key={user.id}
+            className="flex items-center p-4 border-b dark:border-gray-700"
+          >
             <div className="w-8 text-center font-bold mr-4">{user.rank}</div>
             <img
               src={`https://static.upbit.com/logos/${user.profileCoin}.png`}
@@ -240,7 +243,7 @@ export default function Ranking() {
 
       {/* 내 랭킹 */}
       {myRanking && (
-        <div className="sticky bottom-16 rounded-xl min-w-[430px] mx-auto bg-white border-t p-4 shadow-md">
+        <div className="sticky bottom-16 rounded-xl min-w-[430px] mx-auto bg-white border-t p-4 shadow-md dark:bg-gray-800 dark:text-white dark:border-gray-700">
           <div className="flex items-center">
             <div className="w-8 text-center font-bold mr-4">
               {myRanking.rank}
