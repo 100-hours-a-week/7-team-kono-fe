@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import App from './App';
 import './index.css';
@@ -16,7 +15,6 @@ import Profile from './pages/Profile.tsx';
 import Trade from './pages/Trade.tsx';
 import Transaction from './pages/Transaction.tsx';
 import Login from './pages/Login.tsx';
-import KakaoCallback from './pages/KakaoCallback.tsx';
 import Layout from './components/layout/Layout';
 
 const router = createBrowserRouter([
@@ -79,10 +77,6 @@ const router = createBrowserRouter([
           {
             path: 'coins/ticker',
             element: <CoinDetail />,
-          },
-          {
-            path: 'oauth/kakao/callback',
-            element: <KakaoCallback />,
           },
         ],
       },

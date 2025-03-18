@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { initializeKakao, loginWithKakao } from '../../services/kakaoAuth';
+import { initializeKakaoSDK, loginWithKakao } from '../../services/kakaoAuth';
 import kakaoLoginButtonImg from '../../assets/images/kakao_login_medium_wide.png';
 
 const KakaoLoginButton: React.FC = () => {
@@ -7,10 +7,10 @@ const KakaoLoginButton: React.FC = () => {
     // 컴포넌트 마운트 시 SDK 초기화
     const initKakao = () => {
       if (document.readyState === 'complete') {
-        initializeKakao();
+        initializeKakaoSDK();
       } else {
-        window.addEventListener('load', initializeKakao);
-        return () => window.removeEventListener('load', initializeKakao);
+        window.addEventListener('load', initializeKakaoSDK);
+        return () => window.removeEventListener('load', initializeKakaoSDK);
       }
     };
 
