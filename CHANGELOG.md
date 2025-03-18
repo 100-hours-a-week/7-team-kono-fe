@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## <small>1.0.2 (2025-03-18)</small>
+
+* docs: update ✨-feature.md ([148bd36](https://github.com/100-hours-a-week/7-team-secretjuju-kono-fe/commit/148bd36))
+* chore: ✨-feature.md ([47b1857](https://github.com/100-hours-a-week/7-team-secretjuju-kono-fe/commit/47b1857))
+
 ## <small>1.0.1 (2025-03-18)</small>
 
 * docs: add pr template and add labels to issue templates ([fbe0a42](https://github.com/100-hours-a-week/7-team-secretjuju-kono-fe/commit/fbe0a42))
