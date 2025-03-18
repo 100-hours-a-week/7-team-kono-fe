@@ -158,7 +158,7 @@ export default function Trade() {
   // 로딩 중 표시
   if (loading) {
     return (
-      <div className="flex flex-col min-h-screen bg-white">
+      <div className="flex flex-col min-h-screen">
         <div className="p-4 flex items-center">
           <button onClick={() => navigate(-1)} className="p-1">
             <IoIosArrowBack className="text-2xl" />
@@ -166,7 +166,7 @@ export default function Trade() {
           <h1 className="text-lg font-bold ml-2">로딩 중...</h1>
         </div>
         <div className="flex-1 flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 dark:border-blue-400"></div>
         </div>
       </div>
     );
@@ -175,7 +175,7 @@ export default function Trade() {
   // 에러 표시
   if (error || !coin) {
     return (
-      <div className="flex flex-col min-h-screen bg-white">
+      <div className="flex flex-col min-h-screen">
         <div className="p-4 flex items-center">
           <button onClick={() => navigate(-1)} className="p-1">
             <IoIosArrowBack className="text-2xl" />
@@ -200,7 +200,7 @@ export default function Trade() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex flex-col min-h-screen">
       {/* 헤더 */}
       <div className="p-4 flex items-center">
         <button onClick={() => navigate(-1)} className="p-1">
@@ -212,7 +212,7 @@ export default function Trade() {
       </div>
 
       {/* 코인 정보 */}
-      <div className="p-4 border-b">
+      <div className="p-4 border-b dark:bg-gray-800 dark:text-white dark:border-gray-700">
         <div className="flex items-center mb-4">
           <img
             src={`https://static.upbit.com/logos/${coin.symbol}.png`}
@@ -237,7 +237,7 @@ export default function Trade() {
       </div>
 
       {/* 보유 자산 */}
-      <div className="p-4 border-b">
+      <div className="p-4 border-b dark:bg-gray-800 dark:text-white dark:border-gray-700">
         <div className="flex justify-between items-center">
           <div>
             <div className="text-sm text-gray-500">
@@ -261,10 +261,10 @@ export default function Trade() {
       </div>
 
       {/* 거래 수량 입력 */}
-      <div className="p-4 border-b">
+      <div className="p-4 border-b dark:bg-gray-800 dark:text-white dark:border-gray-700    ">
         <div className="flex justify-between items-center mb-2">
           <div className="text-sm text-gray-500">수량</div>
-          <div className="text-sm text-gray-500">
+          <div className="text-sm text-gray-500 dark:text-gray-400">
             최대:{' '}
             {type === 'buy'
               ? (cashBalance / coin.price).toFixed(8)
@@ -278,10 +278,10 @@ export default function Trade() {
             type="text"
             value={amount}
             onChange={handleAmountChange}
-            className="w-full p-3 border rounded-xl text-right pr-16"
+            className="w-full p-3 border rounded-xl text-right pr-16 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-400 dark:border-gray-700"
             placeholder="0"
           />
-          <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+          <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">
             {coin.symbol}
           </span>
         </div>
@@ -291,7 +291,7 @@ export default function Trade() {
           {percentOptions.map((percent) => (
             <button
               key={percent}
-              className="py-2 border rounded-lg text-sm"
+              className="py-2 border rounded-lg text-sm dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
               onClick={() => handlePercentClick(percent)}
             >
               {percent}%
@@ -301,9 +301,9 @@ export default function Trade() {
       </div>
 
       {/* 총액 */}
-      <div className="p-4 border-b">
+      <div className="p-4 border-b dark:bg-gray-800 dark:text-white dark:border-gray-700">
         <div className="flex justify-between items-center">
-          <div className="text-sm text-gray-500">총액</div>
+          <div className="text-sm text-gray-500 dark:text-gray-400">총액</div>
           <div className="text-xl font-bold">{total.toLocaleString()} 원</div>
         </div>
       </div>

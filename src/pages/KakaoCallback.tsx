@@ -1,64 +1,67 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { getKakaoUserInfo } from '../services/kakaoAuth';
-import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { loginWithKakao } from '../api/auth';
+import { useAuth } from '../contexts/AuthContext';
 
 const KakaoCallback: React.FC = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const { refreshAuth } = useAuth();
 
   useEffect(() => {
     const processKakaoLogin = async () => {
-      // URL에서 인증 코드 추출
-      const params = new URLSearchParams(location.search);
-      const code = params.get('code');
-
-      if (!code) {
-        setError('인증 코드를 찾을 수 없습니다.');
-        return;
-      }
-
       try {
-        // 백엔드에 인증 코드 전송하여 토큰 받기
-        // 실제 구현에서는 백엔드 API 엔드포인트로 변경해야 함
-        const tokenResponse = await axios.post('/api/auth/kakao', { code });
-        const { access_token } = tokenResponse.data;
+        // URL에서 인증 코드 추출
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
 
-        // 카카오 액세스 토큰으로 사용자 정보 가져오기
-        const userInfo = await getKakaoUserInfo(access_token);
+        if (!code) {
+          throw new Error('Authorization code not found');
+        }
 
-        // 사용자 정보를 로컬 스토리지나 상태 관리 라이브러리에 저장
-        localStorage.setItem(
-          'user',
-          JSON.stringify({
-            id: userInfo.id,
-            nickname: userInfo.properties.nickname,
-            profileImage: userInfo.properties.profile_image,
-            email: userInfo.kakao_account.email,
-            provider: 'kakao',
-          }),
-        );
+        // 백엔드로 코드 전송하여 로그인
+        await loginWithKakao(code);
+
+        // 인증 상태 갱신
+        await refreshAuth();
 
         // 로그인 성공 후 리다이렉트
-        navigate('/');
+        navigate('/', { replace: true });
       } catch (err) {
-        console.error('Kakao login error:', err);
+        console.error('Login failed:', err);
         setError('로그인 처리 중 오류가 발생했습니다.');
+        setLoading(false);
       }
     };
 
     processKakaoLogin();
-  }, [location, navigate]);
+  }, [navigate, refreshAuth]);
+
+  if (loading && !error) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="text-center">
+          <div
+            className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full"
+            role="status"
+          >
+            <span className="visually-hidden">Loading...</span>
+          </div>
+          <p className="mt-2">로그인 처리 중입니다...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-4">
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-          <p>{error}</p>
+      <div className="flex justify-center items-center h-screen">
+        <div className="text-center">
+          <div className="text-red-500 text-xl mb-4">⚠️ {error}</div>
           <button
             onClick={() => navigate('/login')}
-            className="mt-2 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
           >
             로그인 페이지로 돌아가기
           </button>
@@ -67,14 +70,7 @@ const KakaoCallback: React.FC = () => {
     );
   }
 
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4">
-      <div className="text-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900 mx-auto"></div>
-        <p className="mt-4 text-lg">로그인 처리 중입니다...</p>
-      </div>
-    </div>
-  );
+  return null;
 };
 
 export default KakaoCallback;

@@ -49,7 +49,7 @@ export default function TradeConfirmModal({
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-black bg-opacity-50 transition-opacity" />
+            <div className="fixed inset-0 bg-black bg-opacity-50 transition-opacity dark:bg-white dark:bg-opacity-50" />
           </Transition.Child>
 
           <div className="fixed inset-0 z-10">
@@ -65,14 +65,14 @@ export default function TradeConfirmModal({
               >
                 <Dialog.Panel
                   ref={panelRef}
-                  className="relative w-full max-w-[410px] transform bg-white rounded-t-3xl transition-all mx-auto overflow-hidden"
+                  className="relative w-full max-w-[410px] transform bg-white rounded-t-3xl transition-all mx-auto overflow-hidden dark:bg-gray-800 dark:text-white"
                 >
                   {/* X 버튼 */}
                   <button
                     onClick={onClose}
-                    className="absolute right-4 top-4 p-2 rounded-full hover:bg-gray-100"
+                    className="absolute right-4 top-4 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
                   >
-                    <XMarkIcon className="w-6 h-6 text-gray-500" />
+                    <XMarkIcon className="w-6 h-6 text-gray-500 dark:text-gray-400" />
                   </button>
 
                   {/* 스크롤 가능한 컨텐츠 영역 */}
@@ -81,7 +81,7 @@ export default function TradeConfirmModal({
                       <div className="text-center my-8">
                         <Dialog.Title
                           as="h3"
-                          className="text-lg text-gray-500 mb-2"
+                          className="text-lg text-gray-500 mb-2 dark:text-gray-400"
                         >
                           비트코인
                         </Dialog.Title>
@@ -93,11 +93,13 @@ export default function TradeConfirmModal({
 
                       <div className="space-y-4 mb-8">
                         <div className="flex justify-between items-center">
-                          <span className="text-gray-500">1 {ticker} 가격</span>
+                          <span className="text-gray-500 dark:text-gray-400">
+                            1 {ticker} 가격
+                          </span>
                           <span>{price.toLocaleString()}원</span>
                         </div>
                         <div className="flex justify-between items-center">
-                          <span className="text-gray-500">
+                          <span className="text-gray-500 dark:text-gray-400">
                             총 {tradeType === 'buy' ? '구매' : '판매'} 금액
                           </span>
                           <span className="font-medium text-lg">
@@ -109,7 +111,7 @@ export default function TradeConfirmModal({
                       <div className="flex gap-3">
                         <button
                           type="button"
-                          className="flex-1 py-4 rounded-xl bg-gray-100 font-medium text-gray-900"
+                          className="flex-1 py-4 rounded-xl bg-gray-100 font-medium text-gray-900 dark:bg-gray-700 dark:text-gray-100     "
                           onClick={onClose}
                         >
                           닫기
@@ -117,7 +119,9 @@ export default function TradeConfirmModal({
                         <button
                           type="button"
                           className={`flex-1 py-4 rounded-xl font-medium text-white ${
-                            tradeType === 'buy' ? 'bg-red-500' : 'bg-blue-500'
+                            tradeType === 'buy'
+                              ? 'bg-red-500 dark:bg-red-600 dark:hover:bg-red-700'
+                              : 'bg-blue-500 dark:bg-blue-600 dark:hover:bg-blue-700'
                           }`}
                           onClick={handleTrade}
                         >
