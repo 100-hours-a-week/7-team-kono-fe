@@ -177,14 +177,14 @@ export default function CoinDetail() {
       />
 
       {/* 차트 타임프레임 선택 */}
-      <div className="p-4 border-b flex">
+      <div className="p-4 border-b flex dark:bg-gray-800 dark:text-white dark:border-gray-700">
         {(['1D', '1W', '1M', '1Y'] as const).map((tf) => (
           <button
             key={tf}
             className={`flex-1 py-2 text-center ${
               timeframe === tf
-                ? 'text-blue-500 border-b-2 border-blue-500 font-medium'
-                : 'text-gray-500'
+                ? 'text-blue-500 border-b-2 border-blue-500 font-medium dark:text-blue-400 dark:border-blue-400'
+                : 'text-gray-500 dark:text-gray-400'
             }`}
             onClick={() => setTimeframe(tf)}
           >
