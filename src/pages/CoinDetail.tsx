@@ -29,13 +29,13 @@ const Chart = memo(
     const getTradingViewInterval = (tf: string) => {
       switch (tf) {
         case '1D':
-          return '60';
-        case '1W':
-          return '240';
-        case '1M':
           return 'D';
-        case '1Y':
+        case '1W':
           return 'W';
+        case '1M':
+          return 'M';
+        case '1Y':
+          return 'Y';
         default:
           return '60';
       }
@@ -48,10 +48,8 @@ const Chart = memo(
       <div className="w-full h-[400px] border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
         <TradingViewWidget
           symbol={symbol}
-          theme="light"
           interval={getTradingViewInterval(timeframe)}
           locale="kr"
-          width="100%"
         />
       </div>
     );
