@@ -45,7 +45,7 @@ const Chart = memo(
     const symbol = `UPBIT:${ticker}KRW`;
 
     return (
-      <div className="w-full h-[400px] border-b bg-gray-50">
+      <div className="w-full h-[400px] border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
         <TradingViewWidget
           symbol={symbol}
           theme="light"
@@ -124,7 +124,7 @@ export default function CoinDetail() {
       <div className="flex flex-col min-h-screen">
         <Header title="로딩 중..." />
         <div className="flex-1 flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 dark:border-blue-400"></div>
         </div>
       </div>
     );
@@ -136,11 +136,11 @@ export default function CoinDetail() {
         <Header title="오류" />
         <div className="flex-1 flex items-center justify-center p-4">
           <div className="text-center">
-            <p className="text-red-500 mb-4">
+            <p className="text-red-500 mb-4 dark:text-red-400">
               {error || '코인 정보를 불러올 수 없습니다.'}
             </p>
             <button
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg"
+              className="px-4 py-2 bg-blue-500 text-white rounded-lg dark:bg-blue-400"
               onClick={() => navigate(-1)}
             >
               돌아가기

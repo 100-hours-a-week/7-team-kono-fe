@@ -36,8 +36,8 @@ const PriceInfo = memo(
     // 티커 데이터가 없거나 해당 심볼에 대한 데이터가 없는 경우 로딩 표시
     if (!tickerData || !tickerData[`KRW-${symbol}`]) {
       return (
-        <div className="p-4 border-b flex items-center justify-center h-24">
-          <div className="text-center text-gray-500">
+        <div className="p-4 border-b flex items-center justify-center h-24 dark:bg-gray-800 dark:text-white dark:border-gray-700">
+          <div className="text-center text-gray-500 dark:text-gray-400">
             데이터를 불러오는 중...
           </div>
         </div>
@@ -52,13 +52,13 @@ const PriceInfo = memo(
     // 가격 변화 방향에 따른 스타일 클래스
     const priceChangeClass =
       data.change === 'RISE'
-        ? 'text-red-500'
+        ? 'text-red-500 dark:text-red-400'
         : data.change === 'FALL'
-          ? 'text-blue-500'
-          : 'text-gray-500';
+          ? 'text-blue-500 dark:text-blue-400'
+          : 'text-gray-500 dark:text-gray-400';
 
     return (
-      <div className="p-4 border-b">
+      <div className="p-4 border-b dark:bg-gray-800 dark:text-white dark:border-gray-700">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center">
             <img
@@ -72,7 +72,9 @@ const PriceInfo = memo(
             />
             <div>
               <div className="font-bold">{name || symbol}</div>
-              <div className="text-sm text-gray-500">{`KRW-${symbol}`}</div>
+              <div className="text-sm text-gray-500 dark:text-gray-400">
+                {`KRW-${symbol}`}
+              </div>
             </div>
           </div>
 
@@ -99,19 +101,19 @@ const PriceInfo = memo(
 
           <div className="flex justify-between mt-2 text-sm">
             <div>
-              <span className="text-gray-500">고가</span>
-              <span className="ml-1 text-red-500">
+              <span className="text-gray-500 dark:text-gray-400">고가</span>
+              <span className="ml-1 text-red-500 dark:text-red-400">
                 {formatCurrency(data.high_price, '', false)}
               </span>
             </div>
             <div>
-              <span className="text-gray-500">저가</span>
-              <span className="ml-1 text-blue-500">
+              <span className="text-gray-500 dark:text-gray-400">저가</span>
+              <span className="ml-1 text-blue-500 dark:text-blue-400">
                 {formatCurrency(data.low_price, '', false)}
               </span>
             </div>
             <div>
-              <span className="text-gray-500">거래량</span>
+              <span className="text-gray-500 dark:text-gray-400">거래량</span>
               <span className="ml-1">
                 {data.acc_trade_volume_24h.toFixed(2)} {symbol}
               </span>
