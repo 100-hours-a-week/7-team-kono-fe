@@ -107,7 +107,7 @@ export default function Transaction() {
       <Header title="매매 내역" />
 
       {/* 필터 표시 */}
-      <div className="bg-white p-4 border-b flex justify-between rounded-t-xl">
+      <div className="mx-4 bg-white p-4 border-b flex justify-between rounded-t-xl dark:bg-gray-800 dark:text-white dark:border-gray-700">
         <div className="flex items-center">
           <span className="text-sm text-gray-500 mr-2">필터:</span>
           <span className="text-sm font-medium">{activeFilter}</span>
@@ -119,11 +119,11 @@ export default function Transaction() {
 
       {/* 거래 내역 목록 */}
       {filteredTransactions.length > 0 ? (
-        <div className="flex-1 rounded-xl">
+        <div className="flex-1 rounded-xl mx-4 mb-4">
           {filteredTransactions.map((transaction, index) => (
             <div
               key={transaction.id}
-              className={`p-4 border-b bg-white ${
+              className={`p-4 border-b bg-white dark:bg-gray-800 dark:text-white dark:border-gray-700     ${
                 index === filteredTransactions.length - 1
                   ? 'rounded-b-xl border-b-0'
                   : ''
@@ -143,7 +143,7 @@ export default function Transaction() {
                   />
                   <div>
                     <div className="font-medium">{transaction.coinName}</div>
-                    <div className="text-sm text-gray-500">
+                    <div className="text-sm text-gray-500 dark:text-gray-400">
                       {transaction.symbol}
                     </div>
                   </div>
@@ -151,8 +151,8 @@ export default function Transaction() {
                 <div
                   className={`px-2 py-1 rounded-md text-sm font-medium ${
                     transaction.type === '매수'
-                      ? 'bg-red-100 text-red-500'
-                      : 'bg-blue-100 text-blue-500'
+                      ? 'bg-red-100 text-red-500 dark:bg-red-900 dark:text-red-400'
+                      : 'bg-blue-100 text-blue-500 dark:bg-blue-900 dark:text-blue-400'
                   }`}
                 >
                   {transaction.type}
@@ -160,26 +160,26 @@ export default function Transaction() {
               </div>
 
               <div className="flex justify-between text-sm mb-1">
-                <span className="text-gray-500">수량</span>
+                <span className="text-gray-500 dark:text-gray-400">수량</span>
                 <span>
                   {transaction.amount} {transaction.symbol}
                 </span>
               </div>
 
               <div className="flex justify-between text-sm mb-1">
-                <span className="text-gray-500">가격</span>
+                <span className="text-gray-500 dark:text-gray-400">가격</span>
                 <span>{formatCurrency(transaction.price)}</span>
               </div>
 
               <div className="flex justify-between text-sm mb-1">
-                <span className="text-gray-500">총액</span>
+                <span className="text-gray-500 dark:text-gray-400">총액</span>
                 <span className="font-medium">
                   {formatCurrency(transaction.total)}
                 </span>
               </div>
 
               <div className="flex justify-between text-sm">
-                <span className="text-gray-500">날짜</span>
+                <span className="text-gray-500 dark:text-gray-400">날짜</span>
                 <span>{formatDate(transaction.date)}</span>
               </div>
             </div>
@@ -188,11 +188,11 @@ export default function Transaction() {
       ) : (
         <div className="flex-1 flex flex-col items-center justify-center p-8">
           <div className="text-xl font-bold mb-2">거래 내역이 없습니다</div>
-          <div className="text-gray-500 text-center mb-6">
+          <div className="text-gray-500 text-center mb-6 dark:text-gray-400">
             첫 번째 코인을 구매해보세요
           </div>
           <button
-            className="px-6 py-3 bg-blue-500 text-white rounded-xl font-medium"
+            className="px-6 py-3 bg-blue-500 text-white rounded-xl font-medium dark:bg-blue-400"
             onClick={() => navigate('/discover')}
           >
             탐색하러 가기
