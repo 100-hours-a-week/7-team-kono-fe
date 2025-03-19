@@ -10,7 +10,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ title, rightElement }) => {
   const navigate = useNavigate();
   return (
-    <header className="fixed top-0 left-0 right-0 z-20 bg-white border-b border-gray-200 dark:border-0 dark:bg-gray-900 dark:text-white">
+    <header className="fixed top-0 left-0 right-0 z-20 max-w-[430px] w-full mx-auto bg-white border-b border-gray-200 dark:border-0 dark:bg-gray-900 dark:text-white">
       {/* 내부 컨테이너 - 최대 너비 제한 */}
       <div className="max-w-[430px] w-full mx-auto flex justify-between items-center h-14 px-4 relative">
         <button

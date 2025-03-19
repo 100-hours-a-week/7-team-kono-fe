@@ -119,7 +119,7 @@ export default function Transaction() {
 
       {/* 거래 내역 목록 */}
       {filteredTransactions.length > 0 ? (
-        <div className="flex-1 rounded-xl mx-4 mb-4">
+        <div className="flex-1 rounded-xl mx-4 mb-2">
           {filteredTransactions.map((transaction, index) => (
             <div
               key={transaction.id}

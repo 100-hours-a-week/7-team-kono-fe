@@ -10,7 +10,7 @@ import { IoMdSettings } from 'react-icons/io';
 
 const BottomNavigation: React.FC = () => {
   return (
-    <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-10  dark:border-0 dark:bg-gray-900 dark:text-white">
+    <footer className="fixed bottom-0 left-0 right-0 max-w-[430px] w-full mx-auto bg-white border-t border-gray-200 z-10  dark:border-0 dark:bg-gray-900 dark:text-white">
       <nav className="max-w-[430px] mx-auto">
         <ul className="flex justify-around items-center h-16">
           <li>
@@ -24,12 +24,12 @@ const BottomNavigation: React.FC = () => {
             </Link>
           </li>
           <li>
-            <Link to={ROUTES.FAVORITES}>
+            <Link to={ROUTES.FAVORITE}>
               <FaHeart className="text-2xl mr4 text-toastBg" />
             </Link>
           </li>
           <li>
-            <Link to={ROUTES.RANKINGS}>
+            <Link to={ROUTES.RANKING}>
               <FaCrown className="text-2xl mr4 text-toastBg" />
             </Link>
           </li>
