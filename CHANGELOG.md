@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## <small>1.0.3 (2025-03-20)</small>
+
+* docs: update 🐞-bug.md ([789fb24](https://github.com/100-hours-a-week/7-team-secretjuju-kono-fe/commit/789fb24))
+
 ## <small>1.0.2 (2025-03-18)</small>
 
 * docs: update ✨-feature.md ([148bd36](https://github.com/100-hours-a-week/7-team-secretjuju-kono-fe/commit/148bd36))
