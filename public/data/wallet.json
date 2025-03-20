@@ -1,0 +1,170 @@
+[
+  {
+    "nickname": "test",
+    "ticker": "BTC",
+    "holding_quantity": 0.12,
+    "holding_price": 2650000
+  },
+  {
+    "nickname": "test",
+    "ticker": "ETH",
+    "holding_quantity": 1.85,
+    "holding_price": 1850000
+  },
+  {
+    "nickname": "test",
+    "ticker": "XRP",
+    "holding_quantity": 1200,
+    "holding_price": 300000
+  },
+  {
+    "nickname": "test",
+    "ticker": "BTC",
+    "holding_quantity": 0.25,
+    "holding_price": 4765000
+  },
+  {
+    "nickname": "test",
+    "ticker": "SOL",
+    "holding_quantity": 15.5,
+    "holding_price": 2735000
+  },
+  {
+    "nickname": "test",
+    "ticker": "ETH",
+    "holding_quantity": 2.4,
+    "holding_price": 3120000
+  },
+  {
+    "nickname": "test",
+    "ticker": "ADA",
+    "holding_quantity": 2500,
+    "holding_price": 2000000
+  },
+  {
+    "nickname": "test",
+    "ticker": "BTC",
+    "holding_quantity": 0.17,
+    "holding_price": 3825000
+  },
+  {
+    "nickname": "test",
+    "ticker": "DOT",
+    "holding_quantity": 75,
+    "holding_price": 1875000
+  },
+  {
+    "nickname": "test",
+    "ticker": "LINK",
+    "holding_quantity": 120,
+    "holding_price": 2500000
+  },
+  {
+    "nickname": "test",
+    "ticker": "BTC",
+    "holding_quantity": 0.23,
+    "holding_price": 5175000
+  },
+  {
+    "nickname": "test",
+    "ticker": "ETH",
+    "holding_quantity": 0.95,
+    "holding_price": 1175000
+  },
+  {
+    "nickname": "test",
+    "ticker": "DOGE",
+    "holding_quantity": 5000,
+    "holding_price": 850000
+  },
+  {
+    "nickname": "test",
+    "ticker": "SHIB",
+    "holding_quantity": 50000000,
+    "holding_price": 800000
+  },
+  {
+    "nickname": "test",
+    "ticker": "BTC",
+    "holding_quantity": 0.35,
+    "holding_price": 7875000
+  },
+  {
+    "nickname": "test",
+    "ticker": "ETH",
+    "holding_quantity": 1.2,
+    "holding_price": 1625000
+  },
+  {
+    "nickname": "test",
+    "ticker": "AVAX",
+    "holding_quantity": 25,
+    "holding_price": 1750000
+  },
+  {
+    "nickname": "test",
+    "ticker": "MATIC",
+    "holding_quantity": 900,
+    "holding_price": 1930000
+  },
+  {
+    "nickname": "test",
+    "ticker": "ETH",
+    "holding_quantity": 1.05,
+    "holding_price": 1300000
+  },
+  {
+    "nickname": "test",
+    "ticker": "UNI",
+    "holding_quantity": 65,
+    "holding_price": 830000
+  },
+  {
+    "nickname": "test",
+    "ticker": "BTC",
+    "holding_quantity": 0.28,
+    "holding_price": 6325000
+  },
+  {
+    "nickname": "test",
+    "ticker": "ETH",
+    "holding_quantity": 0.95,
+    "holding_price": 1325000
+  },
+  {
+    "nickname": "test",
+    "ticker": "BTC",
+    "holding_quantity": 0.42,
+    "holding_price": 9450000
+  },
+  {
+    "nickname": "test",
+    "ticker": "SOL",
+    "holding_quantity": 5.5,
+    "holding_price": 330000
+  },
+  {
+    "nickname": "test",
+    "ticker": "BTC",
+    "holding_quantity": 0.32,
+    "holding_price": 7200000
+  },
+  {
+    "nickname": "test",
+    "ticker": "ETH",
+    "holding_quantity": 0.85,
+    "holding_price": 1150000
+  },
+  {
+    "nickname": "test",
+    "ticker": "DOGE",
+    "holding_quantity": 250,
+    "holding_price": 50000
+  },
+  {
+    "nickname": "test",
+    "ticker": null,
+    "holding_quantity": 0,
+    "holding_price": 0
+  }
+]

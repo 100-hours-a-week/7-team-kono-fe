@@ -2,16 +2,21 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { IoIosArrowBack } from 'react-icons/io';
 import TradeConfirmModal from '../components/modal/TradeConfirmModal';
-
+import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
+import { formatCurrency } from '../utils/formatter';
+import getCoinName from '../api/coin';
+import { getBalanceByNickname } from '../api/user';
+import { getQuantityByNicknameAndTicker } from '../api/wallet';
 // 거래 타입 정의
 type TradeType = 'buy' | 'sell';
 
 // 코인 데이터 인터페이스
 interface CoinData {
   name: string;
-  symbol: string;
+  ticker: string;
   price: number;
   balance?: number; // 보유 수량 (매도 시 필요)
+  quantity?: number; // 보유 수량 (매수 시 필요)
 }
 
 export default function Trade() {
@@ -22,7 +27,8 @@ export default function Trade() {
 
   // 상태 관리
   const [coin, setCoin] = useState<CoinData | null>(null);
-  const [amount, setAmount] = useState<string>('');
+  const [amount, setAmount] = useState<string>('0');
+  const [price, setPrice] = useState<number>(0);
   const [total, setTotal] = useState<number>(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -32,7 +38,8 @@ export default function Trade() {
   // 퍼센트 버튼 옵션
   const percentOptions = [10, 25, 50, 100];
 
-  // 코인 데이터 가져오기 (목 데이터)
+  const { tickerData } = useUpbitWebSocket([ticker || '']);
+  const nickname: string = 'test';
   useEffect(() => {
     // 파라미터 검증 로직 수정
     if (!ticker) {
@@ -49,47 +56,48 @@ export default function Trade() {
       return;
     }
 
-    console.log('Fetching coin data for:', ticker, type);
+    // 비동기 로직을 별도 함수로 분리
+    const fetchCoinData = async () => {
+      try {
+        setLoading(true);
 
-    // 실제 구현 시 API 호출로 대체
-    setTimeout(() => {
-      const coinData: CoinData = {
-        name:
-          ticker === 'BTC'
-            ? '비트코인'
-            : ticker === 'ETH'
-              ? '이더리움'
-              : '리플',
-        symbol: ticker,
-        price: ticker === 'BTC' ? 68500000 : ticker === 'ETH' ? 3200000 : 580,
-      };
+        const coinName = await getCoinName(ticker);
+        const balance = await getBalanceByNickname(nickname);
+        const quantity = await getQuantityByNicknameAndTicker(nickname, ticker);
 
-      // 매도인 경우 보유 수량 추가
-      if (type === 'sell') {
-        coinData.balance =
-          ticker === 'BTC' ? 0.01 : ticker === 'ETH' ? 0.5 : 1000;
+        // 현재 가격 정보를 한 번만 가져옴
+        const currentPrice = tickerData[`KRW-${ticker}`]?.trade_price || 0;
+
+        setCoin({
+          name: coinName,
+          ticker: ticker,
+          price: currentPrice,
+          balance: balance,
+          quantity: quantity,
+        });
+
+        // 가격 상태 업데이트
+        setPrice(currentPrice);
+
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching coin data:', error);
+        setError('코인 정보를 불러오는 중 오류가 발생했습니다.');
+        setLoading(false);
       }
+    };
 
-      setCoin(coinData);
-      setLoading(false);
-    }, 500);
-  }, [ticker, type]);
+    fetchCoinData();
+  }, [ticker, type, nickname]); // tickerData 의존성 제거
 
   // 금액 입력 처리
-  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-
-    // 숫자와 소수점만 허용
-    if (/^[0-9]*\.?[0-9]*$/.test(value) || value === '') {
+  const handleAmountChange = (value: string) => {
+    // 숫자만 입력 가능하도록
+    if (/^\d*\.?\d*$/.test(value) || value === '') {
       setAmount(value);
-
-      // 총액 계산
-      if (coin && value) {
-        const numValue = parseFloat(value);
-        setTotal(numValue * coin.price);
-      } else {
-        setTotal(0);
-      }
+      // 입력값이 변경될 때 총액 업데이트
+      const numValue = parseFloat(value) || 0;
+      setTotal(numValue * (coin?.price || 0));
     }
   };
 
@@ -101,10 +109,10 @@ export default function Trade() {
 
     if (type === 'buy') {
       // 매수: 보유 현금 기준
-      maxAmount = cashBalance / coin.price;
+      maxAmount = (coin.balance || cashBalance) / coin.price;
     } else {
       // 매도: 보유 코인 기준
-      maxAmount = coin.balance || 0;
+      maxAmount = coin.quantity || 0;
     }
 
     const calculatedAmount = (maxAmount * percent) / 100;
@@ -113,46 +121,12 @@ export default function Trade() {
   };
 
   // 거래 실행
-  const executeTransaction = () => {
-    if (!coin || !amount) {
-      setError('수량을 입력해주세요.');
+  const handleOpenModal = () => {
+    if (!amount || isNaN(Number(amount)) || !coin || !price) {
+      alert('유효한 수량과 가격을 입력해주세요.');
       return;
     }
-
-    const numAmount = parseFloat(amount);
-
-    if (numAmount <= 0) {
-      setError('0보다 큰 수량을 입력해주세요.');
-      return;
-    }
-
-    if (type === 'buy') {
-      // 매수: 현금 잔액 확인
-      if (total > cashBalance) {
-        setError('잔액이 부족합니다.');
-        return;
-      }
-    } else {
-      // 매도: 보유 코인 확인
-      if (numAmount > (coin.balance || 0)) {
-        setError('보유 수량이 부족합니다.');
-        return;
-      }
-    }
-
-    // 실제 구현 시 API 호출로 거래 처리
-
-    // 성공 시 코인 상세 페이지로 이동
-    navigate(`/coins/${ticker}`, {
-      state: {
-        transactionSuccess: true,
-        type,
-        coin: coin.symbol,
-        amount: numAmount,
-        price: coin.price,
-        total,
-      },
-    });
+    setIsModalOpen(true);
   };
 
   // 로딩 중 표시
@@ -184,11 +158,11 @@ export default function Trade() {
         </div>
         <div className="flex-1 flex items-center justify-center p-4">
           <div className="text-center">
-            <p className="text-red-500 mb-4">
+            <p className="text-red-500 mb-4 dark:text-red-400">
               {error || '코인 정보를 불러오는데 실패했습니다.'}
             </p>
             <button
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg"
+              className="px-4 py-2 bg-blue-500 text-white rounded-lg dark:bg-blue-400"
               onClick={() => navigate(-1)}
             >
               돌아가기
@@ -198,6 +172,16 @@ export default function Trade() {
       </div>
     );
   }
+
+  // 상태값들이 제대로 초기화되었는지 확인
+  console.log('Trade component props:', { ticker, type });
+
+  // 모달에 전달하는 값들 로깅
+  console.log('Modal props:', {
+    amount,
+    price: coin.price,
+    tradeType: type,
+  });
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -215,7 +199,7 @@ export default function Trade() {
       <div className="p-4 border-b dark:bg-gray-800 dark:text-white dark:border-gray-700">
         <div className="flex items-center mb-4">
           <img
-            src={`https://static.upbit.com/logos/${coin.symbol}.png`}
+            src={`https://static.upbit.com/logos/${coin.ticker}.png`}
             alt={coin.name}
             className="w-10 h-10 rounded-full mr-3"
             onError={(e) => {
@@ -225,14 +209,12 @@ export default function Trade() {
           />
           <div>
             <div className="font-medium">{coin.name}</div>
-            <div className="text-sm text-gray-500">{coin.symbol}</div>
+            <div className="text-sm text-gray-500">{coin.ticker}</div>
           </div>
         </div>
 
         <div className="flex justify-between items-center">
-          <div className="text-2xl font-bold">
-            {coin.price.toLocaleString()} 원
-          </div>
+          <div className="text-2xl font-bold">{coin.price} 원</div>
         </div>
       </div>
 
@@ -241,19 +223,19 @@ export default function Trade() {
         <div className="flex justify-between items-center">
           <div>
             <div className="text-sm text-gray-500">
-              {type === 'buy' ? '보유 원화' : `보유 ${coin.symbol}`}
+              {type === 'buy' ? '보유 원화' : `보유 ${coin.ticker}`}
             </div>
             <div className="font-medium">
               {type === 'buy'
-                ? `${cashBalance.toLocaleString()} 원`
-                : `${coin.balance} ${coin.symbol}`}
+                ? `${formatCurrency(coin.balance || cashBalance)} 원`
+                : `${coin.quantity || 0} ${coin.ticker}`}
             </div>
           </div>
           {type === 'sell' && (
             <div className="text-right">
               <div className="text-sm text-gray-500">평가 금액</div>
               <div className="font-medium">
-                {((coin.balance || 0) * coin.price).toLocaleString()} 원
+                {((coin.quantity || 0) * coin.price).toLocaleString()} 원
               </div>
             </div>
           )}
@@ -267,9 +249,9 @@ export default function Trade() {
           <div className="text-sm text-gray-500 dark:text-gray-400">
             최대:{' '}
             {type === 'buy'
-              ? (cashBalance / coin.price).toFixed(8)
-              : coin.balance}{' '}
-            {coin.symbol}
+              ? ((coin.balance || cashBalance) / coin.price).toFixed(8)
+              : coin.quantity || 0}{' '}
+            {coin.ticker}
           </div>
         </div>
 
@@ -277,12 +259,12 @@ export default function Trade() {
           <input
             type="text"
             value={amount}
-            onChange={handleAmountChange}
+            onChange={(e) => handleAmountChange(e.target.value)}
             className="w-full p-3 border rounded-xl text-right pr-16 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-400 dark:border-gray-700"
             placeholder="0"
           />
           <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">
-            {coin.symbol}
+            {coin.ticker}
           </span>
         </div>
 
@@ -321,7 +303,7 @@ export default function Trade() {
           className={`w-full py-4 rounded-xl font-bold text-white ${
             type === 'buy' ? 'bg-konoRed' : 'bg-konoBlue'
           }`}
-          onClick={() => setIsModalOpen(true)}
+          onClick={handleOpenModal}
         >
           {type === 'buy' ? '구매하기' : '판매하기'}
         </button>
@@ -331,10 +313,10 @@ export default function Trade() {
       <TradeConfirmModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        ticker={coin.symbol || ''}
-        amount={amount}
+        ticker={coin.ticker || ''}
+        amount={parseFloat(amount) || 0}
         price={coin.price}
-        tradeType={type}
+        tradeType={type as TradeType}
       />
     </div>
   );
