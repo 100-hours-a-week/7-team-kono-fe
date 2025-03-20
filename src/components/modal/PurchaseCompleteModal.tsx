@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { CheckCircleIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { formatCurrency } from '../../utils/formatter';
+import { formatAmount, formatCurrency } from '../../utils/formatter';
 interface PurchaseCompleteModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -10,6 +10,7 @@ interface PurchaseCompleteModalProps {
   amount: string;
   price: number;
   tradeType: 'buy' | 'sell';
+  quantity: number;
 }
 
 export default function PurchaseCompleteModal({
@@ -20,6 +21,7 @@ export default function PurchaseCompleteModal({
   amount,
   price,
   tradeType,
+  quantity,
 }: PurchaseCompleteModalProps) {
   return (
     <Transition.Root show={isOpen} as={Fragment}>
@@ -69,16 +71,24 @@ export default function PurchaseCompleteModal({
                   <div className="space-y-4 mb-8">
                     <div className="flex justify-between items-center">
                       <span className="text-gray-500 dark:text-gray-400">
-                        1 {ticker} 가격
+                        1 {ticker} 예상 가격
                       </span>
-                      <span>{formatCurrency(price)}원</span>
+                      <span>{formatCurrency(price)}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-500 dark:text-gray-400">
+                        예상 {ticker} 수량
+                      </span>
+                      <span>
+                        {formatAmount(quantity)} {ticker}
+                      </span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-gray-500 dark:text-gray-400">
                         총 주문 금액
                       </span>
                       <span className="text-lg font-medium">
-                        {(Number(amount) * price).toLocaleString()}원
+                        {formatCurrency(amount)}
                       </span>
                     </div>
                   </div>
