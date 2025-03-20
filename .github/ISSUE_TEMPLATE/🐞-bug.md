@@ -2,7 +2,7 @@
 name: "\U0001F41E Bug Report"
 about: 버그 제보
 title: '[BUG]'
-labels: "🐞 bug", "🧑‍💻 frontend"
+labels: ["🐞 bug", "🧑‍💻 frontend"]
 assignees: ''
 ---
 
