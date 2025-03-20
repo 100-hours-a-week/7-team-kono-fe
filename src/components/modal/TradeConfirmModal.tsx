@@ -3,6 +3,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import Toast from '../common/Toast';
 import PurchaseCompleteModal from './PurchaseCompleteModal';
+import { useNavigate } from 'react-router-dom';
 
 interface TradeConfirmModalProps {
   isOpen: boolean;
@@ -21,9 +22,14 @@ export default function TradeConfirmModal({
   price,
   tradeType,
 }: TradeConfirmModalProps) {
+  const navigate = useNavigate();
   const panelRef = useRef<HTMLDivElement>(null);
   const [showComplete, setShowComplete] = useState(false);
   const [showToast, setShowToast] = useState(false);
+
+  // 값이 없을 때의 기본값 처리
+  const safeAmount = amount || 0;
+  const safePrice = price || 0;
 
   const handleTrade = () => {
     onClose();
@@ -32,8 +38,16 @@ export default function TradeConfirmModal({
 
   const handleCompleteConfirm = () => {
     setShowComplete(false);
-    setShowToast(true);
-    setTimeout(() => setShowToast(false), 3000);
+    // Store toast info in sessionStorage before navigation
+    sessionStorage.setItem(
+      'tradeToast',
+      JSON.stringify({
+        show: true,
+        message: `${tradeType === 'buy' ? '구매' : '판매'}를 완료했어요.`,
+        timestamp: Date.now(),
+      }),
+    );
+    navigate(`/coins/${ticker}`);
   };
 
   return (
@@ -96,14 +110,14 @@ export default function TradeConfirmModal({
                           <span className="text-gray-500 dark:text-gray-400">
                             1 {ticker} 가격
                           </span>
-                          <span>{price.toLocaleString()}원</span>
+                          <span>{safePrice.toLocaleString()}원</span>
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-gray-500 dark:text-gray-400">
                             총 {tradeType === 'buy' ? '구매' : '판매'} 금액
                           </span>
                           <span className="font-medium text-lg">
-                            {(Number(amount) * price).toLocaleString()}원
+                            {(safeAmount * safePrice).toLocaleString()}원
                           </span>
                         </div>
                       </div>

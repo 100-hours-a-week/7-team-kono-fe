@@ -10,7 +10,7 @@ import { getQuantityByNicknameAndTicker } from '../api/wallet';
 // 거래 타입 정의
 type TradeType = 'buy' | 'sell';
 
-// 코인 데이터 인터페이스
+// 코인 데이터 인터페이스~
 interface CoinData {
   name: string;
   ticker: string;
@@ -40,6 +40,37 @@ export default function Trade() {
 
   const { tickerData } = useUpbitWebSocket([ticker || '']);
   const nickname: string = 'test';
+
+  // 웹소켓 데이터가 변경될 때 가격 업데이트
+  useEffect(() => {
+    if (ticker && tickerData[`KRW-${ticker}`]?.trade_price && coin) {
+      const currentPrice = tickerData[`KRW-${ticker}`]?.trade_price;
+
+      // 현재 가격이 이전 가격과 다를 때만 업데이트
+      if (currentPrice !== price) {
+        setPrice(currentPrice);
+
+        // 수량이 입력되어 있으면 총액도 업데이트
+        if (amount && amount !== '0') {
+          setTotal(parseFloat(amount) * currentPrice);
+        }
+
+        // 코인 객체의 가격만 업데이트 (전체 객체를 교체하지 않음)
+        setCoin((prevCoin) =>
+          prevCoin ? { ...prevCoin, price: currentPrice } : null,
+        );
+      }
+    }
+  }, [tickerData, ticker]); // coin과 amount 의존성 제거
+
+  // 수량이 변경될 때 총액 업데이트
+  useEffect(() => {
+    if (coin && amount && amount !== '0') {
+      setTotal(parseFloat(amount) * coin.price);
+    }
+  }, [amount]);
+
+  // 코인 데이터 초기 로드 (한 번만 실행)
   useEffect(() => {
     // 파라미터 검증 로직 수정
     if (!ticker) {
@@ -89,6 +120,22 @@ export default function Trade() {
 
     fetchCoinData();
   }, [ticker, type, nickname]); // tickerData 의존성 제거
+
+  // 디버깅용 로그 - 파라미터 변경 시에만 로그 출력
+  useEffect(() => {
+    console.log('Trade params:', { ticker, type });
+  }, [ticker, type]);
+
+  // 모달 상태 변경 시에만 로그 출력
+  useEffect(() => {
+    if (isModalOpen) {
+      console.log('Modal props:', {
+        amount,
+        price: coin?.price,
+        tradeType: type,
+      });
+    }
+  }, [isModalOpen]);
 
   // 금액 입력 처리
   const handleAmountChange = (value: string) => {
@@ -172,16 +219,6 @@ export default function Trade() {
       </div>
     );
   }
-
-  // 상태값들이 제대로 초기화되었는지 확인
-  console.log('Trade component props:', { ticker, type });
-
-  // 모달에 전달하는 값들 로깅
-  console.log('Modal props:', {
-    amount,
-    price: coin.price,
-    tradeType: type,
-  });
 
   return (
     <div className="flex flex-col min-h-screen">

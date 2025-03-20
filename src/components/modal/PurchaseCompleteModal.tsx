@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { CheckCircleIcon, XMarkIcon } from '@heroicons/react/24/outline';
-
+import { formatCurrency } from '../../utils/formatter';
 interface PurchaseCompleteModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -71,7 +71,7 @@ export default function PurchaseCompleteModal({
                       <span className="text-gray-500 dark:text-gray-400">
                         1 {ticker} 가격
                       </span>
-                      <span>{price.toLocaleString()}원</span>
+                      <span>{formatCurrency(price)}원</span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-gray-500 dark:text-gray-400">
