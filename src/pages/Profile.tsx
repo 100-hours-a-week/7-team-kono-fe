@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useAuth } from '../contexts/AuthContext';
 import {
   getUserProfile,
   updateProfileImage,
@@ -8,14 +7,11 @@ import {
 import { toast } from 'react-toastify';
 
 interface ProfileData {
-  id: string;
   nickname: string;
-  email: string;
   profileImage: string;
 }
 
 const Profile: React.FC = () => {
-  const { refreshAuth } = useAuth();
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(true);
@@ -96,9 +92,6 @@ const Profile: React.FC = () => {
       const updatedProfile = await getUserProfile();
       setProfile(updatedProfile);
 
-      // 인증 컨텍스트 갱신
-      await refreshAuth();
-
       toast.success('프로필 이미지가 업데이트되었습니다.');
     } catch (err) {
       toast.error('이미지 업로드에 실패했습니다.');
@@ -123,9 +116,6 @@ const Profile: React.FC = () => {
       // 프로필 정보 다시 로드
       const updatedProfile = await getUserProfile();
       setProfile(updatedProfile);
-
-      // 인증 컨텍스트 갱신
-      await refreshAuth();
 
       setIsEditingNickname(false);
       toast.success('닉네임이 업데이트되었습니다.');

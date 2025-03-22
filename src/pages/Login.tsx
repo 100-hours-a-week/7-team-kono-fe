@@ -1,5 +1,5 @@
 import React from 'react';
-import KakaoLoginButton from '../components/auth/KakaoLoginButton';
+import { KakaoLoginButton } from 'public/images/kakao_login_button.png';
 import konoLogo from '../assets/kono_logo.svg';
 
 const Login: React.FC = () => {
@@ -10,6 +10,7 @@ const Login: React.FC = () => {
 
         <div className="space-y-4">
           {/* 기존 로그인 폼이 있다면 여기에 */}
+          <img src={konoLogo} alt="코노 로고" />
 
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
@@ -20,7 +21,7 @@ const Login: React.FC = () => {
             </div>
           </div>
 
-          <KakaoLoginButton />
+          <img src={KakaoLoginButton} alt="카카오 로그인" />
         </div>
       </div>
     </div>
