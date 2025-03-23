@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Header from '../components/layout/Header';
 
 interface User {
@@ -13,6 +13,10 @@ type RankingPeriod = '일간' | '전체';
 
 export default function Ranking() {
   const [activePeriod, setActivePeriod] = useState<RankingPeriod>('일간');
+  const [myUserSticky, setMyUserSticky] = useState<'bottom' | 'top' | null>(
+    null,
+  );
+  const myUserRef = useRef<HTMLDivElement>(null);
 
   // 코인 심볼 목록 (프로필 이미지용)
   const coinSymbols = [
@@ -115,6 +119,29 @@ export default function Ranking() {
 
   // 내 랭킹 찾기
   const myRanking = users.find((user) => user.name === '나');
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!myUserRef.current) return;
+
+      const rect = myUserRef.current.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+
+      if (rect.bottom > windowHeight) {
+        // 내 순위가 화면 아래로 벗어나면 top-0으로 고정
+        setMyUserSticky('top');
+      } else if (rect.top < 0) {
+        // 내 순위가 화면 위로 벗어나면 bottom-0으로 고정
+        setMyUserSticky('bottom');
+      } else {
+        // 화면 안에 있으면 고정 해제
+        setMyUserSticky(null);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -221,7 +248,18 @@ export default function Ranking() {
         {otherUsers.map((user) => (
           <div
             key={user.id}
-            className="flex items-center p-4 border-b dark:border-gray-700"
+            ref={user.name === '나' ? myUserRef : null}
+            className={`flex items-center p-4 border-b dark:border-gray-700 ${
+              user.name === '나'
+                ? `${
+                    myUserSticky === 'top'
+                      ? 'sticky top-0 z-10 bg-blue-50 dark:bg-blue-900'
+                      : myUserSticky === 'bottom'
+                        ? 'sticky bottom-0 z-10 bg-blue-50 dark:bg-blue-900'
+                        : ''
+                  }`
+                : ''
+            }`}
           >
             <div className="w-8 text-center font-bold mr-4">{user.rank}</div>
             <img
@@ -241,9 +279,9 @@ export default function Ranking() {
         ))}
       </div>
 
-      {/* 내 랭킹 */}
+      {/* 내 랭킹
       {myRanking && (
-        <div className="sticky bottom-16 rounded-xl min-w-[430px] mx-auto bg-white border-t p-4 shadow-md dark:bg-gray-800 dark:text-white dark:border-gray-700">
+        <div className="sticky bottom-16 rounded-xl min-w-[400px] mx-auto bg-white border-t p-4 shadow-md dark:bg-gray-800 dark:text-white dark:border-gray-700">
           <div className="flex items-center">
             <div className="w-8 text-center font-bold mr-4">
               {myRanking.rank}
@@ -265,7 +303,7 @@ export default function Ranking() {
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 }

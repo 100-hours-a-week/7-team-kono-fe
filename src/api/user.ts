@@ -1,48 +1,59 @@
-import apiClient from './client';
+import axios from 'axios';
 
 // 사용자 프로필 정보 가져오기
 export const getUserProfile = async () => {
-  try {
-    const response = await apiClient.get('/api/v1/users/profile');
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching user profile:', error);
-    throw error;
-  }
+  axios
+    .get('/data/user.json') //
+    .then((res) => {
+      return res.data;
+    }) //
+    .catch((err) => {
+      console.log(`get data/user.json error : ${err}`);
+    });
 };
 
-// 프로필 이미지 업데이트
-export const updateProfileImage = async (imageFile: File) => {
-  try {
-    const formData = new FormData();
-    formData.append('image', imageFile);
-
-    const response = await apiClient.post(
-      '/api/v1/users/profile/image',
-      formData,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      },
-    );
-
-    return response.data;
-  } catch (error) {
-    console.error('Error updating profile image:', error);
-    throw error;
+// TODO: 프로필 이미지 S3
+// 로 업데이트
+export const updateProfileImage = async (
+  userNickname: string,
+  imageFile: File,
+) => {
+  const res = await getUserProfile();
+  const user = res.find((user) => user.nickname === userNickname);
+  if (!user) {
+    console.log('user not found');
+    return;
   }
+  user.profileImage = imageFile;
+  await axios.post('data/user.json', {
+    profileImage: imageFile,
+  });
 };
 
 // 닉네임 업데이트
-export const updateNickname = async (nickname: string) => {
-  try {
-    const response = await apiClient.post('/api/v1/users/profile/nickname', {
-      nickname,
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Error updating nickname:', error);
-    throw error;
+export const updateNickname = async (nickname: string, newNickname: string) => {
+  const res = await getUserProfile();
+  const user = res.find((user) => user.nickname === nickname);
+  if (!user) {
+    console.log('user not found');
+    return;
   }
+  user.nickname = newNickname;
+
+  await axios.post('data/user.json', {
+    nickname,
+  });
+};
+
+// 닉네임 별 잔액 조회
+export const getBalanceByNickname = async (nickname: string) => {
+  axios
+    .get('/data/user.json') //
+    .then((res) => {
+      const user = res.data.find((user) => user.nickname === nickname);
+      return user.balance;
+    }) //
+    .catch((err) => {
+      console.log(`get data/user.json error : ${err}`);
+    });
 };

@@ -3,14 +3,18 @@ import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import Toast from '../common/Toast';
 import PurchaseCompleteModal from './PurchaseCompleteModal';
+import { useNavigate } from 'react-router-dom';
+import { formatAmount, formatCurrency } from '../../utils/formatter';
 
 interface TradeConfirmModalProps {
   isOpen: boolean;
   onClose: () => void;
   ticker: string;
-  amount: string;
+  amount: number;
   price: number;
+  quantity: number;
   tradeType: 'buy' | 'sell';
+  totalAmount: number;
 }
 
 export default function TradeConfirmModal({
@@ -20,10 +24,19 @@ export default function TradeConfirmModal({
   amount,
   price,
   tradeType,
+  quantity,
 }: TradeConfirmModalProps) {
+  const navigate = useNavigate();
   const panelRef = useRef<HTMLDivElement>(null);
   const [showComplete, setShowComplete] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [confirmedPrice, setConfirmedPrice] = useState('');
+  const [confirmedQuantity, setConfirmedQuantity] = useState('');
+
+  // 값이 없을 때의 기본값 처리
+  // const safeAmount = amount || 0;
+  // const safePrice = price || 0;
 
   const handleTrade = () => {
     onClose();
@@ -32,8 +45,23 @@ export default function TradeConfirmModal({
 
   const handleCompleteConfirm = () => {
     setShowComplete(false);
-    setShowToast(true);
-    setTimeout(() => setShowToast(false), 3000);
+    // Store toast info in sessionStorage before navigation
+    sessionStorage.setItem(
+      'tradeToast',
+      JSON.stringify({
+        show: true,
+        message: `${tradeType === 'buy' ? '구매' : '판매'} 주문을 완료했어요.`,
+        timestamp: Date.now(),
+      }),
+    );
+    navigate(`/coins/${ticker}`);
+  };
+
+  const handleConfirm = () => {
+    setConfirmedPrice(price.toString() || '0');
+    setConfirmedQuantity(quantity.toString() || '0');
+
+    handleTrade();
   };
 
   return (
@@ -83,10 +111,15 @@ export default function TradeConfirmModal({
                           as="h3"
                           className="text-lg text-gray-500 mb-2 dark:text-gray-400"
                         >
-                          비트코인
+                          {ticker}
                         </Dialog.Title>
-                        <p className="text-2xl font-bold">
-                          {amount} {ticker}{' '}
+                        <p
+                          className={`text-2xl font-bold ${
+                            tradeType === 'buy'
+                              ? 'text-red-500 dark:text-red-400'
+                              : 'text-blue-500 dark:text-blue-400'
+                          }`}
+                        >
                           {tradeType === 'buy' ? '구매' : '판매'}
                         </p>
                       </div>
@@ -96,14 +129,22 @@ export default function TradeConfirmModal({
                           <span className="text-gray-500 dark:text-gray-400">
                             1 {ticker} 가격
                           </span>
-                          <span>{price.toLocaleString()}원</span>
+                          <span>{formatCurrency(price)}</span>
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-gray-500 dark:text-gray-400">
-                            총 {tradeType === 'buy' ? '구매' : '판매'} 금액
+                            예상 {ticker} 수량
+                          </span>
+                          <span>
+                            {formatAmount(quantity)} {ticker}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-gray-500 dark:text-gray-400">
+                            총 예상 {tradeType === 'buy' ? '구매' : '판매'} 금액
                           </span>
                           <span className="font-medium text-lg">
-                            {(Number(amount) * price).toLocaleString()}원
+                            {formatCurrency(amount)}
                           </span>
                         </div>
                       </div>
@@ -123,7 +164,7 @@ export default function TradeConfirmModal({
                               ? 'bg-red-500 dark:bg-red-600 dark:hover:bg-red-700'
                               : 'bg-blue-500 dark:bg-blue-600 dark:hover:bg-blue-700'
                           }`}
-                          onClick={handleTrade}
+                          onClick={handleConfirm}
                         >
                           {tradeType === 'buy' ? '구매' : '판매'}
                         </button>
@@ -142,8 +183,9 @@ export default function TradeConfirmModal({
         onClose={() => setShowComplete(false)}
         onConfirm={handleCompleteConfirm}
         ticker={ticker}
-        amount={amount}
-        price={price}
+        amount={amount.toString() || '0'}
+        price={confirmedPrice}
+        quantity={confirmedQuantity}
         tradeType={tradeType}
       />
 

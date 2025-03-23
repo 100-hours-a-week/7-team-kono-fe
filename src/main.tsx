@@ -16,6 +16,7 @@ import Trade from './pages/Trade.tsx';
 import Transaction from './pages/Transaction.tsx';
 import Login from './pages/Login.tsx';
 import Layout from './components/layout/Layout';
+import AuthLayout from './components/layout/AuthLayout';
 
 const router = createBrowserRouter([
   {
@@ -24,15 +25,19 @@ const router = createBrowserRouter([
     errorElement: <NotFound />,
     children: [
       {
+        path: 'login',
+        element: (
+          <AuthLayout>
+            <Login />
+          </AuthLayout>
+        ),
+      },
+      {
         element: <Layout />,
         children: [
           {
             index: true,
             element: <Favorite />,
-          },
-          {
-            path: 'login',
-            element: <Login />,
           },
           {
             path: 'wallet',
@@ -43,11 +48,11 @@ const router = createBrowserRouter([
             element: <Discover />,
           },
           {
-            path: 'favorites',
+            path: 'favorite',
             element: <Favorite />,
           },
           {
-            path: 'rankings',
+            path: 'ranking',
             element: <Ranking />,
           },
           {
@@ -74,10 +79,6 @@ const router = createBrowserRouter([
             path: 'coins/:ticker',
             element: <CoinDetail />,
           },
-          {
-            path: 'coins/ticker',
-            element: <CoinDetail />,
-          },
         ],
       },
     ],
@@ -85,9 +86,9 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <ThemeProvider>
-      <RouterProvider router={router} />
-    </ThemeProvider>
-  </React.StrictMode>,
+  // <React.StrictMode>
+  <ThemeProvider>
+    <RouterProvider router={router} />
+  </ThemeProvider>,
+  // </React.StrictMode>
 );

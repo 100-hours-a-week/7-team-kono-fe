@@ -1,0 +1,94 @@
+{
+  "coin_favorites": [
+    {
+      "id": 1,
+      "ticker": "BTC",
+      "nickname": "test"
+    },
+    {
+      "id": 2,
+      "ticker": "ETH",
+      "nickname": "test"
+    },
+    {
+      "id": 3,
+      "ticker": "ADA",
+      "nickname": "user2"
+    },
+    {
+      "id": 4,
+      "ticker": "BTC",
+      "nickname": "user3"
+    },
+    {
+      "id": 5,
+      "ticker": "DOT",
+      "nickname": "user2"
+    },
+    {
+      "id": 6,
+      "ticker": "XRP",
+      "nickname": "test"
+    },
+    {
+      "id": 7,
+      "ticker": "ETH",
+      "nickname": "user4"
+    },
+    {
+      "id": 8,
+      "ticker": "SOL",
+      "nickname": "user3"
+    },
+    {
+      "id": 9,
+      "ticker": "DOGE",
+      "nickname": "user5"
+    },
+    {
+      "id": 10,
+      "ticker": "ADA",
+      "nickname": "user4"
+    },
+    {
+      "id": 11,
+      "ticker": "LINK",
+      "nickname": "test"
+    },
+    {
+      "id": 12,
+      "ticker": "LTC",
+      "nickname": "test"
+    },
+    {
+      "id": 13,
+      "ticker": "UNI",
+      "nickname": "test"
+    },
+    {
+      "id": 14,
+      "ticker": "MATIC",
+      "nickname": "test"
+    },
+    {
+      "id": 15,
+      "ticker": "AVAX",
+      "nickname": "test"
+    },
+    {
+      "id": 16,
+      "ticker": "ATOM",
+      "nickname": "test"
+    },
+    {
+      "id": 17,
+      "ticker": "DOT",
+      "nickname": "test"
+    },
+    {
+      "id": 18,
+      "ticker": "AAVE",
+      "nickname": "test"
+    }
+  ]
+}
