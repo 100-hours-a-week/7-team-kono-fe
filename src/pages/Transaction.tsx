@@ -1,88 +1,62 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaFilter } from 'react-icons/fa';
 import Header from '../components/layout/Header';
-import FilterModal, { FilterType } from '../components/modal/FilterModal';
+import FilterModal, {
+  FilterType,
+  displayToDataMap,
+  dataToDisplayMap,
+  DataFilterType,
+} from '../components/modal/FilterModal';
 import { formatDate, formatCurrency } from '../utils/formatter';
+import { getTransactionsByNickname } from '../api/transaction';
 
 // 거래 타입 정의
-type TransactionType = '매수' | '매도';
+type TransactionType = 'buy' | 'sell';
 
 // 거래 내역 인터페이스
-interface Transaction {
+// interface Transaction {
+//   id: string;
+//   type: TransactionType;
+//   coinName: string;
+//   ticker: string;
+//   amount: number;
+//   price: number;
+//   total: number;
+//   date: Date;
+// }
+
+type Transaction = {
   id: string;
+  nickname: string;
   type: TransactionType;
   coinName: string;
-  symbol: string;
+  ticker: string;
   amount: number;
   price: number;
   total: number;
-  date: Date;
-}
+  date: string;
+};
 
 export default function Transaction() {
   const navigate = useNavigate();
   const [activeFilter, setActiveFilter] = useState<FilterType>('전체');
   const [showFilterModal, setShowFilterModal] = useState(false);
 
-  // 거래 내역 목 데이터
-  const [transactions] = useState<Transaction[]>([
-    {
-      id: '1',
-      type: '매수',
-      coinName: '비트코인',
-      symbol: 'BTC',
-      amount: 0.01,
-      price: 68500000,
-      total: 685000,
-      date: new Date('2023-05-15T09:30:00'),
-    },
-    {
-      id: '2',
-      type: '매도',
-      coinName: '이더리움',
-      symbol: 'ETH',
-      amount: 0.5,
-      price: 3200000,
-      total: 1600000,
-      date: new Date('2023-05-14T14:20:00'),
-    },
-    {
-      id: '3',
-      type: '매수',
-      coinName: '리플',
-      symbol: 'XRP',
-      amount: 1000,
-      price: 580,
-      total: 580000,
-      date: new Date('2023-05-12T11:45:00'),
-    },
-    {
-      id: '4',
-      type: '매수',
-      coinName: '카르다노',
-      symbol: 'ADA',
-      amount: 500,
-      price: 420,
-      total: 210000,
-      date: new Date('2023-05-10T16:30:00'),
-    },
-    {
-      id: '5',
-      type: '매도',
-      coinName: '솔라나',
-      symbol: 'SOL',
-      amount: 2,
-      price: 98000,
-      total: 196000,
-      date: new Date('2023-05-08T10:15:00'),
-    },
-  ]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+
+  useEffect(() => {
+    getTransactionsByNickname().then((transactions) => {
+      setTransactions(transactions);
+    });
+  }, []);
 
   // 필터링된 거래 내역
   const filteredTransactions = transactions.filter((transaction) => {
     if (activeFilter === '전체') return true;
-    return transaction.type === activeFilter;
+    return (
+      transaction.type === (displayToDataMap[activeFilter] as TransactionType)
+    );
   });
 
   // 필터 모달 토글
@@ -97,8 +71,8 @@ export default function Transaction() {
   };
 
   // 코인 상세 페이지로 이동
-  const goToCoinDetail = (symbol: string) => {
-    navigate(`/coins/${symbol}`);
+  const goToCoinDetail = (ticker: string) => {
+    navigate(`/coins/${ticker}`);
   };
 
   return (
@@ -109,7 +83,7 @@ export default function Transaction() {
       {/* 필터 표시 */}
       <div className="mx-4 bg-white p-4 border-b flex justify-between rounded-t-xl dark:bg-gray-800 dark:text-white dark:border-gray-700">
         <div className="flex items-center">
-          <span className="text-sm text-gray-500 mr-2">필터:</span>
+          <span className="text-sm text-gray-500 mr-2">필터</span>
           <span className="text-sm font-medium">{activeFilter}</span>
         </div>
         <button onClick={toggleFilterModal} className="p-1">
@@ -128,12 +102,12 @@ export default function Transaction() {
                   ? 'rounded-b-xl border-b-0'
                   : ''
               }`}
-              onClick={() => goToCoinDetail(transaction.symbol)}
+              onClick={() => goToCoinDetail(transaction.ticker)}
             >
               <div className="flex justify-between items-start mb-2">
                 <div className="flex items-center">
                   <img
-                    src={`https://static.upbit.com/logos/${transaction.symbol}.png`}
+                    src={`https://static.upbit.com/logos/${transaction.ticker}.png`}
                     alt={transaction.coinName}
                     className="w-10 h-10 rounded-full mr-3"
                     onError={(e) => {
@@ -144,25 +118,29 @@ export default function Transaction() {
                   <div>
                     <div className="font-medium">{transaction.coinName}</div>
                     <div className="text-sm text-gray-500 dark:text-gray-400">
-                      {transaction.symbol}
+                      {transaction.ticker}
                     </div>
                   </div>
                 </div>
                 <div
                   className={`px-2 py-1 rounded-md text-sm font-medium ${
-                    transaction.type === '매수'
+                    transaction.type === 'buy'
                       ? 'bg-red-100 text-red-500 dark:bg-red-900 dark:text-red-400'
                       : 'bg-blue-100 text-blue-500 dark:bg-blue-900 dark:text-blue-400'
                   }`}
                 >
-                  {transaction.type}
+                  {
+                    dataToDisplayMap[
+                      transaction.type as unknown as DataFilterType
+                    ]
+                  }
                 </div>
               </div>
 
               <div className="flex justify-between text-sm mb-1">
                 <span className="text-gray-500 dark:text-gray-400">수량</span>
                 <span>
-                  {transaction.amount} {transaction.symbol}
+                  {transaction.amount} {transaction.ticker}
                 </span>
               </div>
 
@@ -180,7 +158,7 @@ export default function Transaction() {
 
               <div className="flex justify-between text-sm">
                 <span className="text-gray-500 dark:text-gray-400">날짜</span>
-                <span>{formatDate(transaction.date)}</span>
+                <span>{formatDate(new Date(transaction.date))}</span>
               </div>
             </div>
           ))}

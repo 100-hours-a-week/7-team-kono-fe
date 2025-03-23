@@ -2,6 +2,20 @@ import React from 'react';
 
 // 필터 타입 정의
 export type FilterType = '전체' | '매수' | '매도';
+export type DataFilterType = 'all' | 'buy' | 'sell';
+
+// 데이터 타입과 표시 타입 간의 매핑
+export const dataToDisplayMap: Record<DataFilterType, FilterType> = {
+  all: '전체',
+  buy: '매수',
+  sell: '매도',
+};
+
+export const displayToDataMap: Record<FilterType, DataFilterType> = {
+  전체: 'all',
+  매수: 'buy',
+  매도: 'sell',
+};
 
 interface FilterModalProps {
   isOpen: boolean;
