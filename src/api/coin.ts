@@ -1,9 +1,11 @@
 import axios from 'axios';
+import api from './clients';
+import { API_ENDPOINTS } from '../config/apiEndpoints';
 
 // Example fix for your coin.ts file
 export const getCoinName = async (ticker: string) => {
   try {
-    const res = await axios.get('/data/coin.json');
+    const res = await api.get('/data/coin.json');
 
     // Make sure res.data is an array before using find
     if (Array.isArray(res.data)) {
