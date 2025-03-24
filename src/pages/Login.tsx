@@ -1,14 +1,70 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import KakaoLoginButton from '../assets/images/kakao_login_medium_wide.png';
 import konoLogo from '../assets/kono_logo.svg';
 import { useNavigate } from 'react-router-dom';
 
+declare global {
+  interface Window {
+    Kakao: any;
+  }
+}
+
 const Login: React.FC = () => {
   const navigate = useNavigate();
+  const [isKakaoInitialized, setIsKakaoInitialized] = useState(false);
+
+  // Kakao SDK 초기화
+  useEffect(() => {
+    const loadKakaoSDK = () => {
+      const script = document.createElement('script');
+      script.src = 'https://developers.kakao.com/sdk/js/kakao.js';
+      script.async = true;
+      script.onload = () => {
+        window.Kakao.init(import.meta.env.VITE_KAKAO_API_KEY);
+        setIsKakaoInitialized(true);
+        console.log('Kakao SDK loaded and initialized');
+      };
+      document.body.appendChild(script);
+    };
+
+    // Kakao SDK가 이미 로드되어 있는지 확인
+    if (!window.Kakao) {
+      loadKakaoSDK();
+    } else if (!window.Kakao.isInitialized()) {
+      window.Kakao.init(import.meta.env.VITE_KAKAO_API_KEY);
+      setIsKakaoInitialized(true);
+      console.log('Kakao SDK initialized');
+    } else {
+      setIsKakaoInitialized(true);
+      console.log('Kakao SDK already initialized');
+    }
+
+    // cleanup
+    return () => {
+      const script = document.querySelector(
+        'script[src="https://developers.kakao.com/sdk/js/kakao.js"]',
+      );
+      if (script) {
+        document.body.removeChild(script);
+      }
+    };
+  }, []);
 
   const handleKakaoLogin = () => {
-    // 외부 URL로 리다이렉트하려면 window.location.href를 사용
-    window.location.href = import.meta.env.VITE_API_URL;
+    if (!isKakaoInitialized) {
+      console.error('Kakao SDK not initialized yet');
+      return;
+    }
+
+    try {
+      window.location.href = `${import.meta.env.VITE_API_URL}/oauth2/authorization/kakao`;
+      // window.Kakao.Auth.authorize({
+      //   redirectUri: import.meta.env.VITE_KAKAO_REDIRECT_URI,
+      //   scope: 'profile_nickname,profile_image',
+      // });
+    } catch (error) {
+      console.error('Failed to initiate Kakao login:', error);
+    }
   };
 
   return (
@@ -34,8 +90,12 @@ const Login: React.FC = () => {
           <img
             src={KakaoLoginButton}
             alt="카카오 로그인"
-            className="mx-auto cursor-pointer hover:opacity-90 transition-opacity"
-            onClick={handleKakaoLogin}
+            className={`mx-auto cursor-pointer transition-opacity ${
+              isKakaoInitialized
+                ? 'hover:opacity-90'
+                : 'opacity-50 cursor-not-allowed'
+            }`}
+            onClick={isKakaoInitialized ? handleKakaoLogin : undefined}
           />
         </div>
       </div>

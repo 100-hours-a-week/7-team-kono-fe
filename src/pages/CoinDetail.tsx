@@ -7,6 +7,7 @@ import PriceInfo from '../components/PriceInfo'; // 수정된 PriceInfo 컴포�
 
 import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
 import { formatCurrency, formatVolume } from '../utils/formatter';
+import { isFavoriteCoin, addFavorite, removeFavorite } from '../api/favorite';
 
 // 코인 정보 인터페이스
 interface CoinData {
@@ -64,6 +65,8 @@ export default function CoinDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [timeframe, setTimeframe] = useState<'1D' | '1W' | '1M' | '1Y'>('1D');
+  const [isFavorite, setIsFavorite] = useState(false);
+  const nickname = 'test'; // 실제 구현에서는 로그인된 사용자의 닉네임을 사용
 
   // ticker가 undefined일 경우 기본값으로 'BTC' 사용
   const symbolToUse = ticker || 'BTC';
@@ -106,16 +109,37 @@ export default function CoinDetail() {
     fetchCoinData();
   }, [symbolToUse]);
 
+  // 초기 관심 상태 확인
+  useEffect(() => {
+    const checkFavoriteStatus = async () => {
+      if (symbolToUse) {
+        const status = await isFavoriteCoin(nickname, symbolToUse);
+        setIsFavorite(status);
+      }
+    };
+    checkFavoriteStatus();
+  }, [symbolToUse]);
+
   // 즐겨찾기 토글 함수
-  const toggleFavorite = useCallback(() => {
-    setCoin((prevCoin) => {
-      if (!prevCoin) return null;
-      return {
-        ...prevCoin,
-        isFavorite: !prevCoin.isFavorite,
-      };
-    });
-  }, []);
+  const toggleFavorite = useCallback(async () => {
+    if (!symbolToUse) return;
+
+    try {
+      if (isFavorite) {
+        const success = await removeFavorite(nickname, symbolToUse);
+        if (success) {
+          setIsFavorite(false);
+        }
+      } else {
+        const success = await addFavorite(nickname, symbolToUse);
+        if (success) {
+          setIsFavorite(true);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to toggle favorite:', error);
+    }
+  }, [isFavorite, symbolToUse]);
 
   if (loading) {
     return (
@@ -156,7 +180,7 @@ export default function CoinDetail() {
         title={coin.name}
         rightElement={
           <button onClick={toggleFavorite} className="p-2">
-            {coin.isFavorite ? (
+            {isFavorite ? (
               <FaHeart className="text-red-400 text-xl" />
             ) : (
               <FaRegHeart className="text-gray-400 text-xl" />
@@ -171,7 +195,7 @@ export default function CoinDetail() {
         tickerData={tickerData}
         name={coin.name}
         onFavoriteToggle={toggleFavorite}
-        isFavorite={coin.isFavorite}
+        isFavorite={isFavorite}
       />
 
       {/* 차트 타임프레임 선택 */}
@@ -217,7 +241,6 @@ export default function CoinDetail() {
                 {formatVolume(
                   tickerData[`KRW-${symbolToUse}`].acc_trade_price_24h,
                 )}{' '}
-                원
               </span>
             </div>
             <div className="flex justify-between">

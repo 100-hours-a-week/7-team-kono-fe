@@ -63,14 +63,14 @@ const Settings = () => {
       <Header title="설정" />
 
       {/* 다크 모드 설정 */}
-      <div className="mx-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm mb-4">
+      <div className="mx-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm mb-4 border border-gray-200 dark:border-gray-700">
         <div className="p-4">
           <DarkModeToggle />
         </div>
       </div>
 
       {/* 프로필 수정 */}
-      <div className="mx-4 mt-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm mb-4">
+      <div className="mx-4 mt-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm mb-4 border border-gray-200 dark:border-gray-700">
         <button
           onClick={() => navigate('/profile')}
           className="w-full text-left p-4 flex items-center"
@@ -81,7 +81,7 @@ const Settings = () => {
       </div>
 
       {/* 앱 정보 섹션 */}
-      <div className="mx-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm mb-4">
+      <div className="mx-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm mb-4 border border-gray-200 dark:border-gray-700">
         <h2 className="p-4 border-b dark:border-gray-700 text-sm font-medium text-gray-500 dark:text-gray-400">
           앱 정보
         </h2>
@@ -113,7 +113,7 @@ const Settings = () => {
       </div>
 
       {/* 계정 관리 섹션 */}
-      <div className="mx-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm mb-4">
+      <div className="mx-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm mb-4 border border-gray-200 dark:border-gray-700">
         <h2 className="p-4 border-b dark:border-gray-700 text-sm font-medium text-gray-500 dark:text-gray-400">
           계정 관리
         </h2>
@@ -129,7 +129,7 @@ const Settings = () => {
       </div>
 
       {/* 회원 탈퇴 */}
-      <div className="mx-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm">
+      <div className="mx-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm mb-4 border border-gray-200 dark:border-gray-700">
         <button
           onClick={handleDeleteAccount}
           className="flex items-center w-full text-left p-4 text-red-500"

@@ -165,7 +165,7 @@ export default function Ranking() {
       </div>
 
       {/* 상위 3명 */}
-      <div className="bg-white p-4 py-6 rounded-b-xl mb-2 dark:bg-gray-800 dark:text-white mx-4">
+      <div className="bg-white p-4 py-6 rounded-b-xl mb-2 dark:bg-gray-800 dark:text-white mx-4 shadow-md">
         <div className="flex justify-around items-end">
           {/* 2등 */}
           <div className="flex flex-col items-center">
@@ -244,7 +244,7 @@ export default function Ranking() {
       </div>
 
       {/* 나머지 랭킹 */}
-      <div className="flex-1 bg-white rounded-b-xl dark:bg-gray-800 dark:text-white mx-4">
+      <div className="flex-1 bg-white rounded-b-xl dark:bg-gray-800 dark:text-white mx-4 shadow-lg">
         {otherUsers.map((user) => (
           <div
             key={user.id}
