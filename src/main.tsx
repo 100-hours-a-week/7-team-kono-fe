@@ -17,6 +17,7 @@ import Transaction from './pages/Transaction.tsx';
 import Login from './pages/Login.tsx';
 import Layout from './components/layout/Layout';
 import AuthLayout from './components/layout/AuthLayout';
+import KakoRedirectHandler from './components/auth/KakoRedirectHandler.tsx';
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
             <Login />
           </AuthLayout>
         ),
+      },
+      {
+        path: 'login/oauth',
+        element: <KakoRedirectHandler />,
       },
       {
         element: <Layout />,
