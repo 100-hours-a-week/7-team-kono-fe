@@ -1,4 +1,5 @@
-import axios from 'axios';
+import api from './clients';
+import { API_ENDPOINTS } from '../config/apiEndpoints';
 
 interface FavoriteCoin {
   id: number;
@@ -6,71 +7,84 @@ interface FavoriteCoin {
   nickname: string;
 }
 
-// 초기 데이터 로드 (앱 시작시 한 번만 실행)
-export const initializeFavorites = async () => {
-  if (!localStorage.getItem('favorites')) {
-    try {
-      const res = await axios.get('/data/favorite.json');
-      localStorage.setItem('favorites', JSON.stringify(res.data));
-    } catch (error) {
-      console.error('Failed to initialize favorites:', error);
-      localStorage.setItem('favorites', JSON.stringify({ coin_favorites: [] }));
+/**
+ * 사용자의 관심 코인 목록을 가져오는 함수
+ * @param nickname 사용자 닉네임
+ * @returns 관심 코인 목록 배열
+ */
+export const getFavoriteList = async (): Promise<FavoriteCoin[]> => {
+  try {
+    const response = await api.get(API_ENDPOINTS.GET_FAVORITE);
+
+    // 백엔드에서 이미 필터링된 데이터를 반환하는 경우
+    if (Array.isArray(response.data)) {
+      return response.data;
     }
+
+    // 백엔드에서 coin_favorites와 같은 객체 구조로 반환하는 경우
+    // if (response.data && Array.isArray(response.data.coin_favorites)) {
+    //   return response.data.coin_favorites;
+    // }
+
+    return [];
+  } catch (error) {
+    console.error('관심 코인 목록 조회 오류:', error);
+    return [];
   }
 };
 
-// 좋아요 목록 가져오기
-export const getFavoriteList = async (nickname: string) => {
-  await initializeFavorites(); // 초기 데이터가 없을 경우 로드
-  const favorites = JSON.parse(
-    localStorage.getItem('favorites') || '{"coin_favorites": []}',
-  );
-  return favorites.coin_favorites.filter(
-    (favorite: FavoriteCoin) => favorite.nickname === nickname,
-  );
-};
-
-// 코인이 관심 목록에 있는지 확인
-export const isFavoriteCoin = async (nickname: string, ticker: string) => {
-  const favorites = await getFavoriteList(nickname);
-  return favorites.some((favorite: FavoriteCoin) => favorite.ticker === ticker);
-};
-
-// 좋아요 추가
-export const addFavorite = async (nickname: string, ticker: string) => {
+/**
+ * 특정 코인이 관심 목록에 있는지 확인하는 함수
+ * @param nickname 사용자 닉네임
+ * @param ticker 코인 티커 (예: BTC, ETH)
+ * @returns 관심 목록 포함 여부 (true/false)
+ */
+export const isFavoriteCoin = async (
+  nickname: string,
+  ticker: string,
+): Promise<boolean> => {
   try {
-    const favorites = JSON.parse(
-      localStorage.getItem('favorites') || '{"coin_favorites": []}',
-    );
-    const newFavorite = {
-      id: Date.now(),
-      ticker: ticker,
-      nickname: nickname,
-    };
-
-    favorites.coin_favorites.push(newFavorite);
-    localStorage.setItem('favorites', JSON.stringify(favorites));
-    return true;
+    // 백엔드에서 직접 확인하는 API가 있는 경우
+    try {
+      const response = await api.get(API_ENDPOINTS.POST_FAVORITE(ticker));
+      return response.status === 200 && !!response.data.isFavorite;
+    } catch (directCheckError) {
+      // API가 없는 경우 목록을 가져와서 확인
+      const favorites = await getFavoriteList(nickname);
+      return favorites.some((favorite) => favorite.ticker === ticker);
+    }
   } catch (error) {
-    console.error('Failed to add favorite:', error);
+    console.error(`관심 코인 확인 오류 (${ticker}):`, error);
     return false;
   }
 };
 
-// 좋아요 삭제
-export const removeFavorite = async (nickname: string, ticker: string) => {
+/**
+ * 관심 코인 추가 함수
+ * @param ticker 코인 티커
+ * @returns 성공 여부 (true/false)
+ */
+export const addFavorite = async (ticker: string): Promise<boolean> => {
   try {
-    const favorites = JSON.parse(
-      localStorage.getItem('favorites') || '{"coin_favorites": []}',
-    );
-    favorites.coin_favorites = favorites.coin_favorites.filter(
-      (favorite: FavoriteCoin) =>
-        !(favorite.nickname === nickname && favorite.ticker === ticker),
-    );
-    localStorage.setItem('favorites', JSON.stringify(favorites));
-    return true;
+    const response = await api.post(API_ENDPOINTS.POST_FAVORITE(ticker));
+    return response.status === 200 || response.status === 201;
   } catch (error) {
-    console.error('Failed to remove favorite:', error);
+    console.error(`관심 코인 추가 오류 (${ticker}):`, error);
+    return false;
+  }
+};
+
+/**
+ * 관심 코인 삭제 함수
+ * @param ticker 코인 티커
+ * @returns 성공 여부 (true/false)
+ */
+export const removeFavorite = async (ticker: string): Promise<boolean> => {
+  try {
+    const response = await api.delete(API_ENDPOINTS.DELETE_FAVORITE(ticker));
+    return response.status === 200;
+  } catch (error) {
+    console.error(`관심 코인 삭제 오류 (${ticker}):`, error);
     return false;
   }
 };
