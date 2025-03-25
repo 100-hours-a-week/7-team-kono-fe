@@ -1,15 +1,52 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import KakaoLoginButton from '../assets/images/kakao_login_medium_wide.png';
 import konoLogo from '../assets/kono_logo.svg';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { login, isAuthenticated, loading } = useAuth();
+  const [processingAuth, setProcessingAuth] = useState(false);
+
+  // URL에 인증 코드가 있는지 확인
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const hasAuthCode = params.has('code');
+    
+    if (hasAuthCode) {
+      console.log('로그인 페이지: 인증 코드 감지됨, 처리 중...');
+      setProcessingAuth(true);
+    }
+  }, [location.search]);
+
+  // 이미 로그인된 경우 메인 페이지로 리다이렉트
+  useEffect(() => {
+    if (!loading && isAuthenticated) {
+      console.log('로그인 페이지: 인증됨, 메인 페이지로 리다이렉트');
+      navigate('/favorite');
+    }
+  }, [isAuthenticated, loading, navigate]);
 
   const handleKakaoLogin = () => {
-    // 외부 URL로 리다이렉트하려면 window.location.href를 사용
-    window.location.href = import.meta.env.VITE_API_URL;
+    console.log('로그인 페이지: 카카오 로그인 버튼 클릭');
+    setProcessingAuth(true);
+    // AuthContext에 구현된 로그인 함수 호출
+    login();
   };
+
+  // 로딩 중이거나 처리 중이거나 이미 인증된 경우 로딩 표시
+  if (loading || processingAuth || isAuthenticated) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen p-4">
+        <img src={konoLogo} alt="코노 로고" className="w-1/2 mx-auto mb-8" />
+        <p className="text-gray-500 text-center">
+          {processingAuth ? '카카오 로그인 처리 중...' : '로딩 중...'}
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center justify-between min-h-screen p-4">
