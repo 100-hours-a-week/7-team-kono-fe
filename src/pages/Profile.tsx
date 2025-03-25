@@ -11,6 +11,12 @@ interface ProfileData {
   profileImage: string;
 }
 
+// interface User {
+//   nickname: string;
+//   profileImage: string;
+//   balance?: number;
+// }
+
 const Profile: React.FC = () => {
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState(true);
