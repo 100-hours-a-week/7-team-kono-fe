@@ -4,9 +4,10 @@ import { IoIosArrowBack } from 'react-icons/io';
 import TradeConfirmModal from '../components/modal/TradeConfirmModal';
 import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
 import { formatAmount, formatCurrency } from '../utils/formatter';
-import getCoinName from '../api/coin';
-import { getBalanceByNickname } from '../api/user';
-import { getQuantityByNicknameAndTicker } from '../api/wallet';
+import { getCoinName } from '../api/coin';
+import { getBalance } from '../api/wallet';
+import { getQuantityByTicker } from '../api/wallet';
+
 // 거래 타입 정의
 type TradeType = 'buy' | 'sell';
 
@@ -97,8 +98,8 @@ export default function Trade() {
         setLoading(true);
 
         const coinName = await getCoinName(ticker);
-        const balance = await getBalanceByNickname(nickname);
-        const quantity = await getQuantityByNicknameAndTicker(nickname, ticker);
+        const balance = await getBalance(nickname);
+        const quantity = await getQuantityByTicker(nickname, ticker);
 
         // 현재 가격 정보를 한 번만 가져옴
         const currentPrice = tickerData[`KRW-${ticker}`]?.trade_price || 0;

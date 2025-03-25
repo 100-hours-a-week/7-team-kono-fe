@@ -1,59 +1,80 @@
-import axios from 'axios';
+import api from './clients';
+import { API_ENDPOINTS } from '../config/apiEndpoints';
+
+export interface User {
+  nickname: string;
+  profileImage: string;
+  balance?: number;
+}
 
 // 사용자 프로필 정보 가져오기
-export const getUserProfile = async () => {
-  axios
-    .get('/data/user.json') //
-    .then((res) => {
-      return res.data;
-    }) //
-    .catch((err) => {
-      console.log(`get data/user.json error : ${err}`);
-    });
+export const getUserProfile = async (): Promise<User> => {
+  try {
+    const response = await api.get(API_ENDPOINTS.GET_USER);
+    const users = response.data;
+    console.log(users);
+    return users;
+  } catch (error) {
+    console.error(`사용자 프로필 조회 오류: ${error}`);
+    return null;
+  }
 };
 
-// TODO: 프로필 이미지 S3
-// 로 업데이트
-export const updateProfileImage = async (
-  userNickname: string,
-  imageFile: File,
-) => {
-  const res = await getUserProfile();
-  const user = res.find((user) => user.nickname === userNickname);
-  if (!user) {
-    console.log('user not found');
-    return;
+// 프로필 이미지 업데이트
+export const updateProfileImage = async (imageFile: File): Promise<boolean> => {
+  try {
+    const formData = new FormData();
+    formData.append('image', imageFile);
+
+    const response = await api.post(
+      API_ENDPOINTS.POST_PROFILE_IMAGE,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
+    );
+
+    return response.status === 200;
+  } catch (error) {
+    console.error(`프로필 이미지 업데이트 오류: ${error}`);
+    return false;
   }
-  user.profileImage = imageFile;
-  await axios.post('data/user.json', {
-    profileImage: imageFile,
-  });
 };
 
 // 닉네임 업데이트
-export const updateNickname = async (nickname: string, newNickname: string) => {
-  const res = await getUserProfile();
-  const user = res.find((user) => user.nickname === nickname);
-  if (!user) {
-    console.log('user not found');
-    return;
-  }
-  user.nickname = newNickname;
+export const updateNickname = async (nickname: string): Promise<boolean> => {
+  try {
+    const response = await api.put(API_ENDPOINTS.PUT_NICKNAME, {
+      nickname,
+    });
 
-  await axios.post('data/user.json', {
-    nickname,
-  });
+    return response.status === 200;
+  } catch (error) {
+    console.error(`닉네임 업데이트 오류: ${error}`);
+    return false;
+  }
 };
 
-// 닉네임 별 잔액 조회
-export const getBalanceByNickname = async (nickname: string) => {
-  axios
-    .get('/data/user.json') //
-    .then((res) => {
-      const user = res.data.find((user) => user.nickname === nickname);
-      return user.balance;
-    }) //
-    .catch((err) => {
-      console.log(`get data/user.json error : ${err}`);
-    });
+// 회원 탈퇴
+export const deleteUser = async (): Promise<boolean> => {
+  try {
+    const response = await api.delete(API_ENDPOINTS.DELETE_USER);
+    return response.status === 200;
+  } catch (error) {
+    console.error(`회원 탈퇴 오류: ${error}`);
+    return false;
+  }
+};
+
+// 로그아웃
+export const logout = async (): Promise<boolean> => {
+  try {
+    const response = await api.post(API_ENDPOINTS.LOGOUT);
+    return response.status === 200;
+  } catch (error) {
+    console.error(`로그아웃 오류: ${error}`);
+    return false;
+  }
 };

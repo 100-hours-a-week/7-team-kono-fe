@@ -44,12 +44,21 @@ export default function Transaction() {
   const [showFilterModal, setShowFilterModal] = useState(false);
 
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const nickname = 'test'; // 실제 구현에서는 로그인된 사용자의 닉네임을 사용
 
   useEffect(() => {
-    getTransactionsByNickname().then((transactions) => {
-      setTransactions(transactions);
-    });
-  }, []);
+    const fetchTransactions = async () => {
+      try {
+        const data = await getTransactionsByNickname(nickname);
+        setTransactions(data);
+      } catch (error) {
+        console.error('Failed to fetch transactions:', error);
+        setTransactions([]);
+      }
+    };
+
+    fetchTransactions();
+  }, [nickname]);
 
   // 필터링된 거래 내역
   const filteredTransactions = transactions.filter((transaction) => {
@@ -81,7 +90,7 @@ export default function Transaction() {
       <Header title="매매 내역" />
 
       {/* 필터 표시 */}
-      <div className="mx-4 bg-white p-4 border-b flex justify-between rounded-t-xl dark:bg-gray-800 dark:text-white dark:border-gray-700">
+      <div className="mx-4 bg-white p-4 border-b flex justify-between rounded-t-xl shadow-sm dark:bg-gray-800 dark:text-white border border-gray-200 dark:border-gray-700">
         <div className="flex items-center">
           <span className="text-sm text-gray-500 mr-2">필터</span>
           <span className="text-sm font-medium">{activeFilter}</span>
@@ -97,11 +106,7 @@ export default function Transaction() {
           {filteredTransactions.map((transaction, index) => (
             <div
               key={transaction.id}
-              className={`p-4 border-b bg-white dark:bg-gray-800 dark:text-white dark:border-gray-700     ${
-                index === filteredTransactions.length - 1
-                  ? 'rounded-b-xl border-b-0'
-                  : ''
-              }`}
+              className={`p-4 border-b bg-white dark:bg-gray-800 dark:text-white border border-gray-200 dark:border-gray-700 shadow-sm last:rounded-b-xl last:border-b-0`}
               onClick={() => goToCoinDetail(transaction.ticker)}
             >
               <div className="flex justify-between items-start mb-2">

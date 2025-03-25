@@ -47,10 +47,10 @@ const PriceInfo = memo(
     const data = tickerData[`KRW-${symbol}`];
 
     // 가격 변화율 (퍼센트)
-    const priceChange = data.signed_change_rate * 100;
+    const rateChange = data.signed_change_rate * 100;
 
     // 가격 변화 방향에 따른 스타일 클래스
-    const priceChangeClass =
+    const rateChangeClass =
       data.change === 'RISE'
         ? 'text-red-500 dark:text-red-400'
         : data.change === 'FALL'
@@ -91,11 +91,11 @@ const PriceInfo = memo(
 
         <div className="mt-3">
           <div className="flex items-baseline">
-            <div className={`text-2xl font-bold ${priceChangeClass}`}>
+            <div className={`text-2xl font-bold ${rateChangeClass}`}>
               {formatCurrency(data.trade_price)}
             </div>
-            <div className={`ml-2 ${priceChangeClass}`}>
-              {formatPriceChange(priceChange)}
+            <div className={`ml-2 ${rateChangeClass}`}>
+              {formatPriceChange(rateChange)}
             </div>
           </div>
 
