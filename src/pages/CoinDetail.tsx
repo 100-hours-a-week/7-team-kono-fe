@@ -66,7 +66,9 @@ export default function CoinDetail() {
   const [error, setError] = useState<string | null>(null);
   const [timeframe, setTimeframe] = useState<'1D' | '1W' | '1M' | '1Y'>('1D');
   const [isFavorite, setIsFavorite] = useState(false);
-  const nickname = 'test'; // 실제 구현에서는 로그인된 사용자의 닉네임을 사용
+  
+
+
 
   // ticker가 undefined일 경우 기본값으로 'BTC' 사용
   const symbolToUse = ticker || 'BTC';
@@ -113,7 +115,7 @@ export default function CoinDetail() {
   useEffect(() => {
     const checkFavoriteStatus = async () => {
       if (symbolToUse) {
-        const status = await isFavoriteCoin(nickname, symbolToUse);
+        const status = await isFavoriteCoin(symbolToUse);
         setIsFavorite(status);
       }
     };
@@ -126,12 +128,12 @@ export default function CoinDetail() {
 
     try {
       if (isFavorite) {
-        const success = await removeFavorite(nickname, symbolToUse);
+        const success = await removeFavorite(symbolToUse);
         if (success) {
           setIsFavorite(false);
         }
       } else {
-        const success = await addFavorite(nickname, symbolToUse);
+        const success = await addFavorite(symbolToUse);
         if (success) {
           setIsFavorite(true);
         }

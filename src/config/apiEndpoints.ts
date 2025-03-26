@@ -4,6 +4,11 @@ export const API_ENDPOINTS = {
   SIGNUP: '/api/v1/auth/signup',
   LOGOUT: '/api/v1/auth/logout',
 
+  // 인증 관련
+  KAKAO_LOGIN: '/oauth2/authorization/kakao',
+  AUTH_KAKAO_CALLBACK: '/api/v1/auth/kakao/callback',
+
+  // 사용자 관련
   GET_USER: '/api/v1/users',
   POST_PROFILE_IMAGE: '/api/vi1/users/profile',
   PUT_NICKNAME: '/api/v1/users/nickname',
@@ -11,6 +16,8 @@ export const API_ENDPOINTS = {
 
   // 코인 관련
   GET_FAVORITE: '/api/v1/users/favorites',
+  GET_IS_FAVORITE: (ticker: string) => `/api/v1/users/favorites/${ticker}`,
+
   POST_FAVORITE: (ticker: string) => `/api/v1/users/favorites/${ticker}`,
   DELETE_FAVORITE: (ticker: string) => `/api/v1/users/favorites/${ticker}`,
   GET_COINS: '/api/v1/coins',
@@ -22,39 +29,4 @@ export const API_ENDPOINTS = {
   GET_HOLDING_COIN: '/api/v1/wallets/coins',
   GET_IS_HOLDING_COIN: (ticker: string) => `/api/v1/wallets/coins/${ticker}`,
   GET_TRANSACTION: '/api/v1/wallets/transactions',
-
-  // 랭킹 관련
-
-  // 사용자 관련
-  // USERS: {
-  //   PROFILE: '/api/v1/users',
-  //   PROFILE_IMAGE: '/api/v1/users/profile',
-  //   NICKNAME: '/api/v1/users',
-  //   BADGES: '/api/v1/users/badges',
-  //   FAVORITES: '/api/v1/users/favorites',
-  //   FAVORITE_BY_TICKER: (ticker: string) => `/api/v1/users/favorites/${ticker}`,
-  // },
-
-  // // 코인 관련
-  // COINS: {
-  //   LIST: '/api/v1/coins',
-  //   DETAIL: (ticker: string) => `/api/v1/coins/${ticker}`,
-  //   ORDERS: '/api/v1/coins/orders',
-  // },
-
-  // // 지갑 관련
-  // WALLETS: {
-  //   CASH: '/api/v1/wallets/cash',
-  //   COINS: '/api/v1/wallets/coins',
-  //   COIN_BY_TICKER: (ticker: string) => `/api/v1/wallets/coins/${ticker}`,
-  //   TRANSACTIONS: '/api/v1/wallets/transactions',
-  // },
-
-  // // 랭킹 관련
-  // RANKINGS: {
-  //   DAILY: '/api/v1/rankings/daily',
-  //   DAILY_ME: '/api/v1/rankings/daily/me',
-  //   ALL: '/api/v1/rankings',
-  //   ME: '/api/v1/rankings/me',
-  // },
 };

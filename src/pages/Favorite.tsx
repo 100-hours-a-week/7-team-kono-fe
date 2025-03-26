@@ -5,9 +5,10 @@ import Header from '../components/layout/Header';
 import { formatAmount } from '../utils/formatter';
 import { getFavoriteList } from '../api/favorite';
 import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
+import { getUserProfile } from '../api/user';
+import axios from 'axios';
 
 interface FavoriteCoin {
-  id: string;
   name: string;
   ticker: string;
   accPrice: number;
@@ -48,13 +49,41 @@ export default function Favorites() {
   const [searchTerm, setSearchTerm] = useState('');
   const [favoriteList, setFavoriteList] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const nickname = 'test';
 
+  // 코인 정보를 위한 인터페이스 정의
+interface CoinInfo {
+  ticker: string;
+  coinName: string;
+  // 필요한 다른 속성들도 추가할 수 있습니다
+}
+
+// 즐겨찾기 목록을 가져오는 함수
+const getFavoriteList = async (): Promise<CoinInfo[]> => {
+  try {
+    const response = await axios.get('/api/v1/users/favorites', {
+      headers: {
+        // 필요한 경우 인증 토큰 등을 추가합니다
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+    
+    // 응답에서 데이터 배열 추출
+    if (response.data && response.data.data) {
+      return response.data.data;
+    }
+    
+    return [];
+  } catch (error) {
+    console.error('즐겨찾기 목록을 가져오는 데 실패했습니다:', error);
+    throw error;
+  }
+};
+  
   // 관심 종목 목록 가져오기
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
-        const favorites = await getFavoriteList(nickname);
+        const favorites = await getFavoriteList();
         setFavoriteList(favorites);
         setIsLoading(false);
       } catch (error) {
@@ -64,7 +93,7 @@ export default function Favorites() {
     };
 
     fetchFavorites();
-  }, [nickname]);
+  }, []);
 
   // 티커 목록 생성 및 웹소켓 연결
   const tickers = favoriteList.map((item) => item.ticker);
@@ -88,8 +117,7 @@ export default function Favorites() {
         if (!data) return null;
 
         return {
-          id: favorite.id.toString(),
-          name: favorite.ticker, // 실제 이름이 필요한 경우 추가 데이터 필요
+          name: favorite.coinName, // 실제 이름이 필요한 경우 추가 데이터 필요
           ticker: favorite.ticker,
           accPrice: data.acc_trade_price_24h || 0,
           price: data.trade_price || 0,
