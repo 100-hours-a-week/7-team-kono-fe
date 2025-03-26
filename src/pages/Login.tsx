@@ -66,7 +66,6 @@ const Login: React.FC = () => {
     } catch (error) {
       console.error('Failed to initiate Kakao login:', error);
     }
-
   };
 
   // 로딩 중이거나 처리 중이거나 이미 인증된 경우 로딩 표시
