@@ -1,4 +1,6 @@
 import axios from 'axios';
+import api from './clients';
+import { API_ENDPOINTS } from '../config/apiEndpoints';
 
 type Transaction = {
   id: string;
@@ -16,11 +18,10 @@ export const getTransactionsByNickname: () => Promise<
   Transaction[]
 > = async () => {
   try {
-    const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/data/transaction.json`,
-    );
+    const res= await api.get(API_ENDPOINTS.GET_TRANSACTION);
     // 응답이 배열인지 확인
-    return Array.isArray(response.data) ? response.data : [];
+    console.log(res.data);
+    return Array.isArray(res.data) ? res.data : [];
   } catch (error) {
     console.error('Error fetching transactions:', error);
     return [];
