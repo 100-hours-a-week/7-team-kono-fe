@@ -9,7 +9,7 @@ import { useAuth } from '../contexts/AuthContext';
 
 interface ProfileData {
   nickname: string;
-  profileImage: string;
+  profileImageUrl: string;
   id?: number;
   cashBalance?: number;
 }
@@ -27,7 +27,7 @@ const Profile: React.FC = () => {
   // 더미 프로필 데이터
   const dummyProfile: ProfileData = {
     nickname: '사용자',
-    profileImage: 'https://via.placeholder.com/150',
+    profileImageUrl: 'https://via.placeholder.com/150',
     cashBalance: 0
   };
 
@@ -41,7 +41,7 @@ const Profile: React.FC = () => {
         if (user) {
           setProfile({
             nickname: user.nickname,
-            profileImage: user.profileImageUrl,
+            profileImageUrl: user.profileImageUrl,
             id: user.id,
             cashBalance: user.cashBalance
           });
@@ -53,7 +53,7 @@ const Profile: React.FC = () => {
         // 2. AuthContext에 사용자 정보가 없으면 API 호출
         const data = await getUserProfile();
         if (data) {
-          setProfile(data);
+          setProfile(data.profileImageUrl);
           setNickname(data.nickname);
           setError(false);
         } else {
@@ -161,7 +161,7 @@ const Profile: React.FC = () => {
               accept="image/*"
             />
             <img
-              src={displayProfile.profileImage}
+              src={displayProfile.profileImageUrl}
               alt="프로필 이미지"
               className="w-32 h-32 rounded-full object-cover border-4 border-gray-200 dark:border-gray-700 cursor-pointer"
               onClick={handleImageClick}

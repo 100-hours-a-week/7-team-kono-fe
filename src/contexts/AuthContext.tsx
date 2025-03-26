@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import axios from 'axios';
+import api from '../api/clients';
+import { API_ENDPOINTS } from '../config/apiEndpoints';
 
 // axios 전역 기본 설정
 axios.defaults.withCredentials = true; // 쿠키를 포함하여 요청
@@ -46,14 +48,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       console.log('API 요청 URL (상대 경로):', apiUrl);
       
       // 인증 정보와 함께 요청
-      const res = await axios.get(apiUrl, {
-        withCredentials: true, // 쿠키를 함께 전송
-        timeout: 10000, // 10초 타임아웃
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      });
+      const res = await api.get(API_ENDPOINTS.GET_USER);
 
       console.log('API 응답 데이터:', res.data);
 
@@ -63,7 +58,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         const userData = {
           id: res.data.id,
           nickname: res.data.nickname,
-          profileImageUrl: res.data.profileImage,
+          profileImageUrl: res.data.profileImageUrl,
           cashBalance: res.data.cashBalance,
         };
         setUser(userData);

@@ -1,19 +1,17 @@
 import axios from 'axios';
+import api from './clients';
+import { API_ENDPOINTS } from '../config/apiEndpoints';
 
 interface ProfileData {
   nickname: string;
-  profileImage: string;
-  id?: number;
-  cashBalance?: number;
+  profileImageUrl: string;
 }
 
 // 사용자 프로필 정보 가져오기
 export const getUserProfile = async (): Promise<ProfileData> => {
   try {
     // API 서버에서 인증된 사용자 정보 가져오기
-    const response = await axios.get('/api/v1/users/me', {
-      withCredentials: true,
-    });
+    const response = await api.get(API_ENDPOINTS.GET_USER);
     
     // API 응답 형식에 맞게 데이터 변환
     return response.data;
@@ -26,9 +24,8 @@ export const getUserProfile = async (): Promise<ProfileData> => {
     // 오류 발생 시 기본 더미 데이터 반환
     return {
       nickname: '사용자',
-      profileImage: 'https://via.placeholder.com/150',
-      id: 0,
-      cashBalance: 0
+      profileImageUrl: 'https://via.placeholder.com/150',
+
     };
   }
 };
