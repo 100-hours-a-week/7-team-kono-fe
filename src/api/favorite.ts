@@ -1,55 +1,36 @@
-import axios from 'axios';
-
+import api from './clients'
+import { API_ENDPOINTS } from '../config/apiEndpoints';
 interface FavoriteCoin {
   id: number;
   ticker: string;
   nickname: string;
 }
 
-// 초기 데이터 로드 (앱 시작시 한 번만 실행)
-export const initializeFavorites = async () => {
-  if (!localStorage.getItem('favorites')) {
-    try {
-      const res = await axios.get('/data/favorite.json');
-      localStorage.setItem('favorites', JSON.stringify(res.data));
-    } catch (error) {
-      console.error('Failed to initialize favorites:', error);
-      localStorage.setItem('favorites', JSON.stringify({ coin_favorites: [] }));
-    }
+// 좋아요 목록 가져오기
+export const getFavoriteList = async () => {
+  try {
+    const res = await api.get(API_ENDPOINTS.GET_FAVORITE);
+    return res.data;
+  } catch (error) {
+    console.error('Failed to initialize favorites:', error);
   }
 };
 
-// 좋아요 목록 가져오기
-export const getFavoriteList = async (nickname: string) => {
-  await initializeFavorites(); // 초기 데이터가 없을 경우 로드
-  const favorites = JSON.parse(
-    localStorage.getItem('favorites') || '{"coin_favorites": []}',
-  );
-  return favorites.coin_favorites.filter(
-    (favorite: FavoriteCoin) => favorite.nickname === nickname,
-  );
-};
-
 // 코인이 관심 목록에 있는지 확인
-export const isFavoriteCoin = async (nickname: string, ticker: string) => {
-  const favorites = await getFavoriteList(nickname);
-  return favorites.some((favorite: FavoriteCoin) => favorite.ticker === ticker);
+export const isFavoriteCoin = async (ticker: string): Promise<boolean> => {
+  try {
+    const res = await api.get(API_ENDPOINTS.GET_IS_FAVORITE(ticker));
+    return res.data.data;
+  } catch (error) {
+    console.error('Failed to fetch favorite status:', error);
+    return false; // 실패 시 기본값 반환 (선택)
+  }
 };
 
 // 좋아요 추가
-export const addFavorite = async (nickname: string, ticker: string) => {
+export const addFavorite = async (ticker: string) => {
   try {
-    const favorites = JSON.parse(
-      localStorage.getItem('favorites') || '{"coin_favorites": []}',
-    );
-    const newFavorite = {
-      id: Date.now(),
-      ticker: ticker,
-      nickname: nickname,
-    };
-
-    favorites.coin_favorites.push(newFavorite);
-    localStorage.setItem('favorites', JSON.stringify(favorites));
+    await api.post(API_ENDPOINTS.POST_FAVORITE(ticker));
     return true;
   } catch (error) {
     console.error('Failed to add favorite:', error);
@@ -58,16 +39,9 @@ export const addFavorite = async (nickname: string, ticker: string) => {
 };
 
 // 좋아요 삭제
-export const removeFavorite = async (nickname: string, ticker: string) => {
+export const removeFavorite = async (ticker: string) => {
   try {
-    const favorites = JSON.parse(
-      localStorage.getItem('favorites') || '{"coin_favorites": []}',
-    );
-    favorites.coin_favorites = favorites.coin_favorites.filter(
-      (favorite: FavoriteCoin) =>
-        !(favorite.nickname === nickname && favorite.ticker === ticker),
-    );
-    localStorage.setItem('favorites', JSON.stringify(favorites));
+    await api.delete(API_ENDPOINTS.DELETE_FAVORITE(ticker));
     return true;
   } catch (error) {
     console.error('Failed to remove favorite:', error);

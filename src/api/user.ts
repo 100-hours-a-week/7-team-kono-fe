@@ -1,59 +1,86 @@
 import axios from 'axios';
 
+interface ProfileData {
+  nickname: string;
+  profileImage: string;
+  id?: number;
+  cashBalance?: number;
+}
+
 // 사용자 프로필 정보 가져오기
-export const getUserProfile = async () => {
-  axios
-    .get('/data/user.json') //
-    .then((res) => {
-      return res.data;
-    }) //
-    .catch((err) => {
-      console.log(`get data/user.json error : ${err}`);
+export const getUserProfile = async (): Promise<ProfileData> => {
+  try {
+    // API 서버에서 인증된 사용자 정보 가져오기
+    const response = await axios.get('/api/v1/users/me', {
+      withCredentials: true,
     });
+    
+    // API 응답 형식에 맞게 데이터 변환
+    return response.data;
+      // nickname: response.data.nickname || '사용자',
+      // profileImage: response.data.profileImage || 'https://via.placeholder.com/150',
+      // id: response.data.id,
+      // cashBalance: response.data.cashBalance
+  } catch (error) {
+    console.error('사용자 프로필 정보를 가져오는 중 오류 발생:', error);
+    // 오류 발생 시 기본 더미 데이터 반환
+    return {
+      nickname: '사용자',
+      profileImage: 'https://via.placeholder.com/150',
+      id: 0,
+      cashBalance: 0
+    };
+  }
 };
 
-// TODO: 프로필 이미지 S3
-// 로 업데이트
-export const updateProfileImage = async (
-  userNickname: string,
-  imageFile: File,
-) => {
-  const res = await getUserProfile();
-  const user = res.find((user) => user.nickname === userNickname);
-  if (!user) {
-    console.log('user not found');
-    return;
+// 프로필 이미지 업데이트
+export const updateProfileImage = async (imageFile: File): Promise<ProfileData> => {
+  try {
+    const formData = new FormData();
+    formData.append('file', imageFile);
+    
+    const response = await axios.post('/api/v1/users/profile-image', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      },
+      withCredentials: true
+    });
+    
+    return getUserProfile(); // 업데이트 후 최신 프로필 정보 반환
+  } catch (error) {
+    console.error('프로필 이미지 업데이트 중 오류 발생:', error);
+    throw error;
   }
-  user.profileImage = imageFile;
-  await axios.post('data/user.json', {
-    profileImage: imageFile,
-  });
 };
 
 // 닉네임 업데이트
-export const updateNickname = async (nickname: string, newNickname: string) => {
-  const res = await getUserProfile();
-  const user = res.find((user) => user.nickname === nickname);
-  if (!user) {
-    console.log('user not found');
-    return;
+export const updateNickname = async (nickname: string): Promise<ProfileData> => {
+  try {
+    const response = await axios.put('/api/v1/users/nickname', 
+      { nickname }, 
+      { 
+        headers: { 'Content-Type': 'application/json' },
+        withCredentials: true 
+      }
+    );
+    
+    return getUserProfile(); // 업데이트 후 최신 프로필 정보 반환
+  } catch (error) {
+    console.error('닉네임 업데이트 중 오류 발생:', error);
+    throw error;
   }
-  user.nickname = newNickname;
-
-  await axios.post('data/user.json', {
-    nickname,
-  });
 };
 
-// 닉네임 별 잔액 조회
-export const getBalanceByNickname = async (nickname: string) => {
-  axios
-    .get('/data/user.json') //
-    .then((res) => {
-      const user = res.data.find((user) => user.nickname === nickname);
-      return user.balance;
-    }) //
-    .catch((err) => {
-      console.log(`get data/user.json error : ${err}`);
+// 잔액 조회
+export const getBalanceByNickname = async (): Promise<number> => {
+  try {
+    const response = await axios.get('/api/v1/users/balance', {
+      withCredentials: true
     });
+    
+    return response.data.balance;
+  } catch (error) {
+    console.error('잔액 조회 중 오류 발생:', error);
+    return 0;
+  }
 };

@@ -6,6 +6,7 @@ import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
 import axios from 'axios';
 import { formatAmount } from '../utils/formatter';
 import { useMemo } from 'react';
+import { getCoins } from '../api/coin';
 type SortType = '거래대금' | '가격' | '등락률';
 
 interface Coin {
@@ -20,7 +21,7 @@ interface Coin {
 
 interface CoinInfo {
   ticker: string;
-  name: string;
+  coinName: string;
 }
 
 export default function Discover() {
@@ -28,11 +29,11 @@ export default function Discover() {
   const [activeTab, setActiveTab] = useState<SortType>('거래대금');
   const [coinInfo, setCoinInfo] = useState<CoinInfo[]>([]);
   const [tickers, setTickers] = useState<string[]>([]);
+  const [coinName, setCoinNmae] = useState<string[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get('data/coin.json')
+    getCoins()
       .then((res) => {
         const data: CoinInfo[] = res.data;
         console.log('Fetched coin data:', data);
@@ -40,7 +41,9 @@ export default function Discover() {
         setCoinInfo(data);
         // 티커 목록 추출
         const tickerList = data.map((coin) => coin.ticker);
+        const nameList = data.map((coin) => coin.coinName);
         setTickers(tickerList);
+        setCoinNmae(nameList);
         console.log(`get data/coin.json : ${JSON.stringify(data)}`);
       })
       .catch((err) => {
@@ -85,7 +88,7 @@ export default function Discover() {
 
         return {
           id: code,
-          name: info.name,
+          name: info.coinName,
           ticker: ticker,
           accPrice: data.acc_trade_price_24h || 0,
           price: data.trade_price || 0,
