@@ -4,7 +4,8 @@ import { API_ENDPOINTS } from '../config/apiEndpoints';
 interface Wallet {
   nickname: string;
   ticker: string;
-  holding_quantity: number;
+  holdingQuantity: number;
+  holdingPrice: number;
   // 필요한 경우 다른 속성들 추가
 }
 
@@ -18,13 +19,13 @@ export const getQuantityByTicker = async (ticker: string): Promise<number> => {
     const response = await api.get(API_ENDPOINTS.GET_IS_HOLDING_COIN(ticker));
 
     // API가 직접 수량을 반환하는 경우
-    if (typeof response.data.holding_quantity === 'number') {
-      return response.data.holding_quantity;
+    if (typeof response.data.holdingQuantity === 'number') {
+      return response.data.holdingQuantity;
     }
 
     // 또는 객체를 반환하는 경우
     if (response.data && typeof response.data === 'object') {
-      return response.data.holding_quantity || 0;
+      return response.data.holdingQuantity || 0;
     }
 
     return 0;
@@ -35,20 +36,19 @@ export const getQuantityByTicker = async (ticker: string): Promise<number> => {
 };
 
 /**
- * 사용자가 보유한 모든 코인의 티커 목록을 조회하는 함수
+ * 사용자가 보유한 모든 코인 조회
  * @returns 보유 중인 코인 티커 + 이름 배열
  */
 export const getHoldingCoins = async (): Promise<string[]> => {
   try {
     const response = await api.get(API_ENDPOINTS.GET_HOLDING_COIN);
-
-    if (Array.isArray(response.data)) {
-      // 티커 목록만 추출하여 반환
-      return response.data.map((wallet: Wallet) => wallet.ticker);
-    } else {
-      console.error('Wallet data is not an array:', response.data);
-      return [];
-    }
+    return response.data.data;
+    // if (Array.isArray(response.data.data)) {
+    //   return response.data.data;
+    // } else {
+    //   console.error('Wallet data is not an array:', response.data);
+    //   return [];
+    // }
   } catch (err) {
     console.error(`Error fetching holding coins ticker and name:`, err);
     return [];
@@ -76,10 +76,11 @@ export const getTransactions = async (): Promise<any[]> => {
 };
 
 // 잔액 조회 (현금 조회 API 사용)
-export const getBalance = async (): Promise<number | null> => {
+export const getBalance = async (): Promise<number | 0> => {
   try {
     const response = await api.get(API_ENDPOINTS.GET_CASH);
-    return response.data.balance;
+    console.log(`현금잔액: ${response}`);
+    return response.data.data.cash;
   } catch (error) {
     console.error(`잔액 조회 오류: ${error}`);
     return null;

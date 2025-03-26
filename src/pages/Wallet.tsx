@@ -6,19 +6,13 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { FaHistory } from 'react-icons/fa';
 import { ROUTES } from '../config/routes';
 import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
-import {
-  getHoldingCoinTickers,
-  getQuantityByNicknameAndTicker,
-  getHoldingCoins,
-} from '../api/wallet';
-import axios from 'axios';
+import { getHoldingCoins, getBalance } from '../api/wallet';
 import { formatCurrency } from '../utils/formatter';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface Coin {
   id?: string;
-  nickname: string;
   ticker: string;
   holdingQuantity: number;
   holdingPrice: number;
@@ -32,22 +26,37 @@ interface Coin {
 const Wallet = () => {
   const navigate = useNavigate();
   const [holdingCoins, setHoldingCoins] = useState<Coin[]>([]);
+  const [cashBalance, setCashBalance] = useState<number>();
   const [tickers, setTickers] = useState<string[]>([]);
   const tickerData = useUpbitWebSocket(tickers);
-  const nickname = 'test';
+
   // 초기 로딩 상태를 추적하기 위한 ref
   const initialLoadRef = useRef(true);
 
+  // 현금잔액 불러오기
+  useEffect(() => {
+    const fetchCashBalance = async () => {
+      try {
+        const cashBalance = await getBalance();
+        setCashBalance(cashBalance);
+      } catch (error) {
+        console.error('Error fetching holding coins:', error);
+        setCashBalance(0);
+      }
+    };
+    fetchCashBalance();
+  });
+
+  // 보유코인(holdingCoins) 불러오기
   useEffect(() => {
     const fetchHoldingCoins = async () => {
       try {
-        const walletData = await getHoldingCoins(nickname);
+        const walletData = await getHoldingCoins();
 
         // HoldingCoin 객체 형식으로 변환
         const coins = walletData.map((coin) => ({
           id: coin.ticker.toLowerCase(),
-          nickname: coin.nickname,
-          name: coin.name,
+          name: coin.coinName,
           ticker: coin.ticker,
           holdingQuantity: coin.holdingQuantity,
           holdingPrice: coin.holdingPrice,
@@ -106,20 +115,28 @@ const Wallet = () => {
         const currentValue = coin.holdingQuantity * currentPrice;
 
         // 매수 평균가로 수익률 계산 (%)
+        // let profitRate = 0;
+        // if (
+        //   coin.holdingPrice / coin.holdingQuantity &&
+        //   coin.holdingPrice / coin.holdingQuantity > 0
+        // ) {
+        //   profitRate =
+        //     ((currentPrice - coin.holdingPrice / coin.holdingQuantity) /
+        //       coin.holdingPrice /
+        //       coin.holdingQuantity) *
+        //     100;
+        // }
+
+        // 계산식
         let profitRate = 0;
-        if (
-          coin.holdingPrice / coin.holdingQuantity &&
-          coin.holdingPrice / coin.holdingQuantity > 0
-        ) {
+        const avgPurchasePrice = coin.holdingPrice / coin.holdingQuantity;
+        if (avgPurchasePrice > 0) {
           profitRate =
-            ((currentPrice - coin.holdingPrice / coin.holdingQuantity) /
-              coin.holdingPrice /
-              coin.holdingQuantity) *
-            100;
+            ((currentPrice - avgPurchasePrice) / avgPurchasePrice) * 100;
         }
 
         console.log(
-          `${coin.ticker} - 현재가격: ${currentPrice}, 매수평균가: ${coin.holdingPrice / coin.holdingQuantity}, 수익률: ${profitRate}%`,
+          `${coin.ticker} - 현재가격: ${currentPrice}, 매수평균가: ${avgPurchasePrice}, 수익률: ${profitRate}%`,
         );
 
         return {
@@ -142,7 +159,7 @@ const Wallet = () => {
       console.log('Updating holding coins with new values');
       setHoldingCoins(updatedCoins);
     }
-  }, [tickerData]); // holdingCoins를 의존성에서 제거
+  }, [tickerData]);
 
   const initialTotalAsset = 10000000;
   // const initialInvestment = 10000000;
@@ -158,9 +175,6 @@ const Wallet = () => {
     (sum, coin) => sum + coin.holdingPrice,
     0,
   );
-
-  // 현금 잔액 (음수가 되지 않도록)
-  const cashBalance = Math.max(0, initialTotalAsset - initialInvestment);
 
   // 총 자산 (코인 + 현금)
   const totalAsset = cashBalance + totalCoinValue;
