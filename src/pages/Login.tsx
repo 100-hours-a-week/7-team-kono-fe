@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import KakaoLoginButton from '../assets/images/kakao_login_medium_wide.png';
 import konoLogo from '../assets/kono_logo.svg';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 declare global {
   interface Window {
@@ -65,7 +66,20 @@ const Login: React.FC = () => {
     } catch (error) {
       console.error('Failed to initiate Kakao login:', error);
     }
+
   };
+
+  // 로딩 중이거나 처리 중이거나 이미 인증된 경우 로딩 표시
+  if (loading || processingAuth || isAuthenticated) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen p-4">
+        <img src={konoLogo} alt="코노 로고" className="w-1/2 mx-auto mb-8" />
+        <p className="text-gray-500 text-center">
+          {processingAuth ? '카카오 로그인 처리 중...' : '로딩 중...'}
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center justify-between min-h-screen p-4">
