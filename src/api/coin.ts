@@ -10,25 +10,12 @@ export type OrderType = 'buy' | 'sell';
  */
 export const getCoinName = async (ticker: string): Promise<string | null> => {
   try {
-
     // 개별 코인 정보 요청
     const response = await api.get(API_ENDPOINTS.GET_COIN_DETAIL(ticker));
 
-
     // 단일 코인 상세 정보를 반환하는 경우
-    if (response.data && response.data.name) {
-      return response.data.name;
-    }
-
-    // 코인 목록 전체를 가져와서 찾는 대안
-    const listResponse = await api.get(API_ENDPOINTS.GET_COINS);
-
-    if (Array.isArray(listResponse.data)) {
-      const coin = listResponse.data.find(
-        (coin: { ticker: string; name: string }) => coin.ticker === ticker,
-      );
-
-      return coin?.name || null;
+    if (response.data) {
+      return response.data.kr_coin_name;
     }
 
     console.error('코인 데이터 형식이 예상과 다릅니다:', response.data);
@@ -39,11 +26,10 @@ export const getCoinName = async (ticker: string): Promise<string | null> => {
   }
 };
 
-
 export const getCoins = async (): Promise<Coin[]> => {
   try {
     const response = await api.get(API_ENDPOINTS.GET_COINS);
-    return response.data || [];
+    return response.data.data || [];
   } catch (err) {
     console.error(`코인 목록 조회 오류:`, err);
     return [];
