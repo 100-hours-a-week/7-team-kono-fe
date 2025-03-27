@@ -82,7 +82,7 @@ export const getHoldingCoins = async (nickname: string) => {
 export const getBalance = async (): Promise<number> => {
   try {
     const response = await api.get(API_ENDPOINTS.GET_CASH);
-
+    
     return response.data.data.cash;
   } catch (error) {
     console.error('잔액 조회 중 오류 발생:', error);
