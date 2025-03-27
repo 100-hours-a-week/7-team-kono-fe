@@ -1,11 +1,10 @@
-import axios from 'axios';
 import api from './clients';
 import { API_ENDPOINTS } from '../config/apiEndpoints';
 
 interface Wallet {
   nickname: string;
   ticker: string;
-  holding_quantity: number;
+  holdingQuantity: number;
   // 필요한 경우 다른 속성들 추가
 }
 
@@ -14,9 +13,7 @@ interface Wallet {
  * @param ticker 코인 티커 (예: BTC, ETH)
  * @returns 해당 코인의 보유량, 없으면 0 반환
  */
-export const getQuantityByNicknameAndTicker = async (
-  ticker: string,
-) => {
+export const getQuantityByNicknameAndTicker = async (ticker: string) => {
   try {
     const response = await api.get(API_ENDPOINTS.GET_IS_HOLDING_COIN(ticker));
 
@@ -24,7 +21,6 @@ export const getQuantityByNicknameAndTicker = async (
     if (typeof response.data.data.holdingQuantity === 'number') {
       return response.data.data.holdingQuantity;
     }
-
 
     return 0;
   } catch (err) {
@@ -41,13 +37,7 @@ export const getHoldingCoins = async (): Promise<string[]> => {
   try {
     const response = await api.get(API_ENDPOINTS.GET_HOLDING_COIN);
 
-    if (Array.isArray(response.data)) {
-      // 티커 목록만 추출하여 반환
-      return response.data.map((wallet: Wallet) => wallet.ticker);
-    } else {
-      console.error('Wallet data is not an array:', response.data);
-      return [];
-    }
+    return response.data.data;
   } catch (err) {
     console.error(`Error fetching holding coins ticker and name:`, err);
     return [];
@@ -61,18 +51,13 @@ export const getHoldingCoins = async (): Promise<string[]> => {
 export const getTransactions = async (): Promise<any[]> => {
   try {
     const response = await api.get(API_ENDPOINTS.GET_TRANSACTION);
-
-    if (Array.isArray(response.data)) {
-      return response.data;
-    } else {
-      console.error('Transaction data is not an array:', response.data);
-      return [];
-    }
+    return response.data.data;
   } catch (err) {
     console.error(`Error fetching transactions:`, err);
     return [];
   }
 };
+
 // 잔액 조회
 export const getBalance = async (): Promise<number> => {
   try {
