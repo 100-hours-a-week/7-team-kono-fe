@@ -5,7 +5,7 @@ import Toast from '../common/Toast';
 import PurchaseCompleteModal from './PurchaseCompleteModal';
 import { useNavigate } from 'react-router-dom';
 import { formatAmount, formatCurrency } from '../../utils/formatter';
-
+import { marketBuy, marketSell } from '../../api/trade';
 interface TradeConfirmModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -38,9 +38,20 @@ export default function TradeConfirmModal({
   // const safeAmount = amount || 0;
   // const safePrice = price || 0;
 
-  const handleTrade = () => {
-    onClose();
-    setShowComplete(true);
+  const handleTrade = async () => {
+    try {
+      if(tradeType === 'buy') {
+        await marketBuy(ticker, amount);
+      } else if(tradeType === 'sell') {
+        await marketSell(ticker, amount);
+      }
+      onClose();
+      setShowComplete(true);
+    } catch (error) {
+      console.error('거래 실패:', error);
+      // 에러 처리 (예: 에러 토스트 메시지 표시)
+      setShowToast(true);
+    }
   };
 
   const handleCompleteConfirm = () => {

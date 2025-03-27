@@ -1,3 +1,4 @@
+import axios from 'axios';
 import api from './clients';
 import { API_ENDPOINTS } from '../config/apiEndpoints';
 
@@ -13,19 +14,17 @@ interface Wallet {
  * @param ticker 코인 티커 (예: BTC, ETH)
  * @returns 해당 코인의 보유량, 없으면 0 반환
  */
-export const getQuantityByTicker = async (ticker: string): Promise<number> => {
+export const getQuantityByNicknameAndTicker = async (
+  ticker: string,
+) => {
   try {
     const response = await api.get(API_ENDPOINTS.GET_IS_HOLDING_COIN(ticker));
 
     // API가 직접 수량을 반환하는 경우
-    if (typeof response.data.holding_quantity === 'number') {
-      return response.data.holding_quantity;
+    if (typeof response.data.data.holdingQuantity === 'number') {
+      return response.data.data.holdingQuantity;
     }
 
-    // 또는 객체를 반환하는 경우
-    if (response.data && typeof response.data === 'object') {
-      return response.data.holding_quantity || 0;
-    }
 
     return 0;
   } catch (err) {
@@ -74,14 +73,14 @@ export const getTransactions = async (): Promise<any[]> => {
     return [];
   }
 };
-
-// 잔액 조회 (현금 조회 API 사용)
-export const getBalance = async (): Promise<number | null> => {
+// 잔액 조회
+export const getBalance = async (): Promise<number> => {
   try {
     const response = await api.get(API_ENDPOINTS.GET_CASH);
-    return response.data.balance;
+
+    return response.data.data.cash;
   } catch (error) {
-    console.error(`잔액 조회 오류: ${error}`);
-    return null;
+    console.error('잔액 조회 중 오류 발생:', error);
+    return 0;
   }
 };

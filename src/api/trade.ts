@@ -1,8 +1,13 @@
+import api from './clients';
+import { API_ENDPOINTS } from '../config/apiEndpoints';
+
+export type OrderType = 'sell' | 'buy';
+
 // 주문 정보 인터페이스
 export interface OrderRequest {
   ticker: string;
-  type: OrderType;
-  amount?: number; // 매수 시 사용할 금액 (원화)
+  orderType: OrderType;
+  orderAmount?: number; // 매수 시 사용할 금액 (원화)
   quantity?: number; // 매도 시 사용할 수량
 }
 
@@ -19,12 +24,7 @@ export interface OrderResponse {
   status: 'pending' | 'completed' | 'failed';
 }
 
-/**
- * 시장가 매수 함수 (현재 가격으로 특정 금액만큼 매수)
- * @param ticker 코인 티커 (예: BTC, ETH)
- * @param amount 구매할 총 금액 (원화)
- * @returns 주문 결과 응답
- */
+
 export const marketBuy = async (
   ticker: string,
   amount: number,
@@ -32,8 +32,8 @@ export const marketBuy = async (
   try {
     const orderData: OrderRequest = {
       ticker,
-      type: 'buy',
-      amount,
+      orderType: 'buy',
+      orderAmount: amount,
     };
 
     const response = await api.post(API_ENDPOINTS.POST_COIN, orderData);
@@ -49,21 +49,16 @@ export const marketBuy = async (
   }
 };
 
-/**
- * 시장가 매도 함수 (현재 가격으로 특정 수량 매도)
- * @param ticker 코인 티커 (예: BTC, ETH)
- * @param quantity 판매할 수량
- * @returns 주문 결과 응답
- */
+
 export const marketSell = async (
   ticker: string,
-  quantity: number,
+  amount: number,
 ): Promise<OrderResponse | null> => {
   try {
     const orderData: OrderRequest = {
       ticker,
-      type: 'sell',
-      quantity,
+      orderType: 'sell',
+      orderAmount: amount,
     };
 
     const response = await api.post(API_ENDPOINTS.POST_COIN, orderData);
@@ -76,20 +71,5 @@ export const marketSell = async (
   } catch (error) {
     console.error(`시장가 매도 오류 (${ticker}):`, error);
     return null;
-  }
-};
-
-/**
- * 주문 취소 함수
- * @param orderId 취소할 주문 ID
- * @returns 성공 여부 (true/false)
- */
-export const cancelOrder = async (orderId: string): Promise<boolean> => {
-  try {
-    const response = await api.delete(`${API_ENDPOINTS.POST_COIN}/${orderId}`);
-    return response.status === 200;
-  } catch (error) {
-    console.error(`주문 취소 오류 (${orderId}):`, error);
-    return false;
   }
 };
