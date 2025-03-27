@@ -75,7 +75,8 @@ export const getBalanceByNickname = async (): Promise<number> => {
   } catch (error) {
     console.error('잔액 조회 중 오류 발생:', error);
     return 0;
-
+  }
+};
 
 // 회원 탈퇴
 export const deleteUser = async (): Promise<boolean> => {
