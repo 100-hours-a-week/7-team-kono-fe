@@ -73,3 +73,18 @@ export const marketSell = async (
     return null;
   }
 };
+
+/**
+ * 주문 취소 함수
+ * @param orderId 취소할 주문 ID
+ * @returns 성공 여부 (true/false)
+ */
+export const cancelOrder = async (orderId: string): Promise<boolean> => {
+  try {
+    const response = await api.delete(`${API_ENDPOINTS.POST_COIN}/${orderId}`);
+    return response.status === 200;
+  } catch (error) {
+    console.error(`주문 취소 오류 (${orderId}):`, error);
+    return false;
+  }
+};

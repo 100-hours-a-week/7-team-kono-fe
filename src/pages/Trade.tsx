@@ -97,7 +97,7 @@ export default function Trade() {
 
         const coinName = await getCoinName(ticker);
         const balance = await getBalance();
-        const quantity = await getQuantityByNicknameAndTicker(ticker);78 
+        const quantity = await getQuantityByNicknameAndTicker(ticker);78
 
         // 현재 가격 정보를 한 번만 가져옴
         const currentPrice = tickerData[`KRW-${ticker}`]?.trade_price || 0;

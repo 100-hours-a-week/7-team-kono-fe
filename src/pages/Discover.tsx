@@ -1,12 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IoIosClose } from 'react-icons/io';
 import Header from '../components/layout/Header';
 import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
-import axios from 'axios';
 import { formatAmount } from '../utils/formatter';
-import { useMemo } from 'react';
 import { getCoins } from '../api/coin';
+
 type SortType = '거래대금' | '가격' | '등락률';
 
 interface Coin {
@@ -47,7 +46,7 @@ export default function Discover() {
         console.log(`get data/coin.json : ${JSON.stringify(data)}`);
       })
       .catch((err) => {
-        console.log(`get data/coin.json error : ${err}`);
+        console.log(`get coins data error: ${err}`);
       });
   }, []);
 
@@ -103,12 +102,6 @@ export default function Discover() {
   }, [tickerData, coinInfo]);
 
   // 검색 필터링
-  // const filteredCoins = coins.filter(
-  //   (coin: Coin) =>
-  //     coin.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //     coin.ticker.toLowerCase().includes(searchTerm.toLowerCase()),
-  // );
-
   const filteredCoins = Array.isArray(coins)
     ? coins.filter(
         (coin: Coin) =>
