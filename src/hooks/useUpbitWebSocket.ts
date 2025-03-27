@@ -74,7 +74,7 @@ export function useUpbitWebSocket(symbols: string[] = ['BTC']) {
       reader.onload = function () {
         try {
           const jsonData = JSON.parse(reader.result as string);
-          console.log('받은 데이터:', jsonData);
+          // console.log('받은 데이터:', jsonData);
 
           if (jsonData && jsonData.code) {
             setTickerData((prevData) => ({

@@ -55,23 +55,23 @@ export default function Discover() {
 
   // 웹소켓 데이터와 코인 정보 결합
   const coins = useMemo(() => {
-    console.log('Running coins useMemo');
-    console.log('tickerData available:', !!tickerData);
-    console.log(
-      'tickerData keys:',
-      tickerData ? Object.keys(tickerData).length : 0,
-    );
-    console.log('coinInfo available:', !!coinInfo);
-    console.log('coinInfo length:', coinInfo.length);
+    // console.log('Running coins useMemo');
+    // console.log('tickerData available:', !!tickerData);
+    // console.log(
+    //   'tickerData keys:',
+    //   tickerData ? Object.keys(tickerData).length : 0,
+    // );
+    // console.log('coinInfo available:', !!coinInfo);
+    // console.log('coinInfo length:', coinInfo.length);
 
-    if (
-      !tickerData ||
-      Object.keys(tickerData).length === 0 ||
-      coinInfo.length === 0
-    ) {
-      console.log('Returning empty array from useMemo');
-      return [];
-    }
+    // if (
+    //   !tickerData ||
+    //   Object.keys(tickerData).length === 0 ||
+    //   coinInfo.length === 0
+    // ) {
+    //   console.log('Returning empty array from useMemo');
+    //   return [];
+    // }
 
     const result = Object.entries(tickerData)
       .map(([code, data]) => {
@@ -97,7 +97,7 @@ export default function Discover() {
       })
       .filter(Boolean);
 
-    console.log('Processed coins result length:', result.length);
+    // console.log('Processed coins result length:', result.length);
     return result;
   }, [tickerData, coinInfo]);
 
