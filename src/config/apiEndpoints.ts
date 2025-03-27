@@ -21,6 +21,7 @@ export const API_ENDPOINTS = {
   DELETE_FAVORITE: (ticker: string) => `/api/v1/users/favorites/${ticker}`,
   GET_COINS: '/api/v1/coins',
   GET_COIN_DETAIL: (ticker: string) => `/api/v1/coins/${ticker}`,
+  POST_ORDER: '/api/v1/coins/orders',
 
   // 지갑 관련
   GET_CASH: '/api/v1/wallets/cash',

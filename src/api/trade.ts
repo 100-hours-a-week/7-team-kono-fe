@@ -36,7 +36,7 @@ export const marketBuy = async (
       orderAmount: amount,
     };
 
-    const response = await api.post(API_ENDPOINTS.POST_COIN, orderData);
+    const response = await api.post(API_ENDPOINTS.POST_ORDER, orderData);
 
     if (response.status === 200 || response.status === 201) {
       return response.data;
@@ -61,7 +61,7 @@ export const marketSell = async (
       orderAmount: amount,
     };
 
-    const response = await api.post(API_ENDPOINTS.POST_COIN, orderData);
+    const response = await api.post(API_ENDPOINTS.POST_ORDER, orderData);
 
     if (response.status === 200 || response.status === 201) {
       return response.data;

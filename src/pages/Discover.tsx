@@ -4,7 +4,6 @@ import { IoIosClose } from 'react-icons/io';
 import Header from '../components/layout/Header';
 import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
 import { formatAmount } from '../utils/formatter';
-import { useMemo } from 'react';
 import { getCoins } from '../api/coin';
 
 type SortType = '거래대금' | '가격' | '등락률';
@@ -35,7 +34,7 @@ export default function Discover() {
   useEffect(() => {
     getCoins()
       .then((res) => {
-        const data: CoinInfo[] = res.data;
+        const data: CoinInfo[] = res;
         console.log('Fetched coin data:', data);
         console.log('Data type:', Array.isArray(data) ? 'Array' : typeof data);
         setCoinInfo(data);

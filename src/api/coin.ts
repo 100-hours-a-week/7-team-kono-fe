@@ -10,6 +10,7 @@ export type OrderType = 'buy' | 'sell';
  */
 export const getCoinName = async (ticker: string): Promise<string | null> => {
   try {
+
     // 개별 코인 정보 요청
     const response = await api.get(API_ENDPOINTS.GET_COIN_DETAIL(ticker));
 
@@ -25,6 +26,7 @@ export const getCoinName = async (ticker: string): Promise<string | null> => {
     return null;
   }
 };
+
 
 export const getCoins = async (): Promise<Coin[]> => {
   try {
