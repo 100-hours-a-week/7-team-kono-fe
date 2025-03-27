@@ -69,7 +69,7 @@ export const updateNickname = async (nickname: string): Promise<ProfileData> => 
 };
 
 // 잔액 조회
-export const getBalanceByNickname = async (): Promise<number> => {
+export const getBalanc = async (): Promise<number> => {
   try {
     const response = await axios.get('/api/v1/users/balance', {
       withCredentials: true

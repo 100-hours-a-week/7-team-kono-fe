@@ -5,7 +5,7 @@ import TradeConfirmModal from '../components/modal/TradeConfirmModal';
 import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
 import { formatAmount, formatCurrency } from '../utils/formatter';
 import {getCoinName} from '../api/coin';
-import { getBalanceByNickname } from '../api/user';
+import { getBalance } from '../api/wallet';
 import { getQuantityByNicknameAndTicker } from '../api/wallet';
 // 거래 타입 정의
 type TradeType = 'buy' | 'sell';
@@ -41,7 +41,6 @@ export default function Trade() {
   const percentOptions = [10, 25, 50, 100];
 
   const { tickerData } = useUpbitWebSocket([ticker || '']);
-  const nickname: string = 'test';
 
   // 웹소켓 데이터가 변경될 때 가격 업데이트
   useEffect(() => {
@@ -97,8 +96,8 @@ export default function Trade() {
         setLoading(true);
 
         const coinName = await getCoinName(ticker);
-        const balance = await getBalanceByNickname(nickname);
-        const quantity = await getQuantityByNicknameAndTicker(nickname, ticker);
+        const balance = await getBalance();
+        const quantity = await getQuantityByNicknameAndTicker(ticker);78 
 
         // 현재 가격 정보를 한 번만 가져옴
         const currentPrice = tickerData[`KRW-${ticker}`]?.trade_price || 0;
@@ -123,7 +122,7 @@ export default function Trade() {
     };
 
     fetchCoinData();
-  }, [ticker, type, nickname]); // tickerData 의존성 제거
+  }, [ticker, type]); // tickerData 의존성 제거
 
   // 디버깅용 로그 - 파라미터 변경 시에만 로그 출력
   useEffect(() => {
