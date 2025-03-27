@@ -78,14 +78,21 @@ export const formatVolume = (value: number): string => {
  * @param date 포맷팅할 Date 객체
  * @returns 'yy-MM-dd HH:mm' 형식의 문자열
  */
-export const formatDate = (date: Date): string => {
-  const year = date.getFullYear().toString().slice(2); // yy
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // MM
-  const day = String(date.getDate()).padStart(2, '0'); // dd
-  const hours = String(date.getHours()).padStart(2, '0'); // HH
-  const minutes = String(date.getMinutes()).padStart(2, '0'); // mm
+export const formatDate = (date: string | Date) => {
+  const dateObj = typeof date === 'string' ? new Date(date) : date;
+  
+  try {
+    const year = dateObj.getFullYear();
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    const hours = String(dateObj.getHours()).padStart(2, '0');
+    const minutes = String(dateObj.getMinutes()).padStart(2, '0');
 
-  return `${year}-${month}-${day} ${hours}:${minutes}`;
+    return `${year}.${month}.${day} ${hours}:${minutes}`;
+  } catch (error) {
+    console.error('날짜 형식 변환 오류:', error);
+    return '날짜 형식 오류';
+  }
 };
 
 /**
