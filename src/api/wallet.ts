@@ -7,26 +7,12 @@ import { API_ENDPOINTS } from '../config/apiEndpoints';
  * @param ticker 코인 티커 (예: BTC, ETH)
  * @returns 해당 코인의 보유량, 없으면 0 반환
  */
-export const getQuantityByNicknameAndTicker = async (
+export const getQuantityByTicker = async (
   ticker: string,
 ) => {
   try {
-    const res = await axios.get(
-      `${import.meta.env.VITE_API_URL}/data/wallet.json`,
-    );
-
-    // Make sure res.data is an array before using find
-    if (Array.isArray(res.data)) {
-      const wallet = res.data.find(
-        (wallet: { ticker: string }) =>
-          wallet.ticker === ticker,
-      );
-
-      return wallet ? wallet.holding_quantity : 0;
-    } else {
-      console.error('Wallet data is not an array:', res.data);
-      return 0;
-    }
+    const res = await api.get(API_ENDPOINTS.GET_IS_HOLDING_COIN(ticker));
+    return res.data.data.holdingQuantity;
   } catch (err) {
     console.error(`Error fetching wallet data for ${ticker}:`, err);
     return 0;
