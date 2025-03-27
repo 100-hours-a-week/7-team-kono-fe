@@ -3,12 +3,13 @@ import Header from '../components/layout/Header';
 import { getRanksAllMe, getRanksDaily, getRanksDailyMe } from '../api/ranking';
 import { getRanksAll } from '../api/ranking';
 import { format } from 'date-fns';
+import { formatCurrency } from '../utils/formatter';
 
 interface Rank {
   nickname: string;
   profileImageUrl: string;
   badgeImageUrl?: string;
-  totalAsset?: number;
+  totalAssets?: number;
   profitRate?: number;
   rank: number;
 }
@@ -154,19 +155,15 @@ export default function Ranking() {
                     'https://via.placeholder.com/64';
                 }}
               />
-              {topUsers[1]?.badgeImageUrl && (
-                <img
-                  src={topUsers[1].badgeImageUrl}
-                  alt="badge"
-                  className="absolute -bottom-2 -right-2 w-8 h-8"
-                />
-              )}
+              <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-zinc-200 rounded-full flex items-center justify-center text-lg font-bold">
+                2
+              </div>
             </div>
             <div className="mt-2 font-medium">{topUsers[1]?.nickname}</div>
             <div className="text-red-500">
               {activePeriod === '일간'
                 ? `+${topUsers[1]?.profitRate?.toFixed(2)}%`
-                : `${topUsers[1]?.totalAsset?.toLocaleString()}원`}
+                : `${topUsers[1]?.totalAssets?.toLocaleString()}원`}
             </div>
           </div>
 
@@ -174,8 +171,8 @@ export default function Ranking() {
           <div className="flex flex-col items-center -mt-4 ">
             <div className="relative">
               <img
-                src={`https://static.upbit.com/logos/${topUsers[0]?.profileCoin}.png`}
-                alt={topUsers[0]?.name}
+                src={topUsers[0].profileImageUrl}
+                alt={topUsers[0]?.nickname}
                 className="w-20 h-20 rounded-full border-2 border-yellow-400"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src =
@@ -186,9 +183,11 @@ export default function Ranking() {
                 1
               </div>
             </div>
-            <div className="mt-2 font-medium">{topUsers[0]?.name}</div>
+            <div className="mt-2 font-medium">{topUsers[0]?.nickname}</div>
             <div className="text-red-500">
-              +{topUsers[0]?.profitRate.toFixed(2)}%
+              {activePeriod === '일간'
+                ? `+${topUsers[0]?.profitRate?.toFixed(2)}%`
+                : `${topUsers[0]?.totalAssets?.toLocaleString()}원`}
             </div>
           </div>
 
@@ -196,8 +195,8 @@ export default function Ranking() {
           <div className="flex flex-col items-center">
             <div className="relative">
               <img
-                src={`https://static.upbit.com/logos/${topUsers[2]?.profileCoin}.png`}
-                alt={topUsers[2]?.name}
+                src={topUsers[2].profileImageUrl}
+                alt={topUsers[2]?.nickname}
                 className="w-16 h-16 rounded-full border-2 border-orange-400"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src =
@@ -208,9 +207,11 @@ export default function Ranking() {
                 3
               </div>
             </div>
-            <div className="mt-2 font-medium">{topUsers[2]?.name}</div>
+            <div className="mt-2 font-medium">{topUsers[2]?.nickname}</div>
             <div className="text-red-500">
-              +{topUsers[2]?.profitRate.toFixed(2)}%
+              {activePeriod === '일간'
+                ? `+${topUsers[2]?.profitRate?.toFixed(2)}%`
+                : `${topUsers[2]?.totalAssets?.toLocaleString()}원`}
             </div>
           </div>
         </div>
@@ -224,12 +225,12 @@ export default function Ranking() {
               ? `${format(lastUpdated, 'yyyy년 MM월 dd일 HH:mm')} 기준`
               : '가입일부터 현재까지'}
           </span>
-          <button
+          {/* <button
             onClick={fetchRanks}
             className="text-blue-500 hover:text-blue-600 text-sm"
           >
             새로고침
-          </button>
+          </button> */}
         </div>
       </div>
 
@@ -264,10 +265,29 @@ export default function Ranking() {
             <div className="flex-1">
               <div className="font-medium">{user.nickname}</div>
             </div>
-            <div className="text-red-500">
+            {/* <div
+              className={`text-sm ${
+                user.profitRate || user.totalAssets >= 0
+                  ? 'text-red-500'
+                  : 'text-blue-500'
+              }`}
+            >
               {activePeriod === '일간'
-                ? `+${user.profitRate?.toFixed(2)}%`
-                : `${user.totalAsset?.toLocaleString()}원`}
+                ? `${user.profitRate?.toFixed(2)}%`
+                : `${formatCurrency(user.totalAssets || 0)}`}
+            </div> */}
+            <div
+              className={`text-sm ${
+                user.profitRate === 0 || user.totalAssets === 0
+                  ? 'text-gray-500'
+                  : user.profitRate > 0 || user.totalAssets > 0
+                    ? 'text-red-500'
+                    : 'text-blue-500'
+              }`}
+            >
+              {activePeriod === '일간'
+                ? `${user.profitRate > 0 ? '+' : user.profitRate < 0 ? '-' : ''}${Math.abs(user.profitRate || 0).toFixed(2)}%`
+                : `${user.totalAssets > 0 ? '+' : user.totalAssets < 0 ? '-' : ''}${formatCurrency(Math.abs(user.totalAssets || 0))}`}
             </div>
           </div>
         ))}
