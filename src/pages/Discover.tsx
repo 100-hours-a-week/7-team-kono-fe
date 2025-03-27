@@ -4,7 +4,6 @@ import { IoIosClose } from 'react-icons/io';
 import Header from '../components/layout/Header';
 import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
 import { formatAmount } from '../utils/formatter';
-import { useMemo } from 'react';
 import { getCoins } from '../api/coin';
 
 type SortType = '거래대금' | '가격' | '등락률';

@@ -75,26 +75,5 @@ export const getBalanc = async (): Promise<number> => {
   } catch (error) {
     console.error('잔액 조회 중 오류 발생:', error);
     return 0;
-
-
-// 회원 탈퇴
-export const deleteUser = async (): Promise<boolean> => {
-  try {
-    const response = await api.delete(API_ENDPOINTS.DELETE_USER);
-    return response.status === 200;
-  } catch (error) {
-    console.error(`회원 탈퇴 오류: ${error}`);
-    return false;
-  }
-};
-
-// 로그아웃
-export const logout = async (): Promise<boolean> => {
-  try {
-    const response = await api.post(API_ENDPOINTS.LOGOUT);
-    return response.status === 200;
-  } catch (error) {
-    console.error(`로그아웃 오류: ${error}`);
-    return false;
   }
 };
