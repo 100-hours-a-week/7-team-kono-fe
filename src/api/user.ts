@@ -15,10 +15,6 @@ export const getUserProfile = async (): Promise<ProfileData> => {
     
     // API 응답 형식에 맞게 데이터 변환
     return response.data;
-      // nickname: response.data.nickname || '사용자',
-      // profileImage: response.data.profileImage || 'https://via.placeholder.com/150',
-      // id: response.data.id,
-      // cashBalance: response.data.cashBalance
   } catch (error) {
     console.error('사용자 프로필 정보를 가져오는 중 오류 발생:', error);
     // 오류 발생 시 기본 더미 데이터 반환
@@ -79,5 +75,26 @@ export const getBalanc = async (): Promise<number> => {
   } catch (error) {
     console.error('잔액 조회 중 오류 발생:', error);
     return 0;
+
+
+// 회원 탈퇴
+export const deleteUser = async (): Promise<boolean> => {
+  try {
+    const response = await api.delete(API_ENDPOINTS.DELETE_USER);
+    return response.status === 200;
+  } catch (error) {
+    console.error(`회원 탈퇴 오류: ${error}`);
+    return false;
+  }
+};
+
+// 로그아웃
+export const logout = async (): Promise<boolean> => {
+  try {
+    const response = await api.post(API_ENDPOINTS.LOGOUT);
+    return response.status === 200;
+  } catch (error) {
+    console.error(`로그아웃 오류: ${error}`);
+    return false;
   }
 };

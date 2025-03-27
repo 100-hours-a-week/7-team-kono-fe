@@ -34,7 +34,7 @@ body {
   height: 100vh;
   /* overflow: hidden; */
   @apply mx-auto flex flex-col;
-  @apply bg-gray-100 text-mainText;
+  @apply bg-gray-100 text-mainText dark:bg-gray-900 dark:text-white;
 }
 
 #root {

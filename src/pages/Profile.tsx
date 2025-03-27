@@ -14,6 +14,12 @@ interface ProfileData {
   cashBalance?: number;
 }
 
+// interface User {
+//   nickname: string;
+//   profileImage: string;
+//   balance?: number;
+// }
+
 const Profile: React.FC = () => {
   const { user } = useAuth(); // AuthContext에서 사용자 정보 가져오기
   const [profile, setProfile] = useState<ProfileData | null>(null);
