@@ -6,12 +6,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { FaHistory } from 'react-icons/fa';
 import { ROUTES } from '../config/routes';
 import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
-import {
-  getHoldingCoinTickers,
-  getQuantityByNicknameAndTicker,
-  getHoldingCoins,
-} from '../api/wallet';
-import axios from 'axios';
+import { getHoldingCoins } from '../api/wallet';
 import { formatCurrency } from '../utils/formatter';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -34,20 +29,18 @@ const Wallet = () => {
   const [holdingCoins, setHoldingCoins] = useState<Coin[]>([]);
   const [tickers, setTickers] = useState<string[]>([]);
   const tickerData = useUpbitWebSocket(tickers);
-  const nickname = 'test';
   // 초기 로딩 상태를 추적하기 위한 ref
   const initialLoadRef = useRef(true);
 
   useEffect(() => {
     const fetchHoldingCoins = async () => {
       try {
-        const walletData = await getHoldingCoins(nickname);
+        const walletData = await getHoldingCoins();
 
         // HoldingCoin 객체 형식으로 변환
         const coins = walletData.map((coin) => ({
           id: coin.ticker.toLowerCase(),
-          nickname: coin.nickname,
-          name: coin.name,
+          name: coin.coinName,
           ticker: coin.ticker,
           holdingQuantity: coin.holdingQuantity,
           holdingPrice: coin.holdingPrice,
@@ -70,7 +63,6 @@ const Wallet = () => {
     };
 
     fetchHoldingCoins();
-    // 컴포넌트 마운트 시에만 실행
   }, []);
 
   // 웹소켓 데이터 처리 및 상태 관리
@@ -107,20 +99,10 @@ const Wallet = () => {
 
         // 매수 평균가로 수익률 계산 (%)
         let profitRate = 0;
-        if (
-          coin.holdingPrice / coin.holdingQuantity &&
-          coin.holdingPrice / coin.holdingQuantity > 0
-        ) {
-          profitRate =
-            ((currentPrice - coin.holdingPrice / coin.holdingQuantity) /
-              coin.holdingPrice /
-              coin.holdingQuantity) *
-            100;
+        if (coin.holdingQuantity > 0) {
+          const avgBuyPrice = coin.holdingPrice / coin.holdingQuantity;
+          profitRate = ((currentPrice - avgBuyPrice) / avgBuyPrice) * 100;
         }
-
-        console.log(
-          `${coin.ticker} - 현재가격: ${currentPrice}, 매수평균가: ${coin.holdingPrice / coin.holdingQuantity}, 수익률: ${profitRate}%`,
-        );
 
         return {
           ...coin,
@@ -145,7 +127,6 @@ const Wallet = () => {
   }, [tickerData]); // holdingCoins를 의존성에서 제거
 
   const initialTotalAsset = 10000000;
-  // const initialInvestment = 10000000;
 
   // 총 자산 가치 계산 (코인만)
   const totalCoinValue = holdingCoins.reduce(
@@ -165,11 +146,17 @@ const Wallet = () => {
   // 총 자산 (코인 + 현금)
   const totalAsset = cashBalance + totalCoinValue;
 
-  // 수익률 계산 (NaN 방지)
-  const profitRate =
-    initialInvestment > 0
-      ? ((totalAsset - initialInvestment) / initialInvestment) * 100
-      : 0;
+  // 총 수익률 계산
+  const calculateTotalProfitRate = () => {
+    // 전체 매수 금액이 0인 경우 예외 처리
+    if (initialInvestment <= 0) return 0;
+
+    // (현재 총 자산 - 초기 투자금) / 초기 투자금 * 100
+    return ((totalCoinValue - initialInvestment) / initialInvestment) * 100;
+  };
+
+  // 총 수익률 계산
+  const profitRate = calculateTotalProfitRate();
 
   // 차트 데이터 준비
   // 양수 값을 가진 코인만 필터링
@@ -196,15 +183,6 @@ const Wallet = () => {
   const otherCoinsPercent =
     totalAsset > 0 ? (otherCoinsValue / totalAsset) * 100 : 0;
   const cashPercent = totalAsset > 0 ? (cashBalance / totalAsset) * 100 : 0;
-
-  // 모든 퍼센트 값이 양수인지 확인
-  console.log('Top coins percent:', topCoinsPercent);
-  console.log('Other coins percent:', otherCoinsPercent);
-  console.log('Cash percent:', cashPercent);
-  console.log(
-    'Total percent:',
-    topCoinsPercent + otherCoinsPercent + cashPercent,
-  );
 
   // 차트 데이터
   const data = {

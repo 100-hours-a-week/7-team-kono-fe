@@ -34,7 +34,7 @@ export default function Discover() {
   useEffect(() => {
     getCoins()
       .then((res) => {
-        const data: CoinInfo[] = res.data;
+        const data: CoinInfo[] = res;
         console.log('Fetched coin data:', data);
         console.log('Data type:', Array.isArray(data) ? 'Array' : typeof data);
         setCoinInfo(data);
