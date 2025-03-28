@@ -12,6 +12,7 @@ export const formatCurrency = (
   currency: string = 'KRW',
   showCurrency: boolean = true,
   showSign: boolean = false,
+  showDecimal: boolean = false,
 ): string => {
   // 부호 처리
   const sign = showSign && value > 0 ? '+' : '';
@@ -19,7 +20,11 @@ export const formatCurrency = (
 
   // 소수점 처리 로직
   let formattedValue: string;
-  if (Number.isInteger(absValue)) {
+
+  if (!showDecimal) {
+    // 소수점 완전히 생략하고 정수만 표시
+    formattedValue = Math.floor(absValue).toLocaleString('ko-KR');
+  } else if (Number.isInteger(absValue)) {
     // 정수인 경우 소수점 표시 안함
     formattedValue = absValue.toLocaleString('ko-KR');
   } else {
@@ -80,7 +85,7 @@ export const formatVolume = (value: number): string => {
  */
 export const formatDate = (date: string | Date) => {
   const dateObj = typeof date === 'string' ? new Date(date) : date;
-  
+
   try {
     const year = dateObj.getFullYear();
     const month = String(dateObj.getMonth() + 1).padStart(2, '0');
