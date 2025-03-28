@@ -3,6 +3,7 @@ export const API_ENDPOINTS = {
   LOGIN: '/api/v1/auth/login',
   SIGNUP: '/api/v1/auth/signup',
   LOGOUT: '/api/v1/auth/logout',
+  WITHDRAW: '/api/v1/users/withdraw',
 
   // 인증 관련
   KAKAO_LOGIN: '/oauth2/authorization/kakao',
