@@ -43,7 +43,7 @@ export default function Discover() {
     setIsLoading(true);
     getCoins()
       .then((res) => {
-        const data: CoinInfo[] = res.data;
+        const data: CoinInfo[] = res;
         setCoinInfo(data);
 
         // 티커 목록 추출
