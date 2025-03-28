@@ -13,16 +13,12 @@ interface Wallet {
  * @param ticker 코인 티커 (예: BTC, ETH)
  * @returns 해당 코인의 보유량, 없으면 0 반환
  */
-export const getQuantityByNicknameAndTicker = async (ticker: string) => {
+export const getQuantityByTicker = async (
+  ticker: string,
+) => {
   try {
-    const response = await api.get(API_ENDPOINTS.GET_IS_HOLDING_COIN(ticker));
-
-    // API가 직접 수량을 반환하는 경우
-    if (typeof response.data.data.holdingQuantity === 'number') {
-      return response.data.data.holdingQuantity;
-    }
-
-    return 0;
+    const res = await api.get(API_ENDPOINTS.GET_IS_HOLDING_COIN(ticker));
+    return res.data.data.holdingQuantity;
   } catch (err) {
     console.error(`Error fetching wallet data for ${ticker}:`, err);
     return 0;
@@ -57,7 +53,6 @@ export const getTransactions = async (): Promise<any[]> => {
     return [];
   }
 };
-
 // 잔액 조회
 export const getBalance = async (): Promise<number> => {
   try {

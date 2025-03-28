@@ -2,76 +2,81 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaFilter } from 'react-icons/fa';
 import Header from '../components/layout/Header';
-import FilterModal, {
-  FilterType,
-  displayToDataMap,
-  dataToDisplayMap,
-  DataFilterType,
-} from '../components/modal/FilterModal';
+import FilterModal, { FilterType } from '../components/modal/FilterModal';
 import { formatDate, formatCurrency } from '../utils/formatter';
-import { getTransactionsByNickname } from '../api/transaction';
-
-// 거래 타입 정의
-type TransactionType = 'buy' | 'sell';
-
-// 거래 내역 인터페이스
-// interface Transaction {
-//   id: string;
-//   type: TransactionType;
-//   coinName: string;
-//   ticker: string;
-//   amount: number;
-//   price: number;
-//   total: number;
-//   date: Date;
-// }
-
-type Transaction = {
-  id: string;
-  nickname: string;
-  type: TransactionType;
-  coinName: string;
-  ticker: string;
-  amount: number;
-  price: number;
-  total: number;
-  date: string;
-};
+import { getTransactions, Transaction as TransactionType } from '../api/transaction';
 
 export default function Transaction() {
   const navigate = useNavigate();
   const [activeFilter, setActiveFilter] = useState<FilterType>('전체');
   const [showFilterModal, setShowFilterModal] = useState(false);
+  const [transactions, setTransactions] = useState<TransactionType[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const nickname = 'test'; // 실제 구현에서는 로그인된 사용자의 닉네임을 사용
-
+  // API로부터 거래 내역 조회
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
-        const data = await getTransactionsByNickname(nickname);
+        setLoading(true);
+        const data = await getTransactions();
+        console.log('거래 내역 데이터:', data); // 데이터 확인용 로그
         setTransactions(data);
+        setError(null);
       } catch (error) {
-        console.error('Failed to fetch transactions:', error);
+        console.error('거래 내역 조회 실패:', error);
+        setError('거래 내역을 불러오는데 실패했습니다.');
         setTransactions([]);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchTransactions();
-  }, [nickname]);
+  }, []);
 
   // 필터링된 거래 내역
   const filteredTransactions = transactions.filter((transaction) => {
     if (activeFilter === '전체') return true;
-    return (
-      transaction.type === (displayToDataMap[activeFilter] as TransactionType)
-    );
+    return transaction.orderType === (activeFilter === '매수' ? 'buy' : 'sell');
   });
 
   // 필터 모달 토글
   const toggleFilterModal = () => {
     setShowFilterModal(!showFilterModal);
   };
+
+  // 로딩 상태 표시
+  if (loading) {
+    return (
+      <div className="flex flex-col min-h-screen">
+        <Header title="매매 내역" />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        </div>
+      </div>
+    );
+  }
+
+  // 에러 상태 표시
+  if (error) {
+    return (
+      <div className="flex flex-col min-h-screen">
+        <Header title="매매 내역" />
+        <div className="flex-1 flex items-center justify-center p-4">
+          <div className="text-center">
+            <p className="text-red-500 mb-4">{error}</p>
+            <button
+              className="px-4 py-2 bg-blue-500 text-white rounded-lg"
+              onClick={() => window.location.reload()}
+            >
+              다시 시도
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // 필터 변경
   const changeFilter = (filter: FilterType) => {
@@ -88,11 +93,10 @@ export default function Transaction() {
     <div className="flex flex-col min-h-screen">
       {/* 헤더 */}
       <Header title="매매 내역" />
-
       {/* 필터 표시 */}
-      <div className="mx-4 bg-white p-4 border-b flex justify-between rounded-t-xl shadow-sm dark:bg-gray-800 dark:text-white border border-gray-200 dark:border-gray-700">
+      <div className="mx-4 bg-white p-4 border-b flex justify-between rounded-t-xl dark:bg-gray-800 dark:text-white dark:border-gray-700">
         <div className="flex items-center">
-          <span className="text-sm text-gray-500 mr-2">필터</span>
+          <span className="text-sm text-gray-500 mr-2">필터:</span>
           <span className="text-sm font-medium">{activeFilter}</span>
         </div>
         <button onClick={toggleFilterModal} className="p-1">
@@ -102,11 +106,11 @@ export default function Transaction() {
 
       {/* 거래 내역 목록 */}
       {filteredTransactions.length > 0 ? (
-        <div className="flex-1 rounded-xl mx-4 mb-2">
-          {filteredTransactions.map((transaction, index) => (
+        <div className="flex-1 rounded-xl mx-4 mb-4">
+          {filteredTransactions.map((transaction) => (
             <div
-              key={transaction.id}
-              className={`p-4 border-b bg-white dark:bg-gray-800 dark:text-white border border-gray-200 dark:border-gray-700 shadow-sm last:rounded-b-xl last:border-b-0`}
+              key={transaction.transactionId}
+              className="p-4 border-b bg-white dark:bg-gray-800 dark:text-white dark:border-gray-700"
               onClick={() => goToCoinDetail(transaction.ticker)}
             >
               <div className="flex justify-between items-start mb-2">
@@ -129,41 +133,37 @@ export default function Transaction() {
                 </div>
                 <div
                   className={`px-2 py-1 rounded-md text-sm font-medium ${
-                    transaction.type === 'buy'
+                    transaction.orderType === 'buy'
                       ? 'bg-red-100 text-red-500 dark:bg-red-900 dark:text-red-400'
                       : 'bg-blue-100 text-blue-500 dark:bg-blue-900 dark:text-blue-400'
                   }`}
                 >
-                  {
-                    dataToDisplayMap[
-                      transaction.type as unknown as DataFilterType
-                    ]
-                  }
+                  {transaction.orderType === 'buy' ? '매수' : '매도'}
                 </div>
               </div>
 
               <div className="flex justify-between text-sm mb-1">
                 <span className="text-gray-500 dark:text-gray-400">수량</span>
                 <span>
-                  {transaction.amount} {transaction.ticker}
+                  {transaction.orderQuantity} {transaction.ticker}
                 </span>
               </div>
 
               <div className="flex justify-between text-sm mb-1">
                 <span className="text-gray-500 dark:text-gray-400">가격</span>
-                <span>{formatCurrency(transaction.price)}</span>
+                <span>{formatCurrency(transaction.orderPrice)}</span>
               </div>
 
               <div className="flex justify-between text-sm mb-1">
                 <span className="text-gray-500 dark:text-gray-400">총액</span>
                 <span className="font-medium">
-                  {formatCurrency(transaction.total)}
+                  {formatCurrency(transaction.orderAmount)}
                 </span>
               </div>
 
               <div className="flex justify-between text-sm">
                 <span className="text-gray-500 dark:text-gray-400">날짜</span>
-                <span>{formatDate(new Date(transaction.date))}</span>
+                <span>{formatDate(transaction.createAt)}</span>
               </div>
             </div>
           ))}
@@ -193,3 +193,4 @@ export default function Transaction() {
     </div>
   );
 }
+

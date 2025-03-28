@@ -2,33 +2,28 @@ import api from './clients';
 import { API_ENDPOINTS } from '../config/apiEndpoints';
 
 export type Transaction = {
-  id: string;
-  nickname: string;
-  type: string;
+  transactionId: string;
+  orderType: string;
   coinName: string;
   ticker: string;
-  amount: number;
-  price: number;
-  total: number;
-  date: string;
+  orderQuantity: number;
+  orderPrice: number;
+  orderAmount: number;
+  createAt: string;
 };
 
 /**
  * 특정 사용자의 거래 내역을 조회하는 함수
- * @param nickname 사용자 닉네임 (기본값: 'test')
  * @returns 사용자의 거래 내역 배열
  */
-export const getTransactionsByNickname = async (
-  nickname: string = 'test',
+export const getTransactions = async (
 ): Promise<Transaction[]> => {
   try {
     const res= await api.get(API_ENDPOINTS.GET_TRANSACTION);
-    // 응답이 배열인지 확인
-    console.log(res.data);
-    return Array.isArray(res.data) ? res.data : [];
+    return res.data.data;
 
   } catch (error) {
-    console.error(`${ticker} 코인 거래 내역 조회 오류:`, error);
+    console.error(`거래 내역 조회 오류:`, error);
     return [];
   }
 };
