@@ -136,7 +136,7 @@ export default function Ranking() {
               <img
                 src={topUsers[1]?.profileImageUrl}
                 alt={topUsers[1]?.nickname}
-                className="w-16 h-16 rounded-full border-2 border-gray-300"
+                className="w-16 h-16 rounded-full border-2 border-gray-300 object-cover"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = PLACEHOLDER;
                 }}
@@ -173,7 +173,7 @@ export default function Ranking() {
               <img
                 src={topUsers[0].profileImageUrl}
                 alt={topUsers[0]?.nickname}
-                className="w-20 h-20 rounded-full border-2 border-yellow-400"
+                className="w-20 h-20 rounded-full border-2 border-yellow-400 object-cover"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = PLACEHOLDER;
                 }}
@@ -210,7 +210,7 @@ export default function Ranking() {
               <img
                 src={topUsers[2].profileImageUrl}
                 alt={topUsers[2]?.nickname}
-                className="w-16 h-16 rounded-full border-2 border-orange-400"
+                className="w-16 h-16 rounded-full border-2 border-orange-400 object-cover"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = PLACEHOLDER;
                 }}
@@ -282,7 +282,7 @@ export default function Ranking() {
             <img
               src={user.profileImageUrl}
               alt={user.nickname}
-              className="w-12 h-12 rounded-full mr-4"
+              className="w-12 h-12 rounded-full mr-4 object-cover"
               onError={(e) => {
                 (e.target as HTMLImageElement).src = PLACEHOLDER;
               }}
