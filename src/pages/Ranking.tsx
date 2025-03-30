@@ -160,10 +160,18 @@ export default function Ranking() {
               </div>
             </div>
             <div className="mt-2 font-medium">{topUsers[1]?.nickname}</div>
-            <div className="text-red-500">
+            <div
+              className={`text-sm ${
+                topUsers[1].profitRate === 0 || topUsers[1].totalAssets === 0
+                  ? 'text-gray-500'
+                  : topUsers[1].profitRate > 0 || topUsers[1].totalAssets > 0
+                    ? 'text-red-500'
+                    : 'text-blue-500'
+              }`}
+            >
               {activePeriod === '일간'
-                ? `+${topUsers[1]?.profitRate?.toFixed(2)}%`
-                : `${topUsers[1]?.totalAssets?.toLocaleString()}원`}
+                ? `${topUsers[1].profitRate > 0 ? '+' : topUsers[1].profitRate < 0 ? '-' : ''}${Math.abs(topUsers[2].profitRate || 0).toFixed(2)}%`
+                : `${topUsers[1].totalAssets > 0 ? '+' : topUsers[1].totalAssets < 0 ? '-' : ''}${formatCurrency(Math.abs(topUsers[2].totalAssets || 0))}`}
             </div>
           </div>
 
@@ -184,10 +192,23 @@ export default function Ranking() {
               </div>
             </div>
             <div className="mt-2 font-medium">{topUsers[0]?.nickname}</div>
-            <div className="text-red-500">
+            {/* <div className="text-red-500">
               {activePeriod === '일간'
                 ? `+${topUsers[0]?.profitRate?.toFixed(2)}%`
                 : `${topUsers[0]?.totalAssets?.toLocaleString()}원`}
+            </div> */}
+            <div
+              className={`text-sm ${
+                topUsers[0].profitRate === 0 || topUsers[0].totalAssets === 0
+                  ? 'text-gray-500'
+                  : topUsers[0].profitRate > 0 || topUsers[0].totalAssets > 0
+                    ? 'text-red-500'
+                    : 'text-blue-500'
+              }`}
+            >
+              {activePeriod === '일간'
+                ? `${topUsers[0].profitRate > 0 ? '+' : topUsers[0].profitRate < 0 ? '-' : ''}${Math.abs(topUsers[2].profitRate || 0).toFixed(2)}%`
+                : `${topUsers[0].totalAssets > 0 ? '+' : topUsers[0].totalAssets < 0 ? '-' : ''}${formatCurrency(Math.abs(topUsers[2].totalAssets || 0))}`}
             </div>
           </div>
 
@@ -208,10 +229,23 @@ export default function Ranking() {
               </div>
             </div>
             <div className="mt-2 font-medium">{topUsers[2]?.nickname}</div>
-            <div className="text-red-500">
+            {/* <div className="text-red-500">
               {activePeriod === '일간'
                 ? `+${topUsers[2]?.profitRate?.toFixed(2)}%`
                 : `${topUsers[2]?.totalAssets?.toLocaleString()}원`}
+            </div> */}
+            <div
+              className={`text-sm ${
+                topUsers[2].profitRate === 0 || topUsers[2].totalAssets === 0
+                  ? 'text-gray-500'
+                  : topUsers[2].profitRate > 0 || topUsers[2].totalAssets > 0
+                    ? 'text-red-500'
+                    : 'text-blue-500'
+              }`}
+            >
+              {activePeriod === '일간'
+                ? `${topUsers[2].profitRate > 0 ? '+' : topUsers[2].profitRate < 0 ? '-' : ''}${Math.abs(topUsers[2].profitRate || 0).toFixed(2)}%`
+                : `${topUsers[2].totalAssets > 0 ? '+' : topUsers[2].totalAssets < 0 ? '-' : ''}${formatCurrency(Math.abs(topUsers[2].totalAssets || 0))}`}
             </div>
           </div>
         </div>
