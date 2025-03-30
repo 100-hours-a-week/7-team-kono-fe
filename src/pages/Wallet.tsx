@@ -90,20 +90,25 @@ const Wallet = () => {
       const tickerInfo = tickerData.tickerData[marketCode];
 
       if (tickerInfo) {
-        const currentPrice = tickerInfo.trade_price || 0; // trade_price가 현재 가격
-        const currentValue = coin.holdingQuantity * currentPrice; // 현재 총 가치
+        const currentPrice = tickerInfo.trade_price || 0;
+        const currentValue = coin.holdingQuantity * currentPrice;
+        
+        // 코인당 평균 매수가 계산
+        const averageBuyPrice = coin.holdingQuantity > 0 
+          ? coin.holdingPrice / coin.holdingQuantity 
+          : 0;
 
-        // 개별 코인 수익률 계산
-        const profitRate =
-          coin.holdingPrice > 0
-            ? ((currentPrice - coin.holdingPrice) / coin.holdingPrice) * 100
-            : 0;
+        // 수익률 계산 수정
+        const profitRate = averageBuyPrice > 0
+          ? ((currentPrice - averageBuyPrice) / averageBuyPrice) * 100
+          : 0;
 
         return {
           ...coin,
           price: currentPrice,
           value: currentValue,
-          profitRate: profitRate,
+          averageBuyPrice, // 코인당 평균 매수가 추가
+          profitRate,
         };
       }
 
@@ -126,7 +131,7 @@ const Wallet = () => {
 
   // 총 투자 금액 계산
   const initialInvestment = holdingCoins.reduce(
-    (sum, coin) => sum + coin.holdingPrice * coin.holdingQuantity,
+    (sum, coin) => sum + coin.holdingPrice,
     0,
   );
 
