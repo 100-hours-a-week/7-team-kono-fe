@@ -4,7 +4,6 @@ import { useTheme } from '../contexts/ThemeContext';
 interface TradingViewWidgetProps {
   symbol: string;
   interval: string;
-  theme: 'light' | 'dark';
   locale: string;
   hideLegend?: boolean;
   hideTopToolbar?: boolean;
