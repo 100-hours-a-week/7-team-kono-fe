@@ -5,7 +5,7 @@ import Header from '../components/layout/Header';
 import TradingViewWidget from '../components/TradingViewWidget';
 import PriceInfo from '../components/PriceInfo'; // 수정된 PriceInfo 컴포넌트 임포트
 import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
-import { formatCurrency, formatVolume } from '../utils/formatter';
+import { formatAmount, formatCurrency } from '../utils/formatter';
 import { isFavoriteCoin, addFavorite, removeFavorite } from '../api/favorite';
 import { getCoinName } from '../api/coin';
 
@@ -232,7 +232,7 @@ export default function CoinDetail() {
             <div className="flex justify-between">
               <span className="text-gray-500">거래대금 (24h)</span>
               <span>
-                {formatVolume(
+                {formatAmount(
                   tickerData[`KRW-${symbolToUse}`].acc_trade_price_24h,
                 )}{' '}
               </span>
