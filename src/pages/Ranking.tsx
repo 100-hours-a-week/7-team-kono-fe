@@ -9,7 +9,7 @@ interface Rank {
   nickname: string;
   profileImageUrl: string;
   badgeImageUrl?: string;
-  totalAssets?: number;
+  profit?: number;
   profitRate?: number;
   rank: number;
 }
@@ -162,16 +162,16 @@ export default function Ranking() {
             <div className="mt-2 font-medium">{topUsers[1]?.nickname}</div>
             <div
               className={`text-sm ${
-                topUsers[1].profitRate === 0 || topUsers[1].totalAssets === 0
+                topUsers[1].profitRate === 0 || topUsers[1].profit === 0
                   ? 'text-gray-500'
-                  : topUsers[1].profitRate > 0 || topUsers[1].totalAssets > 0
+                  : topUsers[1].profitRate > 0 || topUsers[1].profit > 0
                     ? 'text-red-500'
                     : 'text-blue-500'
               }`}
             >
               {activePeriod === '일간'
                 ? `${topUsers[1].profitRate > 0 ? '+' : topUsers[1].profitRate < 0 ? '-' : ''}${Math.abs(topUsers[2].profitRate || 0).toFixed(2)}%`
-                : `${topUsers[1].totalAssets > 0 ? '+' : topUsers[1].totalAssets < 0 ? '-' : ''}${formatCurrency(Math.abs(topUsers[2].totalAssets || 0))}`}
+                : `${topUsers[1].profit > 0 ? '+' : topUsers[1].profit < 0 ? '-' : ''}${formatCurrency(Math.abs(topUsers[2].profit || 0))}`}
             </div>
           </div>
 
@@ -195,20 +195,20 @@ export default function Ranking() {
             {/* <div className="text-red-500">
               {activePeriod === '일간'
                 ? `+${topUsers[0]?.profitRate?.toFixed(2)}%`
-                : `${topUsers[0]?.totalAssets?.toLocaleString()}원`}
+                : `${topUsers[0]?.profit?.toLocaleString()}원`}
             </div> */}
             <div
               className={`text-sm ${
-                topUsers[0].profitRate === 0 || topUsers[0].totalAssets === 0
+                topUsers[0].profitRate === 0 || topUsers[0].profit === 0
                   ? 'text-gray-500'
-                  : topUsers[0].profitRate > 0 || topUsers[0].totalAssets > 0
+                  : topUsers[0].profitRate > 0 || topUsers[0].profit > 0
                     ? 'text-red-500'
                     : 'text-blue-500'
               }`}
             >
               {activePeriod === '일간'
-                ? `${topUsers[0].profitRate > 0 ? '+' : topUsers[0].profitRate < 0 ? '-' : ''}${Math.abs(topUsers[2].profitRate || 0).toFixed(2)}%`
-                : `${topUsers[0].totalAssets > 0 ? '+' : topUsers[0].totalAssets < 0 ? '-' : ''}${formatCurrency(Math.abs(topUsers[2].totalAssets || 0))}`}
+                ? `${topUsers[0].profitRate > 0 ? '+' : topUsers[0].profitRate < 0 ? '-' : ''}${Math.abs(topUsers[0].profitRate || 0).toFixed(2)}%`
+                : `${topUsers[0].profit > 0 ? '+' : topUsers[0].profit < 0 ? '-' : ''}${formatCurrency(Math.abs(topUsers[0].profit || 0))}`}
             </div>
           </div>
 
@@ -232,20 +232,20 @@ export default function Ranking() {
             {/* <div className="text-red-500">
               {activePeriod === '일간'
                 ? `+${topUsers[2]?.profitRate?.toFixed(2)}%`
-                : `${topUsers[2]?.totalAssets?.toLocaleString()}원`}
+                : `${topUsers[2]?.profit?.toLocaleString()}원`}
             </div> */}
             <div
               className={`text-sm ${
-                topUsers[2].profitRate === 0 || topUsers[2].totalAssets === 0
+                topUsers[2].profitRate === 0 || topUsers[2].profit === 0
                   ? 'text-gray-500'
-                  : topUsers[2].profitRate > 0 || topUsers[2].totalAssets > 0
+                  : topUsers[2].profitRate > 0 || topUsers[2].profit > 0
                     ? 'text-red-500'
                     : 'text-blue-500'
               }`}
             >
               {activePeriod === '일간'
                 ? `${topUsers[2].profitRate > 0 ? '+' : topUsers[2].profitRate < 0 ? '-' : ''}${Math.abs(topUsers[2].profitRate || 0).toFixed(2)}%`
-                : `${topUsers[2].totalAssets > 0 ? '+' : topUsers[2].totalAssets < 0 ? '-' : ''}${formatCurrency(Math.abs(topUsers[2].totalAssets || 0))}`}
+                : `${topUsers[2].profit > 0 ? '+' : topUsers[2].profit < 0 ? '-' : ''}${formatCurrency(Math.abs(topUsers[2].profit || 0))}`}
             </div>
           </div>
         </div>
@@ -301,27 +301,27 @@ export default function Ranking() {
             </div>
             {/* <div
               className={`text-sm ${
-                user.profitRate || user.totalAssets >= 0
+                user.profitRate || user.profit >= 0
                   ? 'text-red-500'
                   : 'text-blue-500'
               }`}
             >
               {activePeriod === '일간'
                 ? `${user.profitRate?.toFixed(2)}%`
-                : `${formatCurrency(user.totalAssets || 0)}`}
+                : `${formatCurrency(user.profit || 0)}`}
             </div> */}
             <div
               className={`text-sm ${
-                user.profitRate === 0 || user.totalAssets === 0
+                user.profitRate === 0 || user.profit === 0
                   ? 'text-gray-500'
-                  : user.profitRate > 0 || user.totalAssets > 0
+                  : user.profitRate > 0 || user.profit > 0
                     ? 'text-red-500'
                     : 'text-blue-500'
               }`}
             >
               {activePeriod === '일간'
                 ? `${user.profitRate > 0 ? '+' : user.profitRate < 0 ? '-' : ''}${Math.abs(user.profitRate || 0).toFixed(2)}%`
-                : `${user.totalAssets > 0 ? '+' : user.totalAssets < 0 ? '-' : ''}${formatCurrency(Math.abs(user.totalAssets || 0))}`}
+                : `${user.profit > 0 ? '+' : user.profit < 0 ? '-' : ''}${formatCurrency(Math.abs(user.profit || 0))}`}
             </div>
           </div>
         ))}
