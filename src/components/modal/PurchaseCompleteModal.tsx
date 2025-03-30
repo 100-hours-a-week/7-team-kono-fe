@@ -7,7 +7,7 @@ interface PurchaseCompleteModalProps {
   onClose: () => void;
   onConfirm: () => void;
   ticker: string;
-  amount: string;
+  amount: number;
   price: number;
   tradeType: 'buy' | 'sell';
   quantity: number;
