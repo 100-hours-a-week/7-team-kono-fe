@@ -71,17 +71,18 @@ export default function CoinDetail() {
   const symbolToUse = ticker || 'BTC';
 
   // useUpbitWebSocket 훅 사용
-  const { tickerData, isConnected } = useUpbitWebSocket([symbolToUse]);
+  // const { tickerData, isConnected } = useUpbitWebSocket([symbolToUse]);
+  const { tickerData } = useUpbitWebSocket([symbolToUse]);
 
-  // 예시 코인 데이터 설정 (실제로는 API에서 가져옴)
+  // 코인 데이터 설정
   useEffect(() => {
-    // 실제 구현에서는 API를 통해 코인 정보를 가져오는 로직 필요
     const fetchCoinData = async () => {
       try {
         const name = await getCoinName(symbolToUse);
+        const isFavorite = await isFavoriteCoin(symbolToUse);
         const exampleCoin: CoinData = {
           id: symbolToUse.toLowerCase(),
-          name: name,
+          name: name ?? '',
           symbol: symbolToUse,
           price: 0, // 웹소켓에서 업데이트됨
           priceChange24h: 0, // 웹소켓에서 업데이트됨
@@ -89,7 +90,7 @@ export default function CoinDetail() {
           marketCap: 0,
           high24h: 0, // 웹소켓에서 업데이트됨
           low24h: 0, // 웹소켓에서 업데이트됨
-          isFavorite: false, // 로컬 스토리지 등에서 관리 가능
+          isFavorite: isFavorite,
         };
 
         setCoin(exampleCoin);
@@ -188,8 +189,6 @@ export default function CoinDetail() {
         symbol={symbolToUse}
         tickerData={tickerData}
         name={coin.name}
-        onFavoriteToggle={toggleFavorite}
-        isFavorite={isFavorite}
       />
 
       {/* 차트 타임프레임 선택 */}

@@ -28,12 +28,6 @@ interface TickerData {
   timestamp: number;
 }
 
-interface MockData {
-  ticket: string;
-  type: string;
-  codes: string[];
-}
-
 export function useUpbitWebSocket(symbols: string[] = ['BTC']) {
   const [tickerData, setTickerData] = useState<Record<string, TickerData>>({});
   const [isConnected, setIsConnected] = useState(false);

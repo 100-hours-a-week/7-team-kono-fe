@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import KakaoLoginButton from '../assets/images/kakao_login_medium_wide.png';
 import konoLogo from '../assets/kono_logo.svg';
-import { useNavigate } from 'react-router-dom';
 
 declare global {
   interface Window {
@@ -10,7 +9,6 @@ declare global {
 }
 
 const Login: React.FC = () => {
-  const navigate = useNavigate();
   const [isKakaoInitialized, setIsKakaoInitialized] = useState(false);
 
   // Kakao SDK 초기화

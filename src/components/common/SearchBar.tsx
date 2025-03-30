@@ -22,9 +22,17 @@ const SearchBar: React.FC<SearchBarProps> = ({
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            onSearch();
+          }
+        }}
       />
 
-      <button className="absolute right-0 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-konoBlue">
+      <button
+        className="absolute right-0 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-konoBlue"
+        onClick={onSearch}
+      >
         <IoIosSearch className="text-2xl" />
       </button>
     </div>

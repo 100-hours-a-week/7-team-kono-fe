@@ -145,6 +145,16 @@ const Profile: React.FC = () => {
 
   return (
     <div className="p-4 max-w-md mx-auto">
+      {/* 오류 메시지 표시 영역 */}
+      {error && (
+        <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
+          <p className="text-center">
+            {
+              '프로필 정보를 불러오는 중 문제가 발생했습니다. 임시 프로필이 표시됩니다.'
+            }
+          </p>
+        </div>
+      )}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
         <div className="text-center">
           {/* 프로필 이미지 영역 */}

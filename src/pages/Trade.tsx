@@ -4,7 +4,7 @@ import { IoIosArrowBack } from 'react-icons/io';
 import TradeConfirmModal from '../components/modal/TradeConfirmModal';
 import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
 import { formatAmount, formatCurrency } from '../utils/formatter';
-import {getCoinName} from '../api/coin';
+import { getCoinName } from '../api/coin';
 import { getBalance } from '../api/wallet';
 import { getQuantityByTicker } from '../api/wallet';
 // 거래 타입 정의
@@ -29,10 +29,9 @@ export default function Trade() {
   const [coin, setCoin] = useState<CoinData | null>(null);
   const [amount, setAmount] = useState<string>('0');
   const [price, setPrice] = useState<number>(0);
-  const [total, setTotal] = useState<number>(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [cashBalance, setCashBalance] = useState(5000000); // 보유 현금 (예시)
+  const [cashBalance] = useState(5000000); // 보유 현금 (예시)
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [maxAmount, setMaxAmount] = useState<number>(0);
   const [quantity, setQuantity] = useState<number>(0);
@@ -41,7 +40,6 @@ export default function Trade() {
   const percentOptions = [10, 25, 50, 100];
 
   const { tickerData } = useUpbitWebSocket([ticker || '']);
-
 
   // 웹소켓 데이터가 변경될 때 가격 업데이트
   useEffect(() => {
@@ -59,16 +57,16 @@ export default function Trade() {
 
         // 코인 객체의 가격만 업데이트 (전체 객체를 교체하지 않음)
         setCoin((prevCoin) =>
-            prevCoin ? { ...prevCoin, price: currentPrice } : null,
+          prevCoin ? { ...prevCoin, price: currentPrice } : null,
         );
 
-      if (type === 'buy') {
-      // 매수: 보유 현금 기준
-      setMaxAmount(coin.balance || cashBalance);
-    } else {
-      // 매도: 보유 코인 기준 (코인 수량 * 현재 가격)
-      setMaxAmount((coin.quantity || 0) * coin.price);
-    }
+        if (type === 'buy') {
+          // 매수: 보유 현금 기준
+          setMaxAmount(coin.balance || cashBalance);
+        } else {
+          // 매도: 보유 코인 기준 (코인 수량 * 현재 가격)
+          setMaxAmount((coin.quantity || 0) * coin.price);
+        }
       }
     }
   }, [tickerData, ticker, amount]);
@@ -112,7 +110,7 @@ export default function Trade() {
         const currentPrice = tickerData[`KRW-${ticker}`]?.trade_price || 0;
 
         setCoin({
-          name: coinName,
+          name: coinName || ticker,
           ticker: ticker,
           price: currentPrice,
           balance: balance,
@@ -128,22 +126,10 @@ export default function Trade() {
         setError('코인 정보를 불러오는 중 오류가 발생했습니다.');
         setLoading(false);
       }
-
-
     };
 
     fetchCoinData();
   }, [ticker, type]); // tickerData 의존성 제거
-
-  // useEffect(() => {
-  //   if (type === 'buy') {
-  //     // 매수: 보유 현금 기준
-  //     setMaxAmount(coin.balance || cashBalance);
-  //   } else {
-  //     // 매도: 보유 코인 기준 (코인 수량 * 현재 가격)
-  //     setMaxAmount((coin.quantity || 0) * coin.price);
-  //   }
-  // }, [])
 
   // 디버깅용 로그 - 파라미터 변경 시에만 로그 출력
   useEffect(() => {
@@ -202,190 +188,192 @@ export default function Trade() {
   // 로딩 중 표시
   if (loading) {
     return (
-        <div className="flex flex-col min-h-screen">
-          <div className="p-4 flex items-center">
-            <h1 className="text-lg font-bold ml-2">로딩 중...</h1>
-          </div>
-          <div className="flex-1 flex items-center justify-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 dark:border-blue-400"></div>
-          </div>
+      <div className="flex flex-col min-h-screen">
+        <div className="p-4 flex items-center">
+          <h1 className="text-lg font-bold ml-2">로딩 중...</h1>
         </div>
+        <div className="flex-1 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 dark:border-blue-400"></div>
+        </div>
+      </div>
     );
   }
 
   // 에러 표시
   if (error || !coin) {
     return (
-        <div className="flex flex-col min-h-screen">
-          <div className="p-4 flex items-center">
-            <h1 className="text-lg font-bold ml-2">오류</h1>
-          </div>
-          <div className="flex-1 flex items-center justify-center p-4">
-            <div className="text-center">
-              <p className="text-red-500 mb-4 dark:text-red-400">
-                {error || '코인 정보를 불러오는데 실패했습니다.'}
-              </p>
-              <button
-                  className="px-4 py-2 bg-blue-500 text-white rounded-lg dark:bg-blue-400"
-                  onClick={() => navigate(-1)}
-              >
-                돌아가기
-              </button>
-            </div>
+      <div className="flex flex-col min-h-screen">
+        <div className="p-4 flex items-center">
+          <h1 className="text-lg font-bold ml-2">오류</h1>
+        </div>
+        <div className="flex-1 flex items-center justify-center p-4">
+          <div className="text-center">
+            <p className="text-red-500 mb-4 dark:text-red-400">
+              {error || '코인 정보를 불러오는데 실패했습니다.'}
+            </p>
+            <button
+              className="px-4 py-2 bg-blue-500 text-white rounded-lg dark:bg-blue-400"
+              onClick={() => navigate(-1)}
+            >
+              돌아가기
+            </button>
           </div>
         </div>
+      </div>
     );
   }
 
   return (
-      <div className="flex flex-col min-h-screen">
-        {/* 헤더 */}
-        <div className="p-4 flex items-center">
-          <button onClick={() => navigate(-1)} className="p-1">
-            <IoIosArrowBack className="text-2xl" />
-          </button>
-          <h1 className="text-lg font-bold ml-2">
-            {type === 'buy' ? '매수하기' : '매도하기'}
-          </h1>
+    <div className="flex flex-col min-h-screen">
+      {/* 헤더 */}
+      <div className="p-4 flex items-center">
+        <button onClick={() => navigate(-1)} className="p-1">
+          <IoIosArrowBack className="text-2xl" />
+        </button>
+        <h1 className="text-lg font-bold ml-2">
+          {type === 'buy' ? '매수하기' : '매도하기'}
+        </h1>
+      </div>
+
+      {/* 코인 정보 */}
+      <div className="p-4 border-b dark:bg-gray-800 dark:text-white dark:border-gray-700">
+        <div className="flex items-center mb-4">
+          <img
+            src={`https://static.upbit.com/logos/${coin.ticker}.png`}
+            alt={coin.name}
+            className="w-10 h-10 rounded-full mr-3"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src =
+                'https://via.placeholder.com/40';
+            }}
+          />
+          <div>
+            <div className="font-medium">{coin.name}</div>
+            <div className="text-sm text-gray-500">{coin.ticker}</div>
+          </div>
         </div>
 
-        {/* 코인 정보 */}
-        <div className="p-4 border-b dark:bg-gray-800 dark:text-white dark:border-gray-700">
-          <div className="flex items-center mb-4">
-            <img
-                src={`https://static.upbit.com/logos/${coin.ticker}.png`}
-                alt={coin.name}
-                className="w-10 h-10 rounded-full mr-3"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src =
-                      'https://via.placeholder.com/40';
-                }}
-            />
-            <div>
-              <div className="font-medium">{coin.name}</div>
-              <div className="text-sm text-gray-500">{coin.ticker}</div>
+        <div className="flex justify-between items-center">
+          <div className="text-2xl font-bold">{coin.price} 원</div>
+        </div>
+      </div>
+
+      {/* 보유 자산 */}
+      <div className="p-4 border-b dark:bg-gray-800 dark:text-white dark:border-gray-700">
+        <div className="flex justify-between items-center">
+          <div>
+            <div className="text-sm text-gray-500">
+              {type === 'buy' ? '보유 원화' : `보유 ${coin.ticker}`}
+            </div>
+            <div className="font-medium">
+              {type === 'buy'
+                ? `${formatCurrency(coin.balance || cashBalance)}`
+                : `${formatAmount(coin.quantity || 0)} ${coin.ticker}`}
             </div>
           </div>
-
-          <div className="flex justify-between items-center">
-            <div className="text-2xl font-bold">{coin.price} 원</div>
-          </div>
-        </div>
-
-        {/* 보유 자산 */}
-        <div className="p-4 border-b dark:bg-gray-800 dark:text-white dark:border-gray-700">
-          <div className="flex justify-between items-center">
-            <div>
-              <div className="text-sm text-gray-500">
-                {type === 'buy' ? '보유 원화' : `보유 ${coin.ticker}`}
-              </div>
+          {type === 'sell' && (
+            <div className="text-right">
+              <div className="text-sm text-gray-500">평가 금액</div>
               <div className="font-medium">
-                {type === 'buy'
-                    ? `${formatCurrency(coin.balance || cashBalance)}`
-                    : `${formatAmount(coin.quantity || 0)} ${coin.ticker}`}
+                {formatCurrency((coin.quantity || 0) * coin.price)}
               </div>
             </div>
-            {type === 'sell' && (
-                <div className="text-right">
-                  <div className="text-sm text-gray-500">평가 금액</div>
-                  <div className="font-medium">
-                    {formatCurrency((coin.quantity || 0) * coin.price)}
-                  </div>
-                </div>
-            )}
+          )}
+        </div>
+      </div>
+
+      {/* 거래 수량 입력 */}
+      <div className="p-4 border-b dark:bg-gray-800 dark:text-white dark:border-gray-700">
+        <div className="flex justify-between items-center mb-2">
+          <div className="text-sm text-gray-500 dark:text-gray-400">
+            구매 금액
+          </div>
+          <div className="text-sm text-gray-500 dark:text-gray-400">
+            {type === 'buy' ? '구매가능' : '판매가능'}{' '}
+            {formatCurrency(maxAmount)}{' '}
           </div>
         </div>
 
-        {/* 거래 수량 입력 */}
-        <div className="p-4 border-b dark:bg-gray-800 dark:text-white dark:border-gray-700">
-          <div className="flex justify-between items-center mb-2">
-            <div className="text-sm text-gray-500 dark:text-gray-400">
-              구매 금액
-            </div>
-            <div className="text-sm text-gray-500 dark:text-gray-400">
-              {type === 'buy' ? '구매가능' : '판매가능'}{' '}
-              {formatCurrency(maxAmount)}{' '}
-            </div>
-          </div>
-
-          <div className="relative mb-4">
-            <input
-                type="number"
-                value={amount}
-                onChange={(e) => handleAmountChange(e.target.value)}
-                className="w-full p-3 border rounded-xl text-right pr-16 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-400 dark:border-gray-700"
-                placeholder="0"
-                min={0}
-                max={maxAmount}
-            />
-            <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">
+        <div className="relative mb-4">
+          <input
+            type="number"
+            value={amount}
+            onChange={(e) => handleAmountChange(e.target.value)}
+            className="w-full p-3 border rounded-xl text-right pr-16 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-400 dark:border-gray-700"
+            placeholder="0"
+            min={0}
+            max={maxAmount}
+          />
+          <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">
             원
           </span>
-          </div>
-
-          {/* 퍼센트 버튼 */}
-          <div className="grid grid-cols-4 gap-2">
-            {percentOptions.map((percent) => (
-                <button
-                    key={percent}
-                    className="py-2 border rounded-lg text-sm dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
-                    onClick={() => handlePercentClick(percent)}
-                >
-                  {percent}%
-                </button>
-            ))}
-          </div>
         </div>
 
-        {/* 예상 수량 */}
-        <div className="p-4 border-b dark:bg-gray-800 dark:text-white dark:border-gray-700">
-          <div className="flex justify-between items-center">
-            <div className="text-sm text-gray-500 dark:text-gray-400">
-              예상 수량
-            </div>
-            <div className="text-xl font-bold">
-              {quantity.toFixed(8)} {coin.ticker}
-            </div>
-          </div>
+        {/* 퍼센트 버튼 */}
+        <div className="grid grid-cols-4 gap-2">
+          {percentOptions.map((percent) => (
+            <button
+              key={percent}
+              className="py-2 border rounded-lg text-sm dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+              onClick={() => handlePercentClick(percent)}
+            >
+              {percent}%
+            </button>
+          ))}
         </div>
-
-        {/* 총액 */}
-        <div className="p-4 border-b dark:bg-gray-800 dark:text-white dark:border-gray-700">
-          <div className="flex justify-between items-center">
-            <div className="text-sm text-gray-500 dark:text-gray-400">총액</div>
-            <div className="text-xl font-bold">{formatCurrency(amount)}</div>
-          </div>
-        </div>
-
-        {/* 에러 메시지 */}
-        {error && (
-            <div className="p-4">
-              <p className="text-red-500 text-sm">{error}</p>
-            </div>
-        )}
-
-        {/* 거래 버튼 */}
-        <div className="fixed bottom-16 left-0 right-0 max-w-[430px] mx-auto p-4">
-          <button
-              className={`w-full py-4 rounded-xl font-bold text-white ${
-                  type === 'buy' ? 'bg-konoRed' : 'bg-konoBlue'
-              }`}
-              onClick={handleOpenModal}
-          >
-            {type === 'buy' ? '구매하기' : '판매하기'}
-          </button>
-        </div>
-
-        {/* 거래 확인 모달 */}
-        <TradeConfirmModal
-            isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
-            ticker={coin.ticker || ''}
-            amount={amount.toString() || '0'}
-            quantity={quantity.toString() || '0'}
-            price={coin.price}
-            tradeType={type as TradeType}
-        />
       </div>
+
+      {/* 예상 수량 */}
+      <div className="p-4 border-b dark:bg-gray-800 dark:text-white dark:border-gray-700">
+        <div className="flex justify-between items-center">
+          <div className="text-sm text-gray-500 dark:text-gray-400">
+            예상 수량
+          </div>
+          <div className="text-xl font-bold">
+            {quantity.toFixed(8)} {coin.ticker}
+          </div>
+        </div>
+      </div>
+
+      {/* 총액 */}
+      <div className="p-4 border-b dark:bg-gray-800 dark:text-white dark:border-gray-700">
+        <div className="flex justify-between items-center">
+          <div className="text-sm text-gray-500 dark:text-gray-400">총액</div>
+          <div className="text-xl font-bold">
+            {formatCurrency(Number(amount))}
+          </div>
+        </div>
+      </div>
+
+      {/* 에러 메시지 */}
+      {error && (
+        <div className="p-4">
+          <p className="text-red-500 text-sm">{error}</p>
+        </div>
+      )}
+
+      {/* 거래 버튼 */}
+      <div className="fixed bottom-16 left-0 right-0 max-w-[430px] mx-auto p-4">
+        <button
+          className={`w-full py-4 rounded-xl font-bold text-white ${
+            type === 'buy' ? 'bg-konoRed' : 'bg-konoBlue'
+          }`}
+          onClick={handleOpenModal}
+        >
+          {type === 'buy' ? '구매하기' : '판매하기'}
+        </button>
+      </div>
+
+      {/* 거래 확인 모달 */}
+      <TradeConfirmModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        ticker={coin.ticker || ''}
+        amount={Number(amount)}
+        quantity={quantity}
+        price={coin.price}
+        tradeType={type as TradeType}
+      />
+    </div>
   );
 }
