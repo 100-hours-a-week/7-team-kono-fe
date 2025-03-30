@@ -36,7 +36,7 @@ export const marketBuy = async (
       orderAmount: amount,
     };
 
-    const response = await api.post(API_ENDPOINTS.POST_COIN, orderData);
+    const response = await api.post(API_ENDPOINTS.POST_ORDER, orderData);
 
     if (response.status === 200 || response.status === 201) {
       return response.data;
@@ -61,7 +61,7 @@ export const marketSell = async (
       orderAmount: amount,
     };
 
-    const response = await api.post(API_ENDPOINTS.POST_COIN, orderData);
+    const response = await api.post(API_ENDPOINTS.POST_ORDER, orderData);
 
     if (response.status === 200 || response.status === 201) {
       return response.data;
@@ -71,20 +71,5 @@ export const marketSell = async (
   } catch (error) {
     console.error(`시장가 매도 오류 (${ticker}):`, error);
     return null;
-  }
-};
-
-/**
- * 주문 취소 함수
- * @param orderId 취소할 주문 ID
- * @returns 성공 여부 (true/false)
- */
-export const cancelOrder = async (orderId: string): Promise<boolean> => {
-  try {
-    const response = await api.delete(`${API_ENDPOINTS.POST_COIN}/${orderId}`);
-    return response.status === 200;
-  } catch (error) {
-    console.error(`주문 취소 오류 (${orderId}):`, error);
-    return false;
   }
 };

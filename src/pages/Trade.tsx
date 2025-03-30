@@ -6,7 +6,7 @@ import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
 import { formatAmount, formatCurrency } from '../utils/formatter';
 import {getCoinName} from '../api/coin';
 import { getBalance } from '../api/wallet';
-import { getQuantityByNicknameAndTicker } from '../api/wallet';
+import { getQuantityByTicker } from '../api/wallet';
 // 거래 타입 정의
 type TradeType = 'buy' | 'sell';
 
@@ -42,6 +42,7 @@ export default function Trade() {
 
   const { tickerData } = useUpbitWebSocket([ticker || '']);
 
+
   // 웹소켓 데이터가 변경될 때 가격 업데이트
   useEffect(() => {
     if (ticker && tickerData[`KRW-${ticker}`]?.trade_price && coin) {
@@ -60,6 +61,14 @@ export default function Trade() {
         setCoin((prevCoin) =>
             prevCoin ? { ...prevCoin, price: currentPrice } : null,
         );
+
+      if (type === 'buy') {
+      // 매수: 보유 현금 기준
+      setMaxAmount(coin.balance || cashBalance);
+    } else {
+      // 매도: 보유 코인 기준 (코인 수량 * 현재 가격)
+      setMaxAmount((coin.quantity || 0) * coin.price);
+    }
       }
     }
   }, [tickerData, ticker, amount]);
@@ -97,7 +106,7 @@ export default function Trade() {
 
         const coinName = await getCoinName(ticker);
         const balance = await getBalance();
-        const quantity = await getQuantityByNicknameAndTicker(ticker);78
+        const quantity = await getQuantityByTicker(ticker);
 
         // 현재 가격 정보를 한 번만 가져옴
         const currentPrice = tickerData[`KRW-${ticker}`]?.trade_price || 0;
@@ -119,10 +128,22 @@ export default function Trade() {
         setError('코인 정보를 불러오는 중 오류가 발생했습니다.');
         setLoading(false);
       }
+
+
     };
 
     fetchCoinData();
   }, [ticker, type]); // tickerData 의존성 제거
+
+  // useEffect(() => {
+  //   if (type === 'buy') {
+  //     // 매수: 보유 현금 기준
+  //     setMaxAmount(coin.balance || cashBalance);
+  //   } else {
+  //     // 매도: 보유 코인 기준 (코인 수량 * 현재 가격)
+  //     setMaxAmount((coin.quantity || 0) * coin.price);
+  //   }
+  // }, [])
 
   // 디버깅용 로그 - 파라미터 변경 시에만 로그 출력
   useEffect(() => {
@@ -161,6 +182,7 @@ export default function Trade() {
     } else {
       // 매도: 보유 코인 기준 (코인 수량 * 현재 가격)
       setMaxAmount((coin.quantity || 0) * coin.price);
+      console.log('maxAmount', maxAmount);
     }
 
     const calculatedAmount = (maxAmount * percent) / 100;

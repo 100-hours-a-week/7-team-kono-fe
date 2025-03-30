@@ -6,12 +6,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { FaHistory } from 'react-icons/fa';
 import { ROUTES } from '../config/routes';
 import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
-import {
-  getHoldingCoinTickers,
-  getQuantityByNicknameAndTicker,
-  getHoldingCoins,
-} from '../api/wallet';
-import axios from 'axios';
+import { getBalance, getHoldingCoins } from '../api/wallet';
 import { formatCurrency } from '../utils/formatter';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -32,31 +27,30 @@ interface Coin {
 const Wallet = () => {
   const navigate = useNavigate();
   const [holdingCoins, setHoldingCoins] = useState<Coin[]>([]);
+  const [holdingCash, setHoldingCash] = useState<number>(0);
   const [tickers, setTickers] = useState<string[]>([]);
   const tickerData = useUpbitWebSocket(tickers);
-  const nickname = 'test';
   // 초기 로딩 상태를 추적하기 위한 ref
   const initialLoadRef = useRef(true);
 
   useEffect(() => {
     const fetchHoldingCoins = async () => {
       try {
-        const walletData = await getHoldingCoins(nickname);
-
+        const walletData = await getHoldingCoins();
+        const cash = await getBalance();
         // HoldingCoin 객체 형식으로 변환
         const coins = walletData.map((coin) => ({
           id: coin.ticker.toLowerCase(),
-          nickname: coin.nickname,
-          name: coin.name,
+          name: coin.coinName,
           ticker: coin.ticker,
           holdingQuantity: coin.holdingQuantity,
           holdingPrice: coin.holdingPrice,
           price: 0,
           value: 0,
-          priceChange24h: 0,
+          profitRate: 0,
           color: `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.8)`,
         }));
-
+        setHoldingCash(cash);
         setHoldingCoins(coins);
 
         // 티커 목록 추출
@@ -70,7 +64,6 @@ const Wallet = () => {
     };
 
     fetchHoldingCoins();
-    // 컴포넌트 마운트 시에만 실행
   }, []);
 
   // 웹소켓 데이터 처리 및 상태 관리
@@ -97,36 +90,20 @@ const Wallet = () => {
       const tickerInfo = tickerData.tickerData[marketCode];
 
       if (tickerInfo) {
-        console.log(`Found data for ${coin.ticker}:`, tickerInfo);
+        const currentPrice = tickerInfo.trade_price || 0; // trade_price가 현재 가격
+        const currentValue = coin.holdingQuantity * currentPrice; // 현재 총 가치
 
-        // trade_price가 현재 가격
-        const currentPrice = tickerInfo.trade_price || 0;
-
-        // 현재 총 가치
-        const currentValue = coin.holdingQuantity * currentPrice;
-
-        // 매수 평균가로 수익률 계산 (%)
-        let profitRate = 0;
-        if (
-          coin.holdingPrice / coin.holdingQuantity &&
-          coin.holdingPrice / coin.holdingQuantity > 0
-        ) {
-          profitRate =
-            ((currentPrice - coin.holdingPrice / coin.holdingQuantity) /
-              coin.holdingPrice /
-              coin.holdingQuantity) *
-            100;
-        }
-
-        console.log(
-          `${coin.ticker} - 현재가격: ${currentPrice}, 매수평균가: ${coin.holdingPrice / coin.holdingQuantity}, 수익률: ${profitRate}%`,
-        );
+        // 개별 코인 수익률 계산
+        const profitRate =
+          coin.holdingPrice > 0
+            ? ((currentPrice - coin.holdingPrice) / coin.holdingPrice) * 100
+            : 0;
 
         return {
           ...coin,
           price: currentPrice,
           value: currentValue,
-          priceChange24h: profitRate,
+          profitRate: profitRate,
         };
       }
 
@@ -136,16 +113,10 @@ const Wallet = () => {
     });
 
     // 이전 상태와 비교하여 변경된 경우에만 업데이트
-    const hasChanged =
-      JSON.stringify(updatedCoins) !== JSON.stringify(holdingCoins);
-    if (hasChanged) {
-      console.log('Updating holding coins with new values');
+    if (JSON.stringify(updatedCoins) !== JSON.stringify(holdingCoins)) {
       setHoldingCoins(updatedCoins);
     }
-  }, [tickerData]); // holdingCoins를 의존성에서 제거
-
-  const initialTotalAsset = 10000000;
-  // const initialInvestment = 10000000;
+  }, [tickerData]);
 
   // 총 자산 가치 계산 (코인만)
   const totalCoinValue = holdingCoins.reduce(
@@ -153,58 +124,55 @@ const Wallet = () => {
     0,
   );
 
-  // 투자금 (예시)
+  // 총 투자 금액 계산
   const initialInvestment = holdingCoins.reduce(
-    (sum, coin) => sum + coin.holdingPrice,
+    (sum, coin) => sum + coin.holdingPrice * coin.holdingQuantity,
     0,
   );
 
-  // 현금 잔액 (음수가 되지 않도록)
-  const cashBalance = Math.max(0, initialTotalAsset - initialInvestment);
+  // 현금 잔액
+  const cashBalance = holdingCash;
 
   // 총 자산 (코인 + 현금)
   const totalAsset = cashBalance + totalCoinValue;
 
-  // 수익률 계산 (NaN 방지)
-  const profitRate =
-    initialInvestment > 0
-      ? ((totalAsset - initialInvestment) / initialInvestment) * 100
-      : 0;
+  // 총 수익률 계산
+  const calculateTotalProfitRate = () => {
+    if (initialInvestment <= 0) return 0; // 전체 매수 금액이 0인 경우 예외 처리
+    // (현재 총 자산 - 초기 투자금) / 초기 투자금 * 100
+    return ((totalCoinValue - initialInvestment) / initialInvestment) * 100;
+  };
+
+  // 총 수익률 계산
+  const totalProfitRate = calculateTotalProfitRate();
 
   // 차트 데이터 준비
   // 양수 값을 가진 코인만 필터링
-  const positiveCoins = holdingCoins.filter((coin) => coin.value > 0);
+  const positiveCoins = holdingCoins.filter(
+    (coin) => coin.value && coin.value > 0,
+  );
 
   // 상위 5개 코인 선택
   const topCoins = positiveCoins
-    .sort((a, b) => b.value - a.value)
+    .sort((a, b) => (b.value || 0) - (a.value || 0))
     .slice(0, 5)
     .map((coin) => ({
       name: coin.ticker,
       value: coin.value,
-      percent: totalAsset > 0 ? (coin.value / totalAsset) * 100 : 0,
+      percent: totalAsset > 0 ? (coin.value! / totalAsset) * 100 : 0,
     }));
 
   // 나머지 코인들의 합
   const otherCoinsValue = positiveCoins
-    .sort((a, b) => b.value - a.value)
+    .sort((a, b) => (b.value || 0) - (a.value || 0))
     .slice(5)
-    .reduce((sum, coin) => sum + coin.value, 0);
+    .reduce((sum, coin) => sum + (coin.value || 0), 0);
 
   // 각 항목의 퍼센트 계산 (총합이 100%가 되도록)
-  const topCoinsPercent = topCoins.reduce((sum, coin) => sum + coin.percent, 0);
+  // const topCoinsPercent = topCoins.reduce((sum, coin) => sum + coin.percent, 0);
   const otherCoinsPercent =
     totalAsset > 0 ? (otherCoinsValue / totalAsset) * 100 : 0;
   const cashPercent = totalAsset > 0 ? (cashBalance / totalAsset) * 100 : 0;
-
-  // 모든 퍼센트 값이 양수인지 확인
-  console.log('Top coins percent:', topCoinsPercent);
-  console.log('Other coins percent:', otherCoinsPercent);
-  console.log('Cash percent:', cashPercent);
-  console.log(
-    'Total percent:',
-    topCoinsPercent + otherCoinsPercent + cashPercent,
-  );
 
   // 차트 데이터
   const data = {
@@ -266,22 +234,26 @@ const Wallet = () => {
       {/* 잔액 정보 카드 */}
       <div className="mx-4 mt-4 p-4 bg-white rounded-xl shadow-sm dark:bg-gray-800 dark:text-white border border-gray-200 dark:border-gray-700">
         <div className="text-2xl font-bold">
-          {formatCurrency(totalAsset)}
+          {formatCurrency(totalAsset, 'KRW', true, false)}
           <span
-            className={`text-${profitRate >= 0 ? 'red' : 'blue'}-500 text-lg ml-2`}
+            className={`text-${totalProfitRate >= 0 ? 'red' : 'blue'}-500 text-lg ml-2`}
           >
-            ({profitRate >= 0 ? '+' : ''}
-            {profitRate.toFixed(2)}%)
+            ({totalProfitRate >= 0 ? '+' : ''}
+            {totalProfitRate.toFixed(2)}%)
           </span>
         </div>
         <div className="flex justify-between mt-4 text-gray-600 dark:text-white">
           <div>
             <div>투자금</div>
-            <div className="font-medium">{formatCurrency(totalCoinValue)}</div>
+            <div className="font-medium">
+              {formatCurrency(initialInvestment, 'KRW')}
+            </div>
           </div>
           <div className="text-left">
             <div>현금</div>
-            <div className="font-medium">{formatCurrency(cashBalance)}</div>
+            <div className="font-medium">
+              {formatCurrency(cashBalance, 'KRW')}
+            </div>
           </div>
         </div>
       </div>
@@ -364,15 +336,15 @@ const Wallet = () => {
               </div>
               <div className="text-right">
                 <div className="font-medium">
-                  {coin.value.toLocaleString()} KRW
+                  {formatCurrency(coin.value, 'KRW')}
                 </div>
                 <div
                   className={`text-sm ${
-                    coin.priceChange24h >= 0 ? 'text-red-500' : 'text-blue-500'
+                    coin.profitRate >= 0 ? 'text-red-500' : 'text-blue-500'
                   }`}
                 >
-                  {coin.priceChange24h >= 0 ? '+' : ''}
-                  {coin.priceChange24h.toFixed(2)}%
+                  {coin.profitRate >= 0 ? '+' : ''}
+                  {coin.profitRate.toFixed(2)}%
                 </div>
               </div>
             </div>

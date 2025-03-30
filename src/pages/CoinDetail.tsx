@@ -4,10 +4,10 @@ import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import Header from '../components/layout/Header';
 import TradingViewWidget from '../components/TradingViewWidget';
 import PriceInfo from '../components/PriceInfo'; // 수정된 PriceInfo 컴포넌트 임포트
-
 import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
-import { formatCurrency, formatVolume } from '../utils/formatter';
+import { formatAmount, formatCurrency } from '../utils/formatter';
 import { isFavoriteCoin, addFavorite, removeFavorite } from '../api/favorite';
+import { getCoinName } from '../api/coin';
 
 // 코인 정보 인터페이스
 interface CoinData {
@@ -66,9 +66,6 @@ export default function CoinDetail() {
   const [error, setError] = useState<string | null>(null);
   const [timeframe, setTimeframe] = useState<'1D' | '1W' | '1M' | '1Y'>('1D');
   const [isFavorite, setIsFavorite] = useState(false);
-  
-
-
 
   // ticker가 undefined일 경우 기본값으로 'BTC' 사용
   const symbolToUse = ticker || 'BTC';
@@ -81,15 +78,10 @@ export default function CoinDetail() {
     // 실제 구현에서는 API를 통해 코인 정보를 가져오는 로직 필요
     const fetchCoinData = async () => {
       try {
-        // 임시 데이터 (실제로는 API 호출)
+        const name = await getCoinName(symbolToUse);
         const exampleCoin: CoinData = {
           id: symbolToUse.toLowerCase(),
-          name:
-            symbolToUse === 'BTC'
-              ? '비트코인'
-              : symbolToUse === 'ETH'
-                ? '이더리움'
-                : `${symbolToUse} 코인`,
+          name: name,
           symbol: symbolToUse,
           price: 0, // 웹소켓에서 업데이트됨
           priceChange24h: 0, // 웹소켓에서 업데이트됨
@@ -240,7 +232,7 @@ export default function CoinDetail() {
             <div className="flex justify-between">
               <span className="text-gray-500">거래대금 (24h)</span>
               <span>
-                {formatVolume(
+                {formatAmount(
                   tickerData[`KRW-${symbolToUse}`].acc_trade_price_24h,
                 )}{' '}
               </span>
