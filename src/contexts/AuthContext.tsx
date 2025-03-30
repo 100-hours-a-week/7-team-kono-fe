@@ -20,6 +20,7 @@ interface AuthContextType {
   error: string | null;
   login: () => void;
   logout: () => void;
+  withdraw: () => void;
   isAuthenticated: boolean;
   updateUser: (userData: Partial<User>) => void;
 }
@@ -163,19 +164,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       // 로컬 상태 초기화
       setUser(null);
       
-      // 서버에 로그아웃 요청 (실패해도 상관없음)
-      await axios.post(
-        '/api/v1/users/logout',
-        {},
-        { 
-          withCredentials: true, // 쿠키를 함께 전송
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          timeout: 5000 // 짧은 타임아웃 설정 (5초)
-        }
-      );
+      // 서버에 로그아웃 요청
+      await api.post(API_ENDPOINTS.LOGOUT);
       console.log('로그아웃 성공');
+      
     } catch (err) {
       // 에러가 발생해도 로컬에서 로그아웃 처리는 완료됨
       console.error('서버 로그아웃 요청 실패:', err);
@@ -184,6 +176,26 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       // 항상 로그인 페이지로 리다이렉트
       console.log('로그인 페이지로 리다이렉트');
       window.location.href = '/login';
+    }
+  };
+
+  // 회원탈퇴 함수 추가
+  const withdraw = async () => {
+    try {
+      console.log('회원탈퇴 요청 시작...');
+      
+      // 서버에 회원탈퇴 요청
+      await api.delete(API_ENDPOINTS.WITHDRAW);
+      
+      // 로컬 상태 초기화
+      setUser(null);
+      console.log('회원탈퇴 성공');
+      
+      // 로그인 페이지로 리다이렉트
+      window.location.href = '/login';
+    } catch (err) {
+      console.error('회원탈퇴 요청 실패:', err);
+      throw err; // 에러를 상위 컴포넌트에서 처리하도록 전파
     }
   };
 
@@ -212,6 +224,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         error,
         login,
         logout,
+        withdraw,
         isAuthenticated: !!user,
         updateUser,
       }}

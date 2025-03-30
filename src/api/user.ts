@@ -7,6 +7,15 @@ interface ProfileData {
   profileImageUrl: string;
 }
 
+interface ProfileUpdateResponse {
+  message: string;
+  data: {
+    nickname: string;
+    profileImageUrl: string;
+    createdAt: string;
+  };
+}
+
 // 사용자 프로필 정보 가져오기
 export const getUserProfile = async (): Promise<ProfileData> => {
   try {
@@ -34,17 +43,34 @@ export const updateProfileImage = async (
   imageFile: File,
 ): Promise<ProfileData> => {
   try {
-    const formData = new FormData();
-    formData.append('file', imageFile);
-
-    await axios.post('/api/v1/users/profile-image', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-      withCredentials: true,
+    // 1. Presigned URL 요청 - body로 전송
+    const presignedUrlResponse = await api.post('/api/v1/s3/presigned-url', {
+      fileName: imageFile.name,
+      contentType: imageFile.type,
     });
 
-    return getUserProfile(); // 업데이트 후 최신 프로필 정보 반환
+    const { presignedUrl, uploadedFileUrl } = presignedUrlResponse.data;
+
+    // 2. Presigned URL을 사용하여 S3에 직접 업로드
+    await axios.put(presignedUrl, imageFile, {
+      headers: {
+        'Content-Type': imageFile.type,
+      },
+    });
+
+    // 3. 업로드된 이미지 URL로 프로필 업데이트
+    const updateResponse = await api.put<ProfileUpdateResponse>(
+      '/api/v1/users/profile-image',
+      {
+        imageUrl: uploadedFileUrl,
+      },
+    );
+
+    // 4. 업데이트된 프로필 정보 반환
+    return {
+      nickname: updateResponse.data.data.nickname,
+      profileImageUrl: updateResponse.data.data.profileImageUrl,
+    };
   } catch (error) {
     console.error('프로필 이미지 업데이트 중 오류 발생:', error);
     throw error;
@@ -83,5 +109,15 @@ export const getBalance = async (): Promise<number> => {
   } catch (error) {
     console.error('잔액 조회 중 오류 발생:', error);
     return 0;
+  }
+};
+
+// 회원 탈퇴
+export const withdrawUser = async (): Promise<void> => {
+  try {
+    await api.delete('/api/v1/users/withdraw');
+  } catch (error) {
+    console.error('회원탈퇴 처리 중 오류 발생:', error);
+    throw error;
   }
 };
