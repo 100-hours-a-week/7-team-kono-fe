@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/layout/Header';
 import { ROUTES } from '../config/routes';
-import { THEMES } from '../config/constants';
 import {
   FaGithub,
   FaUser,
@@ -13,18 +12,13 @@ import {
 } from 'react-icons/fa';
 import DarkModeToggle from '../components/theme/DarkModeToggle';
 import Modal from '../components/modal/Modal';
-import Toast from '../components/common/Toast';
-import { useTheme } from '../contexts/ThemeContext';
 import { withdrawUser } from '../api/user';
-import {toast} from "react-toastify";
+import { toast } from 'react-toastify';
 import { useAuth } from '../contexts/AuthContext';
 
 const Settings = () => {
   const navigate = useNavigate();
-  const { darkMode } = useTheme();
   const { logout } = useAuth();
-  const [notifications, setNotifications] = useState(true);
-  const [biometricLogin, setBiometricLogin] = useState(false);
   const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
 
   const openGitHubWiki = () => {
@@ -57,9 +51,8 @@ const Settings = () => {
       await withdrawUser();
       toast.success('회원탈퇴가 완료되었습니다.');
       closeDeleteAccountModal();
-      // 로그인 페이지로 리다이렉트
-      window.location.href = '/login';
-    } catch (err) {
+      window.location.href = ROUTES.AUTH.LOGIN;
+    } catch (err: any) {
       console.error('회원탈퇴 실패:', err);
       if (err.response?.status === 401) {
         toast.error('로그인이 필요합니다.');
