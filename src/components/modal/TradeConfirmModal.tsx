@@ -11,8 +11,8 @@ interface TradeConfirmModalProps {
   isOpen: boolean;
   onClose: () => void;
   ticker: string;
-  amount: number;
-  price: number;
+  amount: number | undefined;
+  price: number | null;
   quantity: number;
   tradeType: 'buy' | 'sell';
   // totalAmount: number;
@@ -41,9 +41,13 @@ export default function TradeConfirmModal({
   const handleTrade = async () => {
     try {
       if (tradeType === 'buy') {
-        await marketBuy(ticker, amount);
+        await marketBuy(ticker, amount || 0);
       } else if (tradeType === 'sell') {
-        await marketSell(ticker, amount);
+        if (amount === null) {
+          await marketSell(ticker, 0, quantity);
+        } else {
+          await marketSell(ticker, amount || 0, quantity);
+        }
       }
       onClose();
       setShowComplete(true);
@@ -69,7 +73,7 @@ export default function TradeConfirmModal({
   };
 
   const handleConfirm = () => {
-    setConfirmedPrice(price);
+    setConfirmedPrice(price || 0);
     setConfirmedQuantity(quantity);
 
     handleTrade();
@@ -140,7 +144,7 @@ export default function TradeConfirmModal({
                           <span className="text-gray-500 dark:text-gray-400">
                             1 {ticker} 가격
                           </span>
-                          <span>{formatCurrency(price)}</span>
+                          <span>{formatCurrency(price || 0)}</span>
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-gray-500 dark:text-gray-400">
@@ -155,7 +159,7 @@ export default function TradeConfirmModal({
                             총 예상 {tradeType === 'buy' ? '구매' : '판매'} 금액
                           </span>
                           <span className="font-medium text-lg">
-                            {formatCurrency(amount)}
+                            {formatCurrency(amount || 0)}
                           </span>
                         </div>
                       </div>
@@ -194,7 +198,7 @@ export default function TradeConfirmModal({
         onClose={() => setShowComplete(false)}
         onConfirm={handleCompleteConfirm}
         ticker={ticker}
-        amount={amount}
+        amount={amount || 0}
         price={confirmedPrice}
         quantity={confirmedQuantity}
         tradeType={tradeType}
