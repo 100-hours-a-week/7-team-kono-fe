@@ -1,5 +1,4 @@
 import { IoIosArrowBack } from 'react-icons/io';
-import styles from '../../assets/style';
 import { useNavigate } from 'react-router-dom';
 
 interface HeaderProps {

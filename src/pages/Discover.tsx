@@ -27,6 +27,8 @@ interface CoinInfo {
 // 상수 정의
 const SORT_TYPES: SortType[] = ['거래대금', '가격', '등락률'];
 
+const PLACEHOLDER = 'https://static.upbit.com/logos/BTC.png';
+
 export default function Discover() {
   // 상태 관리
   const [searchTerm, setSearchTerm] = useState('');
@@ -236,7 +238,7 @@ function CoinItem({
         alt={coin.name}
         className="w-10 h-10 rounded-full mr-4"
         onError={(e) => {
-          (e.target as HTMLImageElement).src = 'https://via.placeholder.com/40';
+          (e.target as HTMLImageElement).src = PLACEHOLDER;
         }}
       />
       <div className="flex-1">

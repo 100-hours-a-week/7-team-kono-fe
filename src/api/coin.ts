@@ -8,9 +8,9 @@ export type OrderType = 'buy' | 'sell';
  * @param ticker 코인 티커 (예: BTC, ETH)
  * @returns 코인 이름 또는 null
  */
+
 export const getCoinName = async (ticker: string): Promise<string | null> => {
   try {
-
     // 개별 코인 정보 요청
     const response = await api.get(API_ENDPOINTS.GET_COIN_DETAIL(ticker));
 
@@ -27,8 +27,7 @@ export const getCoinName = async (ticker: string): Promise<string | null> => {
   }
 };
 
-
-export const getCoins = async (): Promise<Coin[]> => {
+export const getCoins = async (): Promise<[]> => {
   try {
     const response = await api.get(API_ENDPOINTS.GET_COINS);
     return response.data.data || [];

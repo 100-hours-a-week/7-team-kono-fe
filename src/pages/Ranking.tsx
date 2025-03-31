@@ -30,20 +30,7 @@ export default function Ranking() {
   const myUserRef = useRef<HTMLDivElement>(null);
 
   const REFRESH_INTERVAL = 5 * 60 * 1000; // 5분
-
-  // 코인 심볼 목록 (프로필 이미지용)
-  const coinSymbols = [
-    'BTC',
-    'ETH',
-    'XRP',
-    'ADA',
-    'SOL',
-    'DOGE',
-    'DOT',
-    'AVAX',
-    'MATIC',
-    'LINK',
-  ];
+  const PLACEHOLDER = 'https://static.upbit.com/logos/BTC.png';
 
   // 랭킹 데이터 가져오기
   const fetchRanks = async () => {
@@ -151,8 +138,7 @@ export default function Ranking() {
                 alt={topUsers[1]?.nickname}
                 className="w-16 h-16 rounded-full border-2 border-gray-300"
                 onError={(e) => {
-                  (e.target as HTMLImageElement).src =
-                    'https://via.placeholder.com/64';
+                  (e.target as HTMLImageElement).src = PLACEHOLDER;
                 }}
               />
               <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-zinc-200 rounded-full flex items-center justify-center text-lg font-bold">
@@ -161,17 +147,23 @@ export default function Ranking() {
             </div>
             <div className="mt-2 font-medium">{topUsers[1]?.nickname}</div>
             <div
-              className={`text-sm ${
-                topUsers[1].profitRate === 0 || topUsers[1].profit === 0
-                  ? 'text-gray-500'
-                  : topUsers[1].profitRate > 0 || topUsers[1].profit > 0
-                    ? 'text-red-500'
-                    : 'text-blue-500'
+              className={`text-xs ${
+                activePeriod === '일간'
+                  ? (topUsers[1]?.profitRate ?? 0) === 0
+                    ? 'text-gray-500'
+                    : (topUsers[1]?.profitRate ?? 0) > 0
+                      ? 'text-red-500'
+                      : 'text-blue-500'
+                  : (topUsers[1]?.profit ?? 0) === 0
+                    ? 'text-gray-500'
+                    : (topUsers[1]?.profit ?? 0) > 0
+                      ? 'text-red-500'
+                      : 'text-blue-500'
               }`}
             >
               {activePeriod === '일간'
-                ? `${topUsers[1].profitRate > 0 ? '+' : topUsers[1].profitRate < 0 ? '-' : ''}${Math.abs(topUsers[2].profitRate || 0).toFixed(2)}%`
-                : `${topUsers[1].profit > 0 ? '+' : topUsers[1].profit < 0 ? '-' : ''}${formatCurrency(Math.abs(topUsers[2].profit || 0))}`}
+                ? `${(topUsers[1]?.profitRate ?? 0) > 0 ? '+' : (topUsers[1]?.profitRate ?? 0) < 0 ? '-' : ''}${Math.abs(topUsers[1]?.profitRate ?? 0).toFixed(2)}%`
+                : `${(topUsers[1]?.profit ?? 0) > 0 ? '+' : (topUsers[1]?.profit ?? 0) < 0 ? '-' : ''}${formatCurrency(Math.abs(topUsers[1]?.profit ?? 0))}`}
             </div>
           </div>
 
@@ -183,8 +175,7 @@ export default function Ranking() {
                 alt={topUsers[0]?.nickname}
                 className="w-20 h-20 rounded-full border-2 border-yellow-400"
                 onError={(e) => {
-                  (e.target as HTMLImageElement).src =
-                    'https://via.placeholder.com/80';
+                  (e.target as HTMLImageElement).src = PLACEHOLDER;
                 }}
               />
               <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center text-lg font-bold">
@@ -192,23 +183,24 @@ export default function Ranking() {
               </div>
             </div>
             <div className="mt-2 font-medium">{topUsers[0]?.nickname}</div>
-            {/* <div className="text-red-500">
-              {activePeriod === '일간'
-                ? `+${topUsers[0]?.profitRate?.toFixed(2)}%`
-                : `${topUsers[0]?.profit?.toLocaleString()}원`}
-            </div> */}
             <div
-              className={`text-sm ${
-                topUsers[0].profitRate === 0 || topUsers[0].profit === 0
-                  ? 'text-gray-500'
-                  : topUsers[0].profitRate > 0 || topUsers[0].profit > 0
-                    ? 'text-red-500'
-                    : 'text-blue-500'
+              className={`text-xs ${
+                activePeriod === '일간'
+                  ? (topUsers[0]?.profitRate ?? 0) === 0
+                    ? 'text-gray-500'
+                    : (topUsers[0]?.profitRate ?? 0) > 0
+                      ? 'text-red-500'
+                      : 'text-blue-500'
+                  : (topUsers[0]?.profit ?? 0) === 0
+                    ? 'text-gray-500'
+                    : (topUsers[0]?.profit ?? 0) > 0
+                      ? 'text-red-500'
+                      : 'text-blue-500'
               }`}
             >
               {activePeriod === '일간'
-                ? `${topUsers[0].profitRate > 0 ? '+' : topUsers[0].profitRate < 0 ? '-' : ''}${Math.abs(topUsers[0].profitRate || 0).toFixed(2)}%`
-                : `${topUsers[0].profit > 0 ? '+' : topUsers[0].profit < 0 ? '-' : ''}${formatCurrency(Math.abs(topUsers[0].profit || 0))}`}
+                ? `${(topUsers[0]?.profitRate ?? 0) > 0 ? '+' : (topUsers[0]?.profitRate ?? 0) < 0 ? '-' : ''}${Math.abs(topUsers[0]?.profitRate ?? 0).toFixed(2)}%`
+                : `${(topUsers[0]?.profit ?? 0) > 0 ? '+' : (topUsers[0]?.profit ?? 0) < 0 ? '-' : ''}${formatCurrency(Math.abs(topUsers[0]?.profit ?? 0))}`}
             </div>
           </div>
 
@@ -220,8 +212,7 @@ export default function Ranking() {
                 alt={topUsers[2]?.nickname}
                 className="w-16 h-16 rounded-full border-2 border-orange-400"
                 onError={(e) => {
-                  (e.target as HTMLImageElement).src =
-                    'https://via.placeholder.com/64';
+                  (e.target as HTMLImageElement).src = PLACEHOLDER;
                 }}
               />
               <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-orange-400 rounded-full flex items-center justify-center text-lg font-bold">
@@ -229,23 +220,24 @@ export default function Ranking() {
               </div>
             </div>
             <div className="mt-2 font-medium">{topUsers[2]?.nickname}</div>
-            {/* <div className="text-red-500">
-              {activePeriod === '일간'
-                ? `+${topUsers[2]?.profitRate?.toFixed(2)}%`
-                : `${topUsers[2]?.profit?.toLocaleString()}원`}
-            </div> */}
             <div
-              className={`text-sm ${
-                topUsers[2].profitRate === 0 || topUsers[2].profit === 0
-                  ? 'text-gray-500'
-                  : topUsers[2].profitRate > 0 || topUsers[2].profit > 0
-                    ? 'text-red-500'
-                    : 'text-blue-500'
+              className={`text-xs ${
+                activePeriod === '일간'
+                  ? (topUsers[2]?.profitRate ?? 0) === 0
+                    ? 'text-gray-500'
+                    : (topUsers[2]?.profitRate ?? 0) > 0
+                      ? 'text-red-500'
+                      : 'text-blue-500'
+                  : (topUsers[2]?.profit ?? 0) === 0
+                    ? 'text-gray-500'
+                    : (topUsers[2]?.profit ?? 0) > 0
+                      ? 'text-red-500'
+                      : 'text-blue-500'
               }`}
             >
               {activePeriod === '일간'
-                ? `${topUsers[2].profitRate > 0 ? '+' : topUsers[2].profitRate < 0 ? '-' : ''}${Math.abs(topUsers[2].profitRate || 0).toFixed(2)}%`
-                : `${topUsers[2].profit > 0 ? '+' : topUsers[2].profit < 0 ? '-' : ''}${formatCurrency(Math.abs(topUsers[2].profit || 0))}`}
+                ? `${(topUsers[2]?.profitRate ?? 0) > 0 ? '+' : (topUsers[2]?.profitRate ?? 0) < 0 ? '-' : ''}${Math.abs(topUsers[2]?.profitRate ?? 0).toFixed(2)}%`
+                : `${(topUsers[2]?.profit ?? 0) > 0 ? '+' : (topUsers[2]?.profit ?? 0) < 0 ? '-' : ''}${formatCurrency(Math.abs(topUsers[2]?.profit ?? 0))}`}
             </div>
           </div>
         </div>
@@ -292,66 +284,34 @@ export default function Ranking() {
               alt={user.nickname}
               className="w-12 h-12 rounded-full mr-4"
               onError={(e) => {
-                (e.target as HTMLImageElement).src =
-                  'https://via.placeholder.com/48';
+                (e.target as HTMLImageElement).src = PLACEHOLDER;
               }}
             />
             <div className="flex-1">
-              <div className="font-medium">{user.nickname}</div>
+              <div className="font-md">{user.nickname}</div>
             </div>
-            {/* <div
-              className={`text-sm ${
-                user.profitRate || user.profit >= 0
-                  ? 'text-red-500'
-                  : 'text-blue-500'
-              }`}
-            >
-              {activePeriod === '일간'
-                ? `${user.profitRate?.toFixed(2)}%`
-                : `${formatCurrency(user.profit || 0)}`}
-            </div> */}
             <div
               className={`text-sm ${
-                user.profitRate === 0 || user.profit === 0
-                  ? 'text-gray-500'
-                  : user.profitRate > 0 || user.profit > 0
-                    ? 'text-red-500'
-                    : 'text-blue-500'
+                activePeriod === '일간'
+                  ? (user?.profitRate ?? 0) === 0
+                    ? 'text-gray-500'
+                    : (user?.profitRate ?? 0) > 0
+                      ? 'text-red-500'
+                      : 'text-blue-500'
+                  : (user?.profit ?? 0) === 0
+                    ? 'text-gray-500'
+                    : (user?.profit ?? 0) > 0
+                      ? 'text-red-500'
+                      : 'text-blue-500'
               }`}
             >
               {activePeriod === '일간'
-                ? `${user.profitRate > 0 ? '+' : user.profitRate < 0 ? '-' : ''}${Math.abs(user.profitRate || 0).toFixed(2)}%`
-                : `${user.profit > 0 ? '+' : user.profit < 0 ? '-' : ''}${formatCurrency(Math.abs(user.profit || 0))}`}
+                ? `${(user?.profitRate ?? 0) > 0 ? '+' : (user?.profitRate ?? 0) < 0 ? '-' : ''}${Math.abs(user?.profitRate ?? 0).toFixed(2)}%`
+                : `${(user?.profit ?? 0) > 0 ? '+' : (user?.profit ?? 0) < 0 ? '-' : ''}${formatCurrency(Math.abs(user?.profit ?? 0))}`}
             </div>
           </div>
         ))}
       </div>
-
-      {/* 내 랭킹
-      {myRanking && (
-        <div className="sticky bottom-16 rounded-xl min-w-[400px] mx-auto bg-white border-t p-4 shadow-md dark:bg-gray-800 dark:text-white dark:border-gray-700">
-          <div className="flex items-center">
-            <div className="w-8 text-center font-bold mr-4">
-              {myRanking.rank}
-            </div>
-            <img
-              src={`https://static.upbit.com/logos/${myRanking.profileCoin}.png`}
-              alt={myRanking.name}
-              className="w-12 h-12 rounded-full mr-4"
-              onError={(e) => {
-                (e.target as HTMLImageElement).src =
-                  'https://via.placeholder.com/48';
-              }}
-            />
-            <div className="flex-1">
-              <div className="font-medium">{myRanking.name}</div>
-            </div>
-            <div className="text-red-500">
-              +{myRanking.profitRate.toFixed(2)}%
-            </div>
-          </div>
-        </div>
-      )} */}
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { Fragment, useRef, useState, useEffect } from 'react';
+import { Fragment, useRef, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import Toast from '../common/Toast';
@@ -6,6 +6,7 @@ import PurchaseCompleteModal from './PurchaseCompleteModal';
 import { useNavigate } from 'react-router-dom';
 import { formatAmount, formatCurrency } from '../../utils/formatter';
 import { marketBuy, marketSell } from '../../api/trade';
+
 interface TradeConfirmModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -14,7 +15,7 @@ interface TradeConfirmModalProps {
   price: number;
   quantity: number;
   tradeType: 'buy' | 'sell';
-  totalAmount: number;
+  // totalAmount: number;
 }
 
 export default function TradeConfirmModal({
@@ -30,9 +31,8 @@ export default function TradeConfirmModal({
   const panelRef = useRef<HTMLDivElement>(null);
   const [showComplete, setShowComplete] = useState(false);
   const [showToast, setShowToast] = useState(false);
-  const [totalPrice, setTotalPrice] = useState(0);
-  const [confirmedPrice, setConfirmedPrice] = useState('');
-  const [confirmedQuantity, setConfirmedQuantity] = useState('');
+  const [confirmedPrice, setConfirmedPrice] = useState(0);
+  const [confirmedQuantity, setConfirmedQuantity] = useState(0);
 
   // 값이 없을 때의 기본값 처리
   // const safeAmount = amount || 0;
@@ -40,9 +40,9 @@ export default function TradeConfirmModal({
 
   const handleTrade = async () => {
     try {
-      if(tradeType === 'buy') {
+      if (tradeType === 'buy') {
         await marketBuy(ticker, amount);
-      } else if(tradeType === 'sell') {
+      } else if (tradeType === 'sell') {
         await marketSell(ticker, amount);
       }
       onClose();
@@ -69,8 +69,8 @@ export default function TradeConfirmModal({
   };
 
   const handleConfirm = () => {
-    setConfirmedPrice(price.toString() || '0');
-    setConfirmedQuantity(quantity.toString() || '0');
+    setConfirmedPrice(price);
+    setConfirmedQuantity(quantity);
 
     handleTrade();
   };
@@ -194,7 +194,7 @@ export default function TradeConfirmModal({
         onClose={() => setShowComplete(false)}
         onConfirm={handleCompleteConfirm}
         ticker={ticker}
-        amount={amount.toString() || '0'}
+        amount={amount}
         price={confirmedPrice}
         quantity={confirmedQuantity}
         tradeType={tradeType}

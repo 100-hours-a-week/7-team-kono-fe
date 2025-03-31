@@ -1,14 +1,24 @@
-import { Fragment } from 'react';
+import { Fragment, useEffect } from 'react';
 import { Transition } from '@headlessui/react';
 import { CheckIcon } from '@heroicons/react/24/solid';
 
 interface ToastProps {
   show: boolean;
   message: string;
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 export default function Toast({ show, message, onClose }: ToastProps) {
+  useEffect(() => {
+    if (show && onClose) {
+      const timer = setTimeout(() => {
+        onClose();
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [show, onClose]);
+
   return (
     <Transition
       show={show}

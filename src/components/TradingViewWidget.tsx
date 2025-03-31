@@ -4,7 +4,7 @@ import { useTheme } from '../contexts/ThemeContext';
 interface TradingViewWidgetProps {
   symbol: string;
   interval: string;
-  theme: 'light' | 'dark';
+  theme?: 'light' | 'dark';
   locale: string;
   hideLegend?: boolean;
   hideTopToolbar?: boolean;
@@ -15,7 +15,6 @@ interface TradingViewWidgetProps {
 const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({
   symbol,
   interval,
-  theme: propTheme,
   locale,
   hideLegend = true,
   hideTopToolbar = true,

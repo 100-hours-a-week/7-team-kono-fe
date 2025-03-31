@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/layout/Header';
 import { Pie } from 'react-chartjs-2';
@@ -11,9 +11,16 @@ import { formatCurrency } from '../utils/formatter';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
+// API 응답용
+interface CoinData {
+  ticker: string;
+  coinName: string;
+  holdingQuantity: number;
+  holdingPrice: number;
+}
+
 interface Coin {
   id?: string;
-  nickname: string;
   ticker: string;
   holdingQuantity: number;
   holdingPrice: number;
@@ -21,7 +28,15 @@ interface Coin {
   price?: number;
   value?: number;
   priceChange24h?: number;
+  profitRate?: number;
   color?: string;
+}
+
+// 차트 데이터용
+interface ChartItem {
+  name: string;
+  value: number;
+  percent: number;
 }
 
 const Wallet = () => {
@@ -30,13 +45,11 @@ const Wallet = () => {
   const [holdingCash, setHoldingCash] = useState<number>(0);
   const [tickers, setTickers] = useState<string[]>([]);
   const tickerData = useUpbitWebSocket(tickers);
-  // 초기 로딩 상태를 추적하기 위한 ref
-  const initialLoadRef = useRef(true);
 
   useEffect(() => {
     const fetchHoldingCoins = async () => {
       try {
-        const walletData = await getHoldingCoins();
+        const walletData = (await getHoldingCoins()) as unknown as CoinData[];
         const cash = await getBalance();
         // HoldingCoin 객체 형식으로 변환
         const coins = walletData.map((coin) => ({
@@ -92,22 +105,24 @@ const Wallet = () => {
       if (tickerInfo) {
         const currentPrice = tickerInfo.trade_price || 0;
         const currentValue = coin.holdingQuantity * currentPrice;
-        
-        // 코인당 평균 매수가 계산
-        const averageBuyPrice = coin.holdingQuantity > 0 
-          ? coin.holdingPrice / coin.holdingQuantity 
-          : 0;
 
-        // 수익률 계산 수정
-        const profitRate = averageBuyPrice > 0
-          ? ((currentPrice - averageBuyPrice) / averageBuyPrice) * 100
-          : 0;
+        // 코인당 평균 매수가 계산
+        const averageBuyPrice =
+          coin.holdingQuantity > 0
+            ? coin.holdingPrice / coin.holdingQuantity
+            : 0;
+
+        // 수익률 계산
+        const profitRate =
+          averageBuyPrice > 0
+            ? ((currentPrice - averageBuyPrice) / averageBuyPrice) * 100
+            : 0;
 
         return {
           ...coin,
           price: currentPrice,
           value: currentValue,
-          averageBuyPrice, // 코인당 평균 매수가 추가
+          averageBuyPrice,
           profitRate,
         };
       }
@@ -165,7 +180,7 @@ const Wallet = () => {
       name: coin.ticker,
       value: coin.value,
       percent: totalAsset > 0 ? (coin.value! / totalAsset) * 100 : 0,
-    }));
+    })) as ChartItem[];
 
   // 나머지 코인들의 합
   const otherCoinsValue = positiveCoins
@@ -179,25 +194,74 @@ const Wallet = () => {
     totalAsset > 0 ? (otherCoinsValue / totalAsset) * 100 : 0;
   const cashPercent = totalAsset > 0 ? (cashBalance / totalAsset) * 100 : 0;
 
+  // 차트 아이템 생성 (기타와 현금 포함)
+  const chartItems: ChartItem[] = [...topCoins];
+
+  // 기타 코인이 있으면 추가
+  if (otherCoinsValue > 0) {
+    chartItems.push({
+      name: '기타',
+      value: otherCoinsValue,
+      percent: otherCoinsPercent,
+    });
+  }
+
+  // 현금이 있으면 추가
+  if (cashBalance > 0) {
+    chartItems.push({
+      name: '현금',
+      value: cashBalance,
+      percent: cashPercent,
+    });
+  }
+
+  // 차트 배경색 배열 생성
+  const chartBackgroundColors: string[] = [
+    ...positiveCoins
+      .slice(0, 5)
+      .map((coin) => coin.color || 'rgba(75, 192, 192, 0.8)'),
+  ];
+
+  // 기타 코인 색상 추가
+  if (otherCoinsValue > 0) {
+    chartBackgroundColors.push('rgba(150, 150, 150, 0.8)');
+  }
+
+  // 현금 색상 추가
+  if (cashBalance > 0) {
+    chartBackgroundColors.push('rgba(200, 200, 200, 0.8)');
+  }
+
+  // 차트 데이터
+  // const data = {
+  //   labels: [
+  //     ...topCoins.map((coin) => coin.name),
+  //     otherCoinsValue > 0 ? '기타' : null,
+  //     cashBalance > 0 ? '현금' : null,
+  //   ].filter(Boolean),
+  //   datasets: [
+  //     {
+  //       data: [
+  //         ...topCoins.map((coin) => Math.max(0, coin.percent)),
+  //         otherCoinsValue > 0 ? Math.max(0, otherCoinsPercent) : null,
+  //         cashBalance > 0 ? Math.max(0, cashPercent) : null,
+  //       ].filter(Boolean),
+  //       backgroundColor: [
+  //         ...positiveCoins.slice(0, 5).map((coin) => coin.color),
+  //         otherCoinsValue > 0 ? 'rgba(150, 150, 150, 0.8)' : null,
+  //         cashBalance > 0 ? 'rgba(200, 200, 200, 0.8)' : null,
+  //       ].filter(Boolean),
+  //       borderWidth: 0,
+  //     },
+  //   ],
+  // };
   // 차트 데이터
   const data = {
-    labels: [
-      ...topCoins.map((coin) => coin.name),
-      otherCoinsValue > 0 ? '기타' : null,
-      cashBalance > 0 ? '현금' : null,
-    ].filter(Boolean),
+    labels: chartItems.map((item) => item.name),
     datasets: [
       {
-        data: [
-          ...topCoins.map((coin) => Math.max(0, coin.percent)),
-          otherCoinsValue > 0 ? Math.max(0, otherCoinsPercent) : null,
-          cashBalance > 0 ? Math.max(0, cashPercent) : null,
-        ].filter(Boolean),
-        backgroundColor: [
-          ...positiveCoins.slice(0, 5).map((coin) => coin.color),
-          otherCoinsValue > 0 ? 'rgba(150, 150, 150, 0.8)' : null,
-          cashBalance > 0 ? 'rgba(200, 200, 200, 0.8)' : null,
-        ].filter(Boolean),
+        data: chartItems.map((item) => item.percent),
+        backgroundColor: chartBackgroundColors,
         borderWidth: 0,
       },
     ],
@@ -273,7 +337,7 @@ const Wallet = () => {
           <Pie data={data} options={options} />
         </div>
 
-        <div className="grid grid-cols-3 gap-4 mt-4">
+        {/* <div className="grid grid-cols-3 gap-4 mt-4">
           {[
             ...topCoins.map((coin) => ({
               name: coin.name,
@@ -288,7 +352,7 @@ const Wallet = () => {
           ]
             .filter(Boolean)
             .map((item, index) => (
-              <div key={item.name} className="flex items-center">
+              <div key={item?.name} className="flex items-center">
                 <div
                   className="w-4 h-4 rounded-md mr-2 flex-shrink-0"
                   style={{
@@ -296,13 +360,32 @@ const Wallet = () => {
                   }}
                 ></div>
                 <div>
-                  <div className="text-sm">{item.name}</div>
+                  <div className="text-sm">{item?.name}</div>
                   <div className="text-sm font-medium">
-                    {item.value.toFixed(1)}%
+                    {item?.value.toFixed(1)}%
                   </div>
                 </div>
               </div>
             ))}
+        </div>
+      </div> */}
+        <div className="grid grid-cols-3 gap-4 mt-4">
+          {chartItems.map((item, index) => (
+            <div key={item.name} className="flex items-center">
+              <div
+                className="w-4 h-4 rounded-md mr-2 flex-shrink-0"
+                style={{
+                  backgroundColor: chartBackgroundColors[index] || '#999',
+                }}
+              ></div>
+              <div>
+                <div className="text-sm">{item.name}</div>
+                <div className="text-sm font-medium">
+                  {item.percent.toFixed(1)}%
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -341,15 +424,17 @@ const Wallet = () => {
               </div>
               <div className="text-right">
                 <div className="font-medium">
-                  {formatCurrency(coin.value, 'KRW')}
+                  {formatCurrency(coin.value || 0, 'KRW')}
                 </div>
                 <div
                   className={`text-sm ${
-                    coin.profitRate >= 0 ? 'text-red-500' : 'text-blue-500'
+                    (coin.profitRate || 0) >= 0
+                      ? 'text-red-500'
+                      : 'text-blue-500'
                   }`}
                 >
-                  {coin.profitRate >= 0 ? '+' : ''}
-                  {coin.profitRate.toFixed(2)}%
+                  {(coin.profitRate || 0) >= 0 ? '+' : ''}
+                  {(coin.profitRate || 0).toFixed(2)}%
                 </div>
               </div>
             </div>
