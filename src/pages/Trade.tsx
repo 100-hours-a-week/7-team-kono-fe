@@ -378,8 +378,8 @@ export default function Trade() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         ticker={coin.ticker || ''}
-        amount={type === 'sell' && displayAmount === '최대' ? undefined : Number(submitAmount)}
-        quantity={type === 'sell' && displayAmount === '최대' ? (coin?.quantity || 0) : quantity}
+        amount={type === 'sell' && displayAmount === '최대' ? 0 : Number(submitAmount)}
+        quantity={quantity}
         price={type === 'sell' && displayAmount === '최대' ? null : coin.price}
         tradeType={type as TradeType}
       />
