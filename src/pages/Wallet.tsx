@@ -144,8 +144,6 @@ const Wallet = () => {
     0,
   );
 
-
-
   // 총 투자 금액 계산(코인의 총투자금액)(사용자가 갖고있는 코인들의 배열들에서 홀딩프라이스 전부 더하는 값)
   const initialInvestment = holdingCoins.reduce(
     (sum, coin) => sum + coin.holdingPrice,
@@ -161,8 +159,11 @@ const Wallet = () => {
   // 총 수익률 계산
   const calculateTotalProfitRate = () => {
     if (initialInvestment <= 0) return 0; // 전체 매수 금액이 0인 경우 예외 처리
-    // (현재 총 자산(코인자산+현금) - 초기 투자금) / 초기 투자금 * 100
-    return ((totalAsset - 10000000) / 10000000) * 100;
+    return (
+      ((totalAsset - (initialInvestment + cashBalance)) /
+        (initialInvestment + cashBalance)) *
+      100
+    );
   };
 
   // 총 수익률 계산
