@@ -33,13 +33,16 @@ export default function TradeConfirmModal({
   const [showToast, setShowToast] = useState(false);
   const [confirmedPrice, setConfirmedPrice] = useState(0);
   const [confirmedQuantity, setConfirmedQuantity] = useState(0);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   // 값이 없을 때의 기본값 처리
   // const safeAmount = amount || 0;
   // const safePrice = price || 0;
 
   const handleTrade = async () => {
+    if (isProcessing) return;
     try {
+      setIsProcessing(true);
       if (tradeType === 'buy') {
         await marketBuy(ticker, amount || 0);
       } else if (tradeType === 'sell') {
@@ -53,8 +56,9 @@ export default function TradeConfirmModal({
       setShowComplete(true);
     } catch (error) {
       console.error('거래 실패:', error);
-      // 에러 처리 (예: 에러 토스트 메시지 표시)
-      setShowToast(true);
+      setShowToast(true); // 에러 토스트 메시지 표시
+    } finally {
+      setIsProcessing(false); // 처리 완료 플래그 리셋
     }
   };
 
@@ -178,10 +182,15 @@ export default function TradeConfirmModal({
                             tradeType === 'buy'
                               ? 'bg-red-500 dark:bg-red-600 dark:hover:bg-red-700'
                               : 'bg-blue-500 dark:bg-blue-600 dark:hover:bg-blue-700'
-                          }`}
+                          } ${isProcessing ? 'opacity-50 cursor-not-allowed' : ''}`}
                           onClick={handleConfirm}
+                          disabled={isProcessing}
                         >
-                          {tradeType === 'buy' ? '구매' : '판매'}
+                          {isProcessing
+                            ? '처리중...'
+                            : tradeType === 'buy'
+                              ? '구매'
+                              : '판매'}
                         </button>
                       </div>
                     </div>
