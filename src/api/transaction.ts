@@ -9,7 +9,7 @@ export type Transaction = {
   orderQuantity: number;
   orderPrice: number;
   orderAmount: number;
-  createAt: string;
+  createdAt: string;
 };
 
 /**
