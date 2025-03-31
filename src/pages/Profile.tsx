@@ -15,7 +15,7 @@ interface ProfileData {
 }
 
 const Profile: React.FC = () => {
-  const { user } = useAuth(); // AuthContext에서 사용자 정보 가져오기
+  const { user, updateUser } = useAuth();
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -92,6 +92,13 @@ const Profile: React.FC = () => {
       const updatedProfile = await getUserProfile();
       setProfile(updatedProfile);
 
+      // AuthContext의 사용자 정보도 업데이트
+      if (updatedProfile) {
+        updateUser({
+          profileImageUrl: updatedProfile.profileImageUrl,
+        });
+      }
+
       toast.success('프로필 이미지가 업데이트되었습니다.');
     } catch (err) {
       toast.error('이미지 업로드에 실패했습니다.');
@@ -116,6 +123,13 @@ const Profile: React.FC = () => {
       // 프로필 정보 다시 로드
       const updatedProfile = await getUserProfile();
       setProfile(updatedProfile);
+
+      // AuthContext의 사용자 정보도 업데이트
+      if (updatedProfile) {
+        updateUser({
+          nickname: updatedProfile.nickname,
+        });
+      }
 
       setIsEditingNickname(false);
       toast.success('닉네임이 업데이트되었습니다.');
