@@ -12,7 +12,7 @@ interface TradeConfirmModalProps {
   onClose: () => void;
   ticker: string;
   amount: number;
-  price: number;
+  price: number | null;
   quantity: number;
   tradeType: 'buy' | 'sell';
   // totalAmount: number;
@@ -43,7 +43,11 @@ export default function TradeConfirmModal({
       if (tradeType === 'buy') {
         await marketBuy(ticker, amount);
       } else if (tradeType === 'sell') {
-        await marketSell(ticker, amount);
+        if (amount === null) {
+          await marketSell(ticker, 0, quantity);
+        } else {
+          await marketSell(ticker, amount, quantity);
+        }
       }
       onClose();
       setShowComplete(true);
