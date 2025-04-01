@@ -32,7 +32,7 @@ export default function Trade() {
   const [price, setPrice] = useState<number>(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [cashBalance] = useState(5000000); // 보유 현금 (예시)
+  const [cashBalance] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [maxAmount, setMaxAmount] = useState<number>(0);
   const [quantity, setQuantity] = useState<number>(0);
