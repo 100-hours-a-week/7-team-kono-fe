@@ -7,6 +7,7 @@ import { formatAmount, formatCurrency } from '../utils/formatter';
 import { getCoinName } from '../api/coin';
 import { getBalance } from '../api/wallet';
 import { getQuantityByTicker } from '../api/wallet';
+import Header from "../components/layout/Header.tsx";
 // 거래 타입 정의
 type TradeType = 'buy' | 'sell';
 
@@ -273,14 +274,10 @@ export default function Trade() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* 헤더 */}
-      <div className="p-4 flex items-center">
-        <button onClick={() => navigate(-1)} className="p-1">
-          <IoIosArrowBack className="text-2xl" />
-        </button>
-        <h1 className="text-lg font-bold ml-2">
-          {type === 'buy' ? '매수하기' : '매도하기'}
-        </h1>
-      </div>
+      <Header
+        title={type === 'buy' ? '매수하기' : '매도하기'}
+        centerTitle={false}
+      />
 
       {/* 코인 정보 */}
       <div className="p-4 border-b dark:bg-gray-800 dark:text-white dark:border-gray-700">
