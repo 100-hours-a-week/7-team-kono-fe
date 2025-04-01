@@ -39,6 +39,7 @@ export default function Trade() {
 
   // 퍼센트 버튼 옵션
   const percentOptions = [10, 25, 50, 100];
+  const MIN_AMOUNT = 5000;
 
   const { tickerData } = useUpbitWebSocket([ticker || '']);
 
@@ -50,7 +51,7 @@ export default function Trade() {
 
       // 코인 데이터 즉시 업데이트
       setCoin((prevCoin) =>
-        prevCoin ? { ...prevCoin, price: currentPrice } : null
+        prevCoin ? { ...prevCoin, price: currentPrice } : null,
       );
 
       // 현재 선택된 상태에 따라 수량과 금액 업데이트
@@ -145,8 +146,12 @@ export default function Trade() {
   const handleAmountChange = (value: string) => {
     if (/^\d*\.?\d*$/.test(value) || value === '') {
       const numValue = value ? Number(value) : 0;
-      setDisplayAmount(numValue);
-      
+
+      // 최대 금액 즉시 유효성 검사 (입력 중에도 최대값 초과 방지)
+      const validatedValue = numValue > maxAmount ? maxAmount : numValue;
+
+      setDisplayAmount(validatedValue);
+
       // 입력값이 있을 때만 수량 계산
       if (value && coin?.price) {
         if (!isNaN(numValue)) {
@@ -160,28 +165,68 @@ export default function Trade() {
     }
   };
 
+  // 입력 값에 대한 유효성 검사 함수
+  const validateAmount = () => {
+    if (displayAmount !== '최대') {
+      const currentAmount = Number(displayAmount);
+
+      // 입력값이 0보다 크고 최소 금액보다 작은 경우
+      if (currentAmount > 0 && currentAmount < MIN_AMOUNT) {
+        setDisplayAmount(MIN_AMOUNT);
+        setSubmitAmount(MIN_AMOUNT);
+        setQuantity(MIN_AMOUNT / price);
+      }
+
+      // 입력값이 최대 금액보다 큰 경우
+      if (currentAmount > maxAmount) {
+        setDisplayAmount(maxAmount);
+        setSubmitAmount(maxAmount);
+        setQuantity(maxAmount / price);
+      }
+    }
+  };
+
   // 퍼센트 변경 처리 함수 수정
   const handlePercentChange = (percent: number) => {
     if (type === 'sell' && percent === 100) {
       setDisplayAmount('최대');
-      setSubmitAmount(null);  // 금액은 null로 설정
-      setQuantity(coin?.quantity || 0);  // 수량은 보유 수량으로 설정
+      setSubmitAmount(null); // 금액은 null로 설정
+      setQuantity(coin?.quantity || 0); // 수량은 보유 수량으로 설정
     } else {
-      const currentMaxAmount = type === 'buy' 
-        ? (coin?.balance || cashBalance)
-        : ((coin?.quantity || 0) * price);
-      
+      const currentMaxAmount =
+        type === 'buy'
+          ? coin?.balance || cashBalance
+          : (coin?.quantity || 0) * price;
+
       const calculatedAmount = (currentMaxAmount * percent) / 100;
-      setDisplayAmount(calculatedAmount);
-      setSubmitAmount(calculatedAmount);
-      setQuantity(calculatedAmount / price);
+
+      // 최소 금액 검사
+      const finalAmount =
+        calculatedAmount < MIN_AMOUNT && calculatedAmount > 0
+          ? MIN_AMOUNT
+          : calculatedAmount;
+
+      setDisplayAmount(finalAmount);
+      setSubmitAmount(finalAmount);
+      setQuantity(finalAmount / price);
     }
   };
 
   // 거래 실행
   const handleOpenModal = () => {
+    // 거래 시작 전 금액 유효성 검사 실행
+    validateAmount();
     if (!displayAmount || !coin || !price) {
       alert('유효한 수량과 가격을 입력해주세요.');
+      return;
+    }
+
+    // 최소 금액 검사
+    if (displayAmount !== '최대' && Number(displayAmount) < MIN_AMOUNT) {
+      alert(`최소 거래 금액은 ${formatCurrency(MIN_AMOUNT)}입니다.`);
+      setDisplayAmount(MIN_AMOUNT);
+      setSubmitAmount(MIN_AMOUNT);
+      setQuantity(MIN_AMOUNT / price);
       return;
     }
     setIsModalOpen(true);
@@ -256,9 +301,7 @@ export default function Trade() {
         </div>
 
         <div className="flex justify-between items-center">
-          <div className="text-2xl font-bold">
-            {formatCurrency(price)}
-          </div>
+          <div className="text-2xl font-bold">{formatCurrency(price)}</div>
         </div>
       </div>
 
@@ -302,14 +345,20 @@ export default function Trade() {
           <input
             value={displayAmount}
             onChange={(e) => handleAmountChange(e.target.value)}
+            onBlur={validateAmount} // 입력 완료 시 유효성 검사
             className="w-full p-3 border rounded-xl text-right pr-16 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-400 dark:border-gray-700"
             placeholder="0"
-            min={0}
+            min={MIN_AMOUNT}
             max={maxAmount}
           />
           <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">
             원
           </span>
+        </div>
+
+        {/* 최소 거래 금액 안내 */}
+        <div className="mb-2 text-xs text-gray-500 dark:text-gray-400">
+          최소 거래 금액: {formatCurrency(MIN_AMOUNT)}
         </div>
 
         {/* 퍼센트 버튼 */}
@@ -333,10 +382,9 @@ export default function Trade() {
             예상 수량
           </div>
           <div className="text-xl font-bold">
-            {type === 'sell' && displayAmount === '최대' 
+            {type === 'sell' && displayAmount === '최대'
               ? '최대'
-              : `${quantity.toFixed(8)} ${coin?.ticker}`
-            }
+              : `${quantity.toFixed(8)} ${coin?.ticker}`}
           </div>
         </div>
       </div>
@@ -348,8 +396,7 @@ export default function Trade() {
           <div className="text-xl font-bold">
             {type === 'sell' && displayAmount === '최대'
               ? '최대'
-              : formatCurrency(Number(displayAmount) || 0)
-            }
+              : formatCurrency(Number(displayAmount) || 0)}
           </div>
         </div>
       </div>
@@ -378,7 +425,14 @@ export default function Trade() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         ticker={coin.ticker || ''}
-        amount={type === 'sell' && displayAmount === '최대' ? 0 : Number(submitAmount)}
+        // amount={
+        //   type === 'sell' && displayAmount === '최대' ? 0 : Number(submitAmount)
+        // }
+        amount={
+          type === 'sell' && displayAmount === '최대'
+            ? (coin?.quantity || 0) * price // 최대 선택 시 실제 금액으로 계산
+            : Number(submitAmount)
+        }
         quantity={quantity}
         price={type === 'sell' && displayAmount === '최대' ? null : coin.price}
         tradeType={type as TradeType}
