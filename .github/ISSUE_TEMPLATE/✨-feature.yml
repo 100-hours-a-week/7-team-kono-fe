@@ -1,0 +1,31 @@
+name: "✨ Feature"
+description: "새로운 기능 추가"
+labels: ["✨ feat", "🧑‍💻 frontend"]
+body:
+  - type: textarea
+    attributes:
+      label: 📝 어떤 기능인가요?
+      description: 추가하려는 기능에 대한 설명을 작성해 주세요.
+      placeholder: 자세히 적을수록 좋습니다!
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: ✅ 작업할 내용
+      description: 할 일을 체크박스 형태로 작성해주세요.
+      value: |
+        - [ ] 작업 1
+        - [ ] 작업 2
+        - [ ] 작업 3
+  - type: textarea
+    attributes:
+      label: 🔗 참고 자료
+      description: 참고 자료가 있다면 작성해 주세요.
+  - type: checkboxes
+    id: label-confirmation
+    attributes:
+      label: 라벨 설정을 완료하였나요?
+      description: 적절한 라벨을 선택했는지 확인해주세요.
+      options:
+        - label: 예, 라벨 설정을 완료하였습니다.
+          required: true
