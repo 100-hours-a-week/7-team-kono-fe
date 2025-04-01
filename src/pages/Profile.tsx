@@ -11,7 +11,6 @@ interface ProfileData {
   nickname: string;
   profileImageUrl: string;
   id?: number;
-  cashBalance?: number;
 }
 
 const Profile: React.FC = () => {
@@ -27,7 +26,6 @@ const Profile: React.FC = () => {
   const dummyProfile: ProfileData = {
     nickname: '닉네임',
     profileImageUrl: 'https://static.upbit.com/logos/BTC.png',
-    cashBalance: 0,
   };
 
   // 프로필 정보 로드
@@ -267,13 +265,6 @@ const Profile: React.FC = () => {
               </button>
             </div>
           )}
-
-          {/* 보유 금액 영역 */}
-          <div className="text-gray-600 dark:text-gray-300">
-            <p>
-              보유 금액: {displayProfile.cashBalance?.toLocaleString() || 0} 원
-            </p>
-          </div>
         </div>
       </div>
     </div>
