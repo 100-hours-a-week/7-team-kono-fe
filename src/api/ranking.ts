@@ -7,6 +7,7 @@ interface Rank {
   badgeImageUrl?: string;
   totalAssets: number;
   rank: number;
+  updatedAt: string;
 }
 
 interface RankDaily {
@@ -15,6 +16,7 @@ interface RankDaily {
   badgeImageUrl?: string;
   profileRate: number;
   rank: number;
+  updatedAt: string;
 }
 
 //일간 랭킹 조회
