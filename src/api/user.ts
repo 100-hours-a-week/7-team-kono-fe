@@ -90,11 +90,19 @@ export const updateNickname = async (
         withCredentials: true,
       },
     );
-
     return getUserProfile(); // 업데이트 후 최신 프로필 정보 반환
   } catch (error) {
-    console.error('닉네임 업데이트 중 오류 발생:', error);
-    throw error;
+    if (axios.isAxiosError(error) && error.response) {
+      // HTTP 상태 코드와 메시지를 함께 throw
+      throw {
+        status: error.response.status,
+        message: error.response.data.message
+      };
+    }
+    throw {
+      status: 500,
+      message: '닉네임 변경에 실패했습니다.'
+    };
   }
 };
 
