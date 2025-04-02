@@ -117,23 +117,31 @@ const Profile: React.FC = () => {
 
     try {
       await updateNickname(nickname);
-
-      // 프로필 정보 다시 로드
       const updatedProfile = await getUserProfile();
       setProfile(updatedProfile);
-
-      // AuthContext의 사용자 정보도 업데이트
-      if (updatedProfile) {
-        updateUser({
-          nickname: updatedProfile.nickname,
-        });
-      }
-
       setIsEditingNickname(false);
       toast.success('닉네임이 업데이트되었습니다.');
-    } catch (err) {
-      toast.error('닉네임 변경에 실패했습니다.');
-      console.error(err);
+    } catch (error: any) {
+
+      const { status, message } = error;
+
+      switch (status) {
+        case 400:
+          toast.error(`${message}`);
+          break;
+        case 401:
+          toast.error(`${message}`);
+          break;
+        case 409:
+          toast.error(`${message}`);
+          break;
+        case 500:
+          toast.error(`${message}`);
+          break;
+        default:
+          toast.error(`[${status}] ${message}`);
+      }
+      console.error('닉네임 변경 실패:', { status, message });
     }
   };
 
