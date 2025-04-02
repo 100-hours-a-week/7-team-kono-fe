@@ -3,6 +3,7 @@ description: "새로운 기능 제안"
 title: "[FEAT] "
 labels: ["✨ feat", "🧑‍💻 frontend"]
 projects: "@KONO"
+type: "Feature"
 assignees: []
 body:
   - type: textarea
