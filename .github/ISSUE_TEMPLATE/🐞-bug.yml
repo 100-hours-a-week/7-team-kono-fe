@@ -1,0 +1,42 @@
+name: "🐞 Bug"
+description: "버그 제보"
+title: "[BUG] "
+labels: ["🐞 bug", "🧑‍💻 frontend"]
+body:
+  - type: textarea
+    attributes:
+      label: 🐞 버그 설명
+      description: 버그에 대한 명확하고 간결한 설명을 작성해주세요
+      placeholder: 자세히 적을수록 좋습니다!
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 🔄 재현 방법
+      description: 버그를 재현하기 위한 단계별 과정을 작성해주세요
+      value: |
+        1. 
+        2. 
+        3. 
+  - type: textarea
+    attributes:
+      label: 🤔 예상 동작
+      description: 어떤 동작이 일어날 것으로 예상했는지 명확하게 설명해주세요
+      placeholder: 
+  - type: textarea
+    attributes:
+      label: 📸 스크린샷
+      description: 해당하는 경우, 문제를 설명하는 데 도움이 되는 스크린샷을 추가해주세요
+      placeholder: 
+  - type: textarea
+    attributes:
+      label: 📝 추가 정보
+      description: 문제에 대한 기타 정보를 여기에 추가해주세요
+  - type: checkboxes
+    id: label-confirmation
+    attributes:
+      label: 라벨 설정을 완료하였나요?
+      description: 적절한 라벨을 선택했는지 확인해주세요.
+      options:
+        - label: 예, 라벨 설정을 완료하였습니다.
+          required: true
