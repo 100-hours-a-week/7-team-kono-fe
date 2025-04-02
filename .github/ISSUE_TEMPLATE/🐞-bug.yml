@@ -1,6 +1,6 @@
 name: "🐞 Bug"
 description: "버그 제보"
-title: "[BUG]: "
+title: "[BUG] "
 labels: ["🐞 bug", "🧑‍💻 frontend"]
 projects: "@KONO"
 assignees: []
