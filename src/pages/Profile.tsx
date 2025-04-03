@@ -120,6 +120,14 @@ const Profile: React.FC = () => {
       const updatedProfile = await getUserProfile();
       setProfile(updatedProfile);
       setIsEditingNickname(false);
+      
+      // AuthContext의 사용자 정보도 업데이트
+      if (updatedProfile) {
+        updateUser({
+          nickname: updatedProfile.nickname
+        });
+      }
+      
       toast.success('닉네임이 업데이트되었습니다.');
     } catch (error: any) {
 
