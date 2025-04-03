@@ -8,6 +8,7 @@ import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
 import { formatAmount, formatCurrency } from '../utils/formatter';
 import { isFavoriteCoin, addFavorite, removeFavorite } from '../api/favorite';
 import { getCoinName } from '../api/coin';
+import { getQuantityByTicker } from '../api/wallet';
 
 // 코인 정보 인터페이스
 interface CoinData {
@@ -66,6 +67,7 @@ export default function CoinDetail() {
   const [error, setError] = useState<string | null>(null);
   const [timeframe, setTimeframe] = useState<'1D' | '1W' | '1M' | '1Y'>('1D');
   const [isFavorite, setIsFavorite] = useState(false);
+  const [isHolding, setIsHolding] = useState(false);
 
   // ticker가 undefined일 경우 기본값으로 'BTC' 사용
   const symbolToUse = ticker || 'BTC';
@@ -113,6 +115,17 @@ export default function CoinDetail() {
       }
     };
     checkFavoriteStatus();
+  }, [symbolToUse]);
+
+  // 초기 코인 코유 여부 확인
+  useEffect(() => {
+    const checkHoldingStatus = async () => {
+      if (symbolToUse) {
+        const holding = await getQuantityByTicker(symbolToUse);
+        setIsHolding(holding > 0);
+      }
+    };
+    checkHoldingStatus();
   }, [symbolToUse]);
 
   // 즐겨찾기 토글 함수
@@ -259,7 +272,9 @@ export default function CoinDetail() {
             매수
           </button>
           <button
-            className="flex-1 py-3 bg-blue-500 text-white rounded-xl font-medium"
+            className={`flex-1 py-3 text-white rounded-xl font-medium ${
+              isHolding ? 'bg-blue-500' : 'hidden'
+            }`}
             onClick={() => navigate(`/coins/${ticker}/sell`)}
           >
             매도
