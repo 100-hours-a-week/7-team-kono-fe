@@ -15,6 +15,7 @@ interface TradeConfirmModalProps {
   price: number | null;
   quantity: number;
   tradeType: 'buy' | 'sell';
+  name: string;
   // totalAmount: number;
 }
 
@@ -26,6 +27,7 @@ export default function TradeConfirmModal({
   price,
   tradeType,
   quantity,
+  name,
 }: TradeConfirmModalProps) {
   const navigate = useNavigate();
   const panelRef = useRef<HTMLDivElement>(null);
@@ -211,6 +213,7 @@ export default function TradeConfirmModal({
         price={confirmedPrice}
         quantity={confirmedQuantity}
         tradeType={tradeType}
+        coinName={name}
       />
 
       <Toast
