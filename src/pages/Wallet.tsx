@@ -112,11 +112,12 @@ const Wallet = () => {
             ? coin.holdingPrice / coin.holdingQuantity
             : 0;
 
-        // 수익률 계산
-        const profitRate =
-          averageBuyPrice > 0
-            ? ((currentPrice - averageBuyPrice) / averageBuyPrice) * 100
-            : 0;
+        // 수익률 계산 수정
+        let profitRate = 0;
+        if (averageBuyPrice > 0) {
+          // 현재가와 평균 매수가의 차이를 백분율로 계산
+          profitRate = ((currentPrice - averageBuyPrice) / averageBuyPrice) * 100;
+        }
 
         return {
           ...coin,
