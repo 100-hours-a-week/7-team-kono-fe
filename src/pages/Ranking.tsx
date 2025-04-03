@@ -12,7 +12,6 @@ interface Rank {
   profit?: number;
   profitRate?: number;
   rank: number;
-  updatedAt: string;
 }
 
 type RankingPeriod = '일간' | '전체';
@@ -26,8 +25,7 @@ export default function Ranking() {
   const [myRank, setMyRank] = useState<Rank | null>(null);
   const [ranksDaily, setRanksDaily] = useState<Rank[]>([]);
   const [myRankDaily, setMyRankDaily] = useState<Rank | null>(null);
-  const [dailyUpdatedAt, setDailyUpdatedAt] = useState<string>('');
-  const [allUpdatedAt, setAllUpdatedAt] = useState<string>('');
+  const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
   const [isLoading, setIsLoading] = useState(true);
   const myUserRef = useRef<HTMLDivElement>(null);
 
@@ -50,9 +48,7 @@ export default function Ranking() {
       setRanksDaily(dailyRanks);
       setMyRank(myRankData?.[0] || null);
       setMyRankDaily(myRankDailyData?.[0] || null);
-      setDailyUpdatedAt(dailyRanks[0].updatedAt);
-      setAllUpdatedAt(allRanks[0].updatedAt)
-
+      setLastUpdated(new Date());
     } catch (error) {
       console.error('Failed to fetch rankings:', error);
     } finally {
@@ -249,13 +245,11 @@ export default function Ranking() {
 
       {/* 랭킹 기간 정보 */}
       <div className="bg-white p-4 border-b rounded-t-xl dark:bg-gray-800 dark:text-white mx-4 dark:border-gray-600">
-        <div className="text-gray-500 text-sm dark:text-gray-400 flex flex-col">
+        <div className="text-gray-500 text-sm dark:text-gray-400 flex justify-between items-center">
           <span>
             {activePeriod === '일간'
-              ? dailyUpdatedAt
-                ? `${format(new Date(dailyUpdatedAt), 'yyyy년 MM월 dd일 HH:mm')} 기준` : '업데이트 시간 정보 없음'
-              : allUpdatedAt
-                ? `${format(new Date(allUpdatedAt), 'yyyy년 MM월 dd일 HH:mm')} 기준` : '가입일부터 현재까지'}
+              ? `${format(lastUpdated, 'yyyy년 MM월 dd일 HH:mm')} 기준`
+              : '가입일부터 현재까지'}
           </span>
           {/* <button
             onClick={fetchRanks}
@@ -286,6 +280,7 @@ export default function Ranking() {
           >
             <div className="w-8 text-center font-bold mr-4">{user.rank}</div>
             <img
+              loading="lazy"
               src={user.profileImageUrl}
               alt={user.nickname}
               className="w-12 h-12 rounded-full mr-4 object-cover"
