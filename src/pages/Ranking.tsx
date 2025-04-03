@@ -4,6 +4,8 @@ import { getRanksAllMe, getRanksDaily, getRanksDailyMe } from '../api/ranking';
 import { getRanksAll } from '../api/ranking';
 import { format } from 'date-fns';
 import { formatCurrency } from '../utils/formatter';
+import {LazyLoadImage} from "react-lazy-load-image-component";
+import 'react-lazy-load-image-component/src/effects/blur.css'; // 블러 효과 스타일 (선택사항)
 
 interface Rank {
   nickname: string;
@@ -12,6 +14,7 @@ interface Rank {
   profit?: number;
   profitRate?: number;
   rank: number;
+  updatedAt: string;
 }
 
 type RankingPeriod = '일간' | '전체';
@@ -25,12 +28,19 @@ export default function Ranking() {
   const [myRank, setMyRank] = useState<Rank | null>(null);
   const [ranksDaily, setRanksDaily] = useState<Rank[]>([]);
   const [myRankDaily, setMyRankDaily] = useState<Rank | null>(null);
-  const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+  const [dailyUpdatedAt, setDailyUpdatedAt] = useState<string>('');
+  const [allUpdatedAt, setAllUpdatedAt] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
   const myUserRef = useRef<HTMLDivElement>(null);
 
   const REFRESH_INTERVAL = 5 * 60 * 1000; // 5분
   const PLACEHOLDER = 'https://static.upbit.com/logos/BTC.png';
+
+  // 이미지 URL 최적화 함수 (선택사항)
+  const optimizeImageUrl = (url: string) => {
+    if (!url || !url.includes('kakaocdn')) return url;
+    return url.replace('R640x640', 'R160x160'); // 더 작은 이미지 요청
+  };
 
   // 랭킹 데이터 가져오기
   const fetchRanks = async () => {
@@ -48,7 +58,9 @@ export default function Ranking() {
       setRanksDaily(dailyRanks);
       setMyRank(myRankData?.[0] || null);
       setMyRankDaily(myRankDailyData?.[0] || null);
-      setLastUpdated(new Date());
+      setDailyUpdatedAt(dailyRanks[0].updatedAt);
+      setAllUpdatedAt(allRanks[0].updatedAt)
+
     } catch (error) {
       console.error('Failed to fetch rankings:', error);
     } finally {
@@ -133,8 +145,8 @@ export default function Ranking() {
           {/* 2등 */}
           <div className="flex flex-col items-center">
             <div className="relative">
-              <img
-                src={topUsers[1]?.profileImageUrl}
+              <LazyLoadImage
+                src={optimizeImageUrl(topUsers[1]?.profileImageUrl)}
                 alt={topUsers[1]?.nickname}
                 className="w-16 h-16 rounded-full border-2 border-gray-300 object-cover"
                 onError={(e) => {
@@ -170,8 +182,8 @@ export default function Ranking() {
           {/* 1등 */}
           <div className="flex flex-col items-center -mt-4 ">
             <div className="relative">
-              <img
-                src={topUsers[0].profileImageUrl}
+              <LazyLoadImage
+                src={optimizeImageUrl(topUsers[0].profileImageUrl)}
                 alt={topUsers[0]?.nickname}
                 className="w-20 h-20 rounded-full border-2 border-yellow-400 object-cover"
                 onError={(e) => {
@@ -207,8 +219,8 @@ export default function Ranking() {
           {/* 3등 */}
           <div className="flex flex-col items-center">
             <div className="relative">
-              <img
-                src={topUsers[2].profileImageUrl}
+              <LazyLoadImage
+                src={optimizeImageUrl(topUsers[2].profileImageUrl)}
                 alt={topUsers[2]?.nickname}
                 className="w-16 h-16 rounded-full border-2 border-orange-400 object-cover"
                 onError={(e) => {
@@ -245,11 +257,13 @@ export default function Ranking() {
 
       {/* 랭킹 기간 정보 */}
       <div className="bg-white p-4 border-b rounded-t-xl dark:bg-gray-800 dark:text-white mx-4 dark:border-gray-600">
-        <div className="text-gray-500 text-sm dark:text-gray-400 flex justify-between items-center">
+        <div className="text-gray-500 text-sm dark:text-gray-400 flex flex-col">
           <span>
             {activePeriod === '일간'
-              ? `${format(lastUpdated, 'yyyy년 MM월 dd일 HH:mm')} 기준`
-              : '가입일부터 현재까지'}
+              ? dailyUpdatedAt
+                ? `${format(new Date(dailyUpdatedAt), 'yyyy년 MM월 dd일 HH:mm')} 기준` : '업데이트 시간 정보 없음'
+              : allUpdatedAt
+                ? `${format(new Date(allUpdatedAt), 'yyyy년 MM월 dd일 HH:mm')} 기준` : '가입일부터 현재까지'}
           </span>
           {/* <button
             onClick={fetchRanks}
@@ -279,9 +293,8 @@ export default function Ranking() {
             }`}
           >
             <div className="w-8 text-center font-bold mr-4">{user.rank}</div>
-            <img
-              loading="lazy"
-              src={user.profileImageUrl}
+            <LazyLoadImage
+              src={optimizeImageUrl(user.profileImageUrl)}
               alt={user.nickname}
               className="w-12 h-12 rounded-full mr-4 object-cover"
               onError={(e) => {
