@@ -22,6 +22,9 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Force install rollup native dep
+        run: npm install @rollup/rollup-linux-x64-gnu
+        
       - name: Build React App
         run: npm run build
 
