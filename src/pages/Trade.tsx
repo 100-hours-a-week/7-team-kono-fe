@@ -425,6 +425,7 @@ export default function Trade() {
         quantity={quantity}
         price={type === 'sell' && displayAmount === '최대' ? coin.price : coin.price}
         tradeType={type as TradeType}
+        name={coin.name}
       />
     </div>
   );
