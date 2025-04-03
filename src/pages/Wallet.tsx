@@ -423,7 +423,7 @@ const Wallet = () => {
                   </span>
                 </div>
                 <div className="text-sm text-gray-500">
-                  {coin.holdingQuantity} {coin.ticker}
+                  {coin.holdingQuantity.toFixed(5)} {coin.ticker}
                 </div>
               </div>
               <div className="text-right">
