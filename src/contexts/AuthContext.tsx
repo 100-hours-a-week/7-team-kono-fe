@@ -134,10 +134,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       console.log('URL에 인증 코드 감지. 로그인 완료 후 사용자 정보 로드 예정');
       console.log('인증 코드:', params.get('code'));
 
+      const cleanUrl = window.location.pathname; // 쿼리 파라미터 제거
+
       // 인증 코드가 있으면 쿠키가 설정되기까지 약간의 지연 후 로드
       setTimeout(() => {
-        loadUserInfo(false);
+        loadUserInfo(false).then(() => {
+          const redirectTo = localStorage.getItem('redirectAfterLogin') || '/';
+          window.location.replace(redirectTo);
+          localStorage.removeItem('redirectAfterLogin');
+        });
       }, 2000); // 2초로 증가
+      window.history.replaceState({}, document.title, cleanUrl);
     } else {
       loadUserInfo();
     }
