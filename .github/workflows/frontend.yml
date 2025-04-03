@@ -24,12 +24,12 @@ jobs:
 
       - name: Force install rollup native dep
         run: npm install @rollup/rollup-linux-x64-gnu
-        
+
       - name: Build React App
         run: npm run build
 
       - name: Deploy to S3
-        run: aws s3 sync ./build s3://kono-front --delete
+        run: aws s3 sync ./dist s3://kono-front --delete
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
