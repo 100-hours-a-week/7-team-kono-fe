@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from 'react';
 import axios from 'axios';
 import api from '../api/clients';
 import { API_ENDPOINTS } from '../config/apiEndpoints';
@@ -27,7 +33,9 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -41,13 +49,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       } else {
         console.log('인증 코드 감지 후 사용자 정보 다시 로드 중...');
       }
-      
+
       setLoading(true);
-      
+
       // 상대 경로로 API 요청 (Vite 프록시 사용)
       const apiUrl = '/api/v1/users/me';
       console.log('API 요청 URL (상대 경로):', apiUrl);
-      
+
       // 인증 정보와 함께 요청
       const res = await api.get(API_ENDPOINTS.GET_USER);
 
@@ -70,13 +78,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setError(null);
     } catch (err) {
       console.error('사용자 정보 로드 실패:', err);
-      
+
       // 오류 응답 상세 정보 기록
       if (axios.isAxiosError(err)) {
         if (err.response) {
           console.error('오류 상태 코드:', err.response.status);
           console.error('오류 응답 데이터:', err.response.data);
-          
+
           // 401 또는 403 오류는 인증 실패로 간주
           if (err.response.status === 401 || err.response.status === 403) {
             console.log('인증되지 않은 사용자');
@@ -88,12 +96,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           console.error('요청 내용:', {
             method: 'GET',
             url: '/api/v1/users/me',
-            withCredentials: true
+            withCredentials: true,
           });
         } else {
           console.error('요청 설정 중 오류 발생:', err.message);
         }
-        
+
         // 네트워크 오류이고 첫 로드이며 아직 재시도하지 않은 경우 짧은 지연 후 재시도
         if (err.code === 'ERR_NETWORK' && isInitialLoad && !isRetrying) {
           console.log('네트워크 오류로 3초 후 재시도합니다...');
@@ -104,7 +112,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           }, 3000);
         }
       }
-      
+
       setError('Failed to load user info');
       if (!isRetrying) {
         setLoading(false);
@@ -121,26 +129,33 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     // URL에 카카오 인증 코드가 있는지 확인 (로그인 직후)
     const params = new URLSearchParams(window.location.search);
     const hasAuthCode = params.has('code');
-    
+
     if (hasAuthCode) {
       console.log('URL에 인증 코드 감지. 로그인 완료 후 사용자 정보 로드 예정');
       console.log('인증 코드:', params.get('code'));
-      
+
+      const cleanUrl = window.location.pathname; // 쿼리 파라미터 제거
+
       // 인증 코드가 있으면 쿠키가 설정되기까지 약간의 지연 후 로드
       setTimeout(() => {
-        loadUserInfo(false);
+        loadUserInfo(false).then(() => {
+          const redirectTo = localStorage.getItem('redirectAfterLogin') || '/';
+          window.location.replace(redirectTo);
+          localStorage.removeItem('redirectAfterLogin');
+        });
       }, 2000); // 2초로 증가
+      window.history.replaceState({}, document.title, cleanUrl);
     } else {
       loadUserInfo();
     }
-    
+
     // 인증 코드 처리 후 리디렉션 처리
     if (hasAuthCode) {
       // 인증 코드 제거를 위한 URL 정리 (필요시)
       const currentUrl = window.location.href;
       const baseUrl = currentUrl.split('?')[0];
       const cleanUrl = baseUrl;
-      
+
       // 브라우저 히스토리 교체 (뒤로가기 시 코드 노출 방지)
       window.history.replaceState({}, document.title, cleanUrl);
     }
@@ -149,9 +164,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   // 로그인 함수 - 카카오 로그인 페이지로 리다이렉트
   const login = () => {
     console.log('카카오 로그인 시작...');
-    // 상대 경로로 리다이렉트 (Vite 프록시 사용)
-    // prompt=login 파라미터 추가: 항상 로그인 화면 표시
-    const kakaoLoginPath = '/oauth2/authorization/kakao?prompt=login';
+    const kakaoLoginPath = '/oauth2/authorization/kakao';
     console.log('로그인 URL (상대 경로):', kakaoLoginPath);
     window.location.href = kakaoLoginPath;
   };
@@ -160,14 +173,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const logout = async () => {
     try {
       console.log('로그아웃 요청 시작...');
-      
+
       // 로컬 상태 초기화
       setUser(null);
-      
+
       // 서버에 로그아웃 요청
       await api.post(API_ENDPOINTS.LOGOUT);
       console.log('로그아웃 성공');
-      
     } catch (err) {
       // 에러가 발생해도 로컬에서 로그아웃 처리는 완료됨
       console.error('서버 로그아웃 요청 실패:', err);
@@ -183,14 +195,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const withdraw = async () => {
     try {
       console.log('회원탈퇴 요청 시작...');
-      
+
       // 서버에 회원탈퇴 요청
       await api.delete(API_ENDPOINTS.WITHDRAW);
-      
+
       // 로컬 상태 초기화
       setUser(null);
       console.log('회원탈퇴 성공');
-      
+
       // 로그인 페이지로 리다이렉트
       window.location.href = '/login';
     } catch (err) {
@@ -208,11 +220,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   // 인증 상태가 변경될 때마다 로깅
   useEffect(() => {
-    console.log('인증 상태 변경:', { 
-      isAuthenticated: !!user, 
-      loading, 
+    console.log('인증 상태 변경:', {
+      isAuthenticated: !!user,
+      loading,
       hasUser: !!user,
-      userData: user 
+      userData: user,
     });
   }, [user, loading]);
 
@@ -240,4 +252,4 @@ export const useAuth = (): AuthContextType => {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
-}; 
+};
