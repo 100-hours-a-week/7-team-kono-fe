@@ -11,17 +11,10 @@ interface ProfileData {
   nickname: string;
   profileImageUrl: string;
   id?: number;
-  cashBalance?: number;
 }
 
-// interface User {
-//   nickname: string;
-//   profileImage: string;
-//   balance?: number;
-// }
-
 const Profile: React.FC = () => {
-  const { user } = useAuth(); // AuthContext에서 사용자 정보 가져오기
+  const { user, updateUser } = useAuth();
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -30,11 +23,9 @@ const Profile: React.FC = () => {
   const [imageUploading, setImageUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // 더미 프로필 데이터
   const dummyProfile: ProfileData = {
-    nickname: '사용자',
-    profileImageUrl: 'https://via.placeholder.com/150',
-    cashBalance: 0
+    nickname: '닉네임',
+    profileImageUrl: 'https://static.upbit.com/logos/BTC.png',
   };
 
   // 프로필 정보 로드
@@ -42,25 +33,22 @@ const Profile: React.FC = () => {
     const loadProfile = async () => {
       try {
         setLoading(true);
-        
+
         // 1. AuthContext의 사용자 정보가 있으면 사용
         if (user) {
           setProfile({
             nickname: user.nickname,
             profileImageUrl: user.profileImageUrl,
-            id: user.id,
-            cashBalance: user.cashBalance
           });
           setNickname(user.nickname);
           setError(false);
           return;
         }
-        
+
         // 2. AuthContext에 사용자 정보가 없으면 API 호출
         const data = await getUserProfile();
         if (data) {
-          setProfile(data.profileImageUrl);
-          setNickname(data.nickname);
+          setProfile(data);
           setError(false);
         } else {
           // 데이터가 없는 경우 더미 데이터 사용
@@ -102,6 +90,13 @@ const Profile: React.FC = () => {
       const updatedProfile = await getUserProfile();
       setProfile(updatedProfile);
 
+      // AuthContext의 사용자 정보도 업데이트
+      if (updatedProfile) {
+        updateUser({
+          profileImageUrl: updatedProfile.profileImageUrl,
+        });
+      }
+
       toast.success('프로필 이미지가 업데이트되었습니다.');
     } catch (err) {
       toast.error('이미지 업로드에 실패했습니다.');
@@ -119,19 +114,43 @@ const Profile: React.FC = () => {
       toast.error('닉네임을 입력해주세요.');
       return;
     }
-
     try {
       await updateNickname(nickname);
-
-      // 프로필 정보 다시 로드
       const updatedProfile = await getUserProfile();
       setProfile(updatedProfile);
+      // AuthContext 사용자 정보 업데이트
+      if (updatedProfile) {
+        updateUser({
+          nickname: updatedProfile.nickname,
+        });
+      }
+
 
       setIsEditingNickname(false);
       toast.success('닉네임이 업데이트되었습니다.');
-    } catch (err) {
-      toast.error('닉네임 변경에 실패했습니다.');
-      console.error(err);
+    }
+
+    catch (error: any) {
+
+      const { status, message } = error;
+
+      switch (status) {
+        case 400:
+          toast.error(`${message}`);
+          break;
+        case 401:
+          toast.error(`${message}`);
+          break;
+        case 409:
+          toast.error(`${message}`);
+          break;
+        case 500:
+          toast.error(`${message}`);
+          break;
+        default:
+          toast.error(`[${status}] ${message}`);
+      }
+      console.error('닉네임 변경 실패:', { status, message });
     }
   };
 
@@ -155,6 +174,16 @@ const Profile: React.FC = () => {
 
   return (
     <div className="p-4 max-w-md mx-auto">
+      {/* 오류 메시지 표시 영역 */}
+      {error && (
+        <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
+          <p className="text-center">
+            {
+              '프로필 정보를 불러오는 중 문제가 발생했습니다. 임시 프로필이 표시됩니다.'
+            }
+          </p>
+        </div>
+      )}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
         <div className="text-center">
           {/* 프로필 이미지 영역 */}
@@ -177,9 +206,23 @@ const Profile: React.FC = () => {
                 <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-white"></div>
               </div>
             )}
-            <div className="absolute bottom-0 right-0 bg-blue-500 rounded-full p-2 cursor-pointer" onClick={handleImageClick}>
-              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+            <div
+              className="absolute bottom-0 right-0 bg-blue-500 rounded-full p-2 cursor-pointer"
+              onClick={handleImageClick}
+            >
+              <svg
+                className="w-4 h-4 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                ></path>
               </svg>
             </div>
           </div>
@@ -222,17 +265,23 @@ const Profile: React.FC = () => {
                 onClick={() => setIsEditingNickname(true)}
                 className="text-blue-500 hover:text-blue-700"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                  ></path>
                 </svg>
               </button>
             </div>
           )}
-
-          {/* 보유 금액 영역 */}
-          <div className="text-gray-600 dark:text-gray-300">
-            <p>보유 금액: {displayProfile.cashBalance?.toLocaleString() || 0} 원</p>
-          </div>
         </div>
       </div>
     </div>

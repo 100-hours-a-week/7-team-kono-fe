@@ -7,10 +7,11 @@ interface PurchaseCompleteModalProps {
   onClose: () => void;
   onConfirm: () => void;
   ticker: string;
-  amount: string;
+  amount: number;
   price: number;
   tradeType: 'buy' | 'sell';
   quantity: number;
+  coinName: string;
 }
 
 export default function PurchaseCompleteModal({
@@ -22,6 +23,7 @@ export default function PurchaseCompleteModal({
   price,
   tradeType,
   quantity,
+  coinName = ticker, // 기본값으로 ticker
 }: PurchaseCompleteModalProps) {
   return (
     <Transition.Root show={isOpen} as={Fragment}>
@@ -64,7 +66,7 @@ export default function PurchaseCompleteModal({
                       as="h3"
                       className="text-2xl font-bold text-center"
                     >
-                      비트코인 {tradeType === 'buy' ? '구매' : '판매'} 완료
+                      {coinName} {tradeType === 'buy' ? '구매' : '판매'} 완료
                     </Dialog.Title>
                   </div>
 

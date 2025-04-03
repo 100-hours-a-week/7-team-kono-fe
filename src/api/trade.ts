@@ -8,7 +8,7 @@ export interface OrderRequest {
   ticker: string;
   orderType: OrderType;
   orderAmount?: number; // 매수 시 사용할 금액 (원화)
-  quantity?: number; // 매도 시 사용할 수량
+  orderQuantity?: number; // 매도 시 사용할 수량
 }
 
 // 주문 응답 인터페이스
@@ -53,12 +53,14 @@ export const marketBuy = async (
 export const marketSell = async (
   ticker: string,
   amount: number,
+  orderQuantity?: number,
 ): Promise<OrderResponse | null> => {
   try {
     const orderData: OrderRequest = {
       ticker,
       orderType: 'sell',
-      orderAmount: amount,
+      orderAmount: amount || undefined,
+      orderQuantity: orderQuantity || undefined,
     };
 
     const response = await api.post(API_ENDPOINTS.POST_ORDER, orderData);

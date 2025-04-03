@@ -20,6 +20,18 @@ import Layout from './components/layout/Layout';
 import AuthLayout from './components/layout/AuthLayout';
 import KakoRedirectHandler from './components/auth/KakoRedirectHandler.tsx';
 
+import * as Sentry from "@sentry/react";
+
+Sentry.init({
+  dsn: "https://9ba5351ae2788a1039d336aeb4b88082@o4509077698707456.ingest.us.sentry.io/4509077976449024",
+  integrations: [
+    Sentry.browserTracingIntegration()
+  ],
+  // Tracing
+  tracesSampleRate: 1.0, //  Capture 100% of the transactions
+  // Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
+  tracePropagationTargets: ["localhost", /^https:\/\/dev.playkono.com\.io\/api/]
+});
 const router = createBrowserRouter([
   {
     path: '/',
@@ -92,11 +104,11 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  // <React.StrictMode>
-  <ThemeProvider>
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
-  </ThemeProvider>,
-  // </React.StrictMode>
+  <React.StrictMode>
+    <ThemeProvider>
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
+    </ThemeProvider>
+  </React.StrictMode>,
 );

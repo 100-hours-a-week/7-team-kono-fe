@@ -5,9 +5,10 @@ import Header from '../components/layout/Header';
 import TradingViewWidget from '../components/TradingViewWidget';
 import PriceInfo from '../components/PriceInfo'; // 수정된 PriceInfo 컴포넌트 임포트
 import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
-import { formatCurrency, formatVolume } from '../utils/formatter';
+import { formatAmount, formatCurrency } from '../utils/formatter';
 import { isFavoriteCoin, addFavorite, removeFavorite } from '../api/favorite';
 import { getCoinName } from '../api/coin';
+import { getQuantityByTicker } from '../api/wallet';
 
 // 코인 정보 인터페이스
 interface CoinData {
@@ -66,22 +67,24 @@ export default function CoinDetail() {
   const [error, setError] = useState<string | null>(null);
   const [timeframe, setTimeframe] = useState<'1D' | '1W' | '1M' | '1Y'>('1D');
   const [isFavorite, setIsFavorite] = useState(false);
+  const [isHolding, setIsHolding] = useState(false);
 
   // ticker가 undefined일 경우 기본값으로 'BTC' 사용
   const symbolToUse = ticker || 'BTC';
 
   // useUpbitWebSocket 훅 사용
-  const { tickerData, isConnected } = useUpbitWebSocket([symbolToUse]);
+  // const { tickerData, isConnected } = useUpbitWebSocket([symbolToUse]);
+  const { tickerData } = useUpbitWebSocket([symbolToUse]);
 
-  // 예시 코인 데이터 설정 (실제로는 API에서 가져옴)
+  // 코인 데이터 설정
   useEffect(() => {
-    // 실제 구현에서는 API를 통해 코인 정보를 가져오는 로직 필요
     const fetchCoinData = async () => {
       try {
         const name = await getCoinName(symbolToUse);
+        const isFavorite = await isFavoriteCoin(symbolToUse);
         const exampleCoin: CoinData = {
           id: symbolToUse.toLowerCase(),
-          name: name,
+          name: name ?? '',
           symbol: symbolToUse,
           price: 0, // 웹소켓에서 업데이트됨
           priceChange24h: 0, // 웹소켓에서 업데이트됨
@@ -89,7 +92,7 @@ export default function CoinDetail() {
           marketCap: 0,
           high24h: 0, // 웹소켓에서 업데이트됨
           low24h: 0, // 웹소켓에서 업데이트됨
-          isFavorite: false, // 로컬 스토리지 등에서 관리 가능
+          isFavorite: isFavorite,
         };
 
         setCoin(exampleCoin);
@@ -112,6 +115,17 @@ export default function CoinDetail() {
       }
     };
     checkFavoriteStatus();
+  }, [symbolToUse]);
+
+  // 초기 코인 코유 여부 확인
+  useEffect(() => {
+    const checkHoldingStatus = async () => {
+      if (symbolToUse) {
+        const holding = await getQuantityByTicker(symbolToUse);
+        setIsHolding(holding > 0);
+      }
+    };
+    checkHoldingStatus();
   }, [symbolToUse]);
 
   // 즐겨찾기 토글 함수
@@ -188,8 +202,6 @@ export default function CoinDetail() {
         symbol={symbolToUse}
         tickerData={tickerData}
         name={coin.name}
-        onFavoriteToggle={toggleFavorite}
-        isFavorite={isFavorite}
       />
 
       {/* 차트 타임프레임 선택 */}
@@ -232,7 +244,7 @@ export default function CoinDetail() {
             <div className="flex justify-between">
               <span className="text-gray-500">거래대금 (24h)</span>
               <span>
-                {formatVolume(
+                {formatAmount(
                   tickerData[`KRW-${symbolToUse}`].acc_trade_price_24h,
                 )}{' '}
               </span>
@@ -260,7 +272,9 @@ export default function CoinDetail() {
             매수
           </button>
           <button
-            className="flex-1 py-3 bg-blue-500 text-white rounded-xl font-medium"
+            className={`flex-1 py-3 text-white rounded-xl font-medium ${
+              isHolding ? 'bg-blue-500' : 'hidden'
+            }`}
             onClick={() => navigate(`/coins/${ticker}/sell`)}
           >
             매도

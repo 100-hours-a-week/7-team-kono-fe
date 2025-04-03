@@ -21,6 +21,14 @@ export default function Transaction() {
         setLoading(true);
         const data = await getTransactions();
         console.log('거래 내역 데이터:', data); // 데이터 확인용 로그
+        
+        // 날짜 형식 디버깅을 위한 코드 추가
+        if (data && data.length > 0) {
+          console.log('첫 번째 거래의 날짜:', data[0].createdAt);
+          console.log('날짜 타입:', typeof data[0].createdAt);
+          console.log('날짜 변환 결과:', formatDate(data[0].createdAt));
+        }
+        
         setTransactions(data);
         setError(null);
       } catch (error) {
@@ -163,7 +171,7 @@ export default function Transaction() {
 
               <div className="flex justify-between text-sm">
                 <span className="text-gray-500 dark:text-gray-400">날짜</span>
-                <span>{formatDate(transaction.createAt)}</span>
+                <span>{formatDate(transaction.createdAt)}</span>
               </div>
             </div>
           ))}

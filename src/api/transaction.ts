@@ -9,19 +9,17 @@ export type Transaction = {
   orderQuantity: number;
   orderPrice: number;
   orderAmount: number;
-  createAt: string;
+  createdAt: string;
 };
 
 /**
  * 특정 사용자의 거래 내역을 조회하는 함수
  * @returns 사용자의 거래 내역 배열
  */
-export const getTransactions = async (
-): Promise<Transaction[]> => {
+export const getTransactions = async (): Promise<Transaction[]> => {
   try {
-    const res= await api.get(API_ENDPOINTS.GET_TRANSACTION);
+    const res = await api.get(API_ENDPOINTS.GET_TRANSACTION);
     return res.data.data;
-
   } catch (error) {
     console.error(`거래 내역 조회 오류:`, error);
     return [];
@@ -30,17 +28,15 @@ export const getTransactions = async (
 
 /**
  * 특정 유형의 거래 내역을 조회하는 함수 (예: 매수, 매도)
- * @param nickname 사용자 닉네임 (기본값: 'test')
  * @param type 거래 유형 ('buy' 또는 'sell')
  * @returns 해당 유형의 거래 내역 배열
  */
 export const getTransactionsByType = async (
-  nickname: string = 'test',
   type: 'buy' | 'sell',
 ): Promise<Transaction[]> => {
   try {
-    const transactions = await getTransactionsByNickname(nickname);
-    return transactions.filter((transaction) => transaction.type === type);
+    const transactions = await getTransactions();
+    return transactions.filter((transaction) => transaction.orderType === type);
   } catch (error) {
     console.error(`${type} 유형 거래 내역 조회 오류:`, error);
     return [];

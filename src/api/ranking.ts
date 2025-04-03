@@ -7,6 +7,7 @@ interface Rank {
   badgeImageUrl?: string;
   totalAssets: number;
   rank: number;
+  updatedAt: string;
 }
 
 interface RankDaily {
@@ -15,15 +16,18 @@ interface RankDaily {
   badgeImageUrl?: string;
   profileRate: number;
   rank: number;
+  updatedAt: string;
 }
 
 //일간 랭킹 조회
 export const getRanksDaily = async (): Promise<RankDaily[]> => {
   try {
     const res = await api.get(API_ENDPOINTS.GET_RANK_DAILY);
+    console.log('daily rank', res.data);
     return res.data.data;
   } catch (error) {
-    console.error('Failed to initialize favorites:', error);
+    console.error('Failed to get daily ranks:', error);
+    return [];
   }
 };
 
@@ -31,9 +35,11 @@ export const getRanksDaily = async (): Promise<RankDaily[]> => {
 export const getRanksDailyMe = async (): Promise<RankDaily[]> => {
   try {
     const res = await api.get(API_ENDPOINTS.GET_RANK_DAILY_ME);
+    console.log('rank daily me', res.data);
     return res.data.data;
   } catch (error) {
-    console.error('Failed to initialize favorites:', error);
+    console.error('Failed to get user daily rank:', error);
+    return [];
   }
 };
 
@@ -41,9 +47,10 @@ export const getRanksDailyMe = async (): Promise<RankDaily[]> => {
 export const getRanksAll = async (): Promise<Rank[]> => {
   try {
     const res = await api.get(API_ENDPOINTS.GET_RANK_ALL);
+    console.log('rank all', res.data);
     return res.data.data;
   } catch (error) {
-    console.error('Failed to initialize favorites:', error);
+    console.error('Failed to get ranks:', error);
     return [];
   }
 };
@@ -52,8 +59,10 @@ export const getRanksAll = async (): Promise<Rank[]> => {
 export const getRanksAllMe = async (): Promise<Rank[]> => {
   try {
     const res = await api.get(API_ENDPOINTS.GET_RANK_ALL_ME);
+    console.log('rank all me', res.data);
     return res.data.data;
   } catch (error) {
-    console.error('Failed to initialize favorites:', error);
+    console.error('Failed to get user ranks:', error);
+    return [];
   }
 };

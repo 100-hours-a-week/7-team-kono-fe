@@ -1,19 +1,20 @@
 import api from './clients';
 import { API_ENDPOINTS } from '../config/apiEndpoints';
 
-interface FavoriteCoin {
-  id: number;
-  ticker: string;
-  nickname: string;
-}
+// interface FavoriteCoin {
+//   id: number;
+//   ticker: string;
+//   nickname: string;
+// }
 
 // 좋아요 목록 가져오기
-export const getFavoriteList = async () => {
+export const getFavoriteList = async (): Promise<[]> => {
   try {
     const res = await api.get(API_ENDPOINTS.GET_FAVORITE);
-    return res.data;
+    return res.data.data;
   } catch (error) {
     console.error('Failed to initialize favorites:', error);
+    return [];
   }
 };
 
@@ -33,7 +34,6 @@ export const addFavorite = async (ticker: string) => {
   try {
     await api.post(API_ENDPOINTS.POST_FAVORITE(ticker));
     return true;
-
   } catch (error) {
     console.error(`관심 코인 추가 오류 (${ticker}):`, error);
     return false;

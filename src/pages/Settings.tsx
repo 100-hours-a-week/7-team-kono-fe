@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/layout/Header';
 import { ROUTES } from '../config/routes';
-import { THEMES } from '../config/constants';
 import {
   FaGithub,
   FaUser,
@@ -13,14 +12,13 @@ import {
 } from 'react-icons/fa';
 import DarkModeToggle from '../components/theme/DarkModeToggle';
 import Modal from '../components/modal/Modal';
-import Toast from '../components/common/Toast';
-import { useTheme } from '../contexts/ThemeContext';
+import { withdrawUser } from '../api/user';
+import { toast } from 'react-toastify';
+import { useAuth } from '../contexts/AuthContext';
 
 const Settings = () => {
   const navigate = useNavigate();
-  const { darkMode } = useTheme();
-  const [notifications, setNotifications] = useState(true);
-  const [biometricLogin, setBiometricLogin] = useState(false);
+  const { logout } = useAuth();
   const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
 
   const openGitHubWiki = () => {
@@ -30,16 +28,14 @@ const Settings = () => {
     );
   };
 
-  const handleLogout = () => {
-    // 실제 구현 시 로그아웃 로직 추가
-    // 예: 토큰 삭제, 상태 초기화 등
-
-    // 로컬 스토리지에서 토큰 제거 (예시)
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-
-    // 로그인 페이지로 리다이렉트
-    navigate(ROUTES.AUTH.LOGIN);
+  const handleLogout = async () => {
+    try {
+      await logout();
+      toast.success('로그아웃 되었습니다.');
+    } catch (err) {
+      console.error('로그아웃 실패:', err);
+      toast.error('로그아웃 중 오류가 발생했습니다.');
+    }
   };
 
   const handleDeleteAccount = () => {
@@ -50,12 +46,23 @@ const Settings = () => {
     setShowDeleteAccountModal(false);
   };
 
-  const confirmDeleteAccount = () => {
-    // 회원 탈퇴 로직 구현
-
-    closeDeleteAccountModal();
-    // 로그아웃 및 홈 화면으로 리다이렉트
-    handleLogout();
+  const confirmDeleteAccount = async () => {
+    try {
+      await withdrawUser();
+      toast.success('회원탈퇴가 완료되었습니다.');
+      closeDeleteAccountModal();
+      window.location.href = ROUTES.AUTH.LOGIN;
+    } catch (err: any) {
+      console.error('회원탈퇴 실패:', err);
+      if (err.response?.status === 401) {
+        toast.error('로그인이 필요합니다.');
+      } else if (err.response?.status === 403) {
+        toast.error('탈퇴 권한이 없습니다.');
+      } else {
+        toast.error('회원탈퇴 처리 중 오류가 발생했습니다.');
+      }
+      closeDeleteAccountModal();
+    }
   };
 
   return (

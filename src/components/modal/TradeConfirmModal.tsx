@@ -1,4 +1,4 @@
-import { Fragment, useRef, useState, useEffect } from 'react';
+import { Fragment, useRef, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import Toast from '../common/Toast';
@@ -6,15 +6,17 @@ import PurchaseCompleteModal from './PurchaseCompleteModal';
 import { useNavigate } from 'react-router-dom';
 import { formatAmount, formatCurrency } from '../../utils/formatter';
 import { marketBuy, marketSell } from '../../api/trade';
+
 interface TradeConfirmModalProps {
   isOpen: boolean;
   onClose: () => void;
   ticker: string;
-  amount: number;
-  price: number;
+  amount: number | undefined;
+  price: number | null;
   quantity: number;
   tradeType: 'buy' | 'sell';
-  totalAmount: number;
+  name: string;
+  // totalAmount: number;
 }
 
 export default function TradeConfirmModal({
@@ -25,32 +27,40 @@ export default function TradeConfirmModal({
   price,
   tradeType,
   quantity,
+  name,
 }: TradeConfirmModalProps) {
   const navigate = useNavigate();
   const panelRef = useRef<HTMLDivElement>(null);
   const [showComplete, setShowComplete] = useState(false);
   const [showToast, setShowToast] = useState(false);
-  const [totalPrice, setTotalPrice] = useState(0);
-  const [confirmedPrice, setConfirmedPrice] = useState('');
-  const [confirmedQuantity, setConfirmedQuantity] = useState('');
+  const [confirmedPrice, setConfirmedPrice] = useState(0);
+  const [confirmedQuantity, setConfirmedQuantity] = useState(0);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   // 값이 없을 때의 기본값 처리
   // const safeAmount = amount || 0;
   // const safePrice = price || 0;
 
   const handleTrade = async () => {
+    if (isProcessing) return;
     try {
-      if(tradeType === 'buy') {
-        await marketBuy(ticker, amount);
-      } else if(tradeType === 'sell') {
-        await marketSell(ticker, amount);
+      setIsProcessing(true);
+      if (tradeType === 'buy') {
+        await marketBuy(ticker, amount || 0);
+      } else if (tradeType === 'sell') {
+        if (amount === null) {
+          await marketSell(ticker, 0, quantity);
+        } else {
+          await marketSell(ticker, amount || 0, quantity);
+        }
       }
       onClose();
       setShowComplete(true);
     } catch (error) {
       console.error('거래 실패:', error);
-      // 에러 처리 (예: 에러 토스트 메시지 표시)
-      setShowToast(true);
+      setShowToast(true); // 에러 토스트 메시지 표시
+    } finally {
+      setIsProcessing(false); // 처리 완료 플래그 리셋
     }
   };
 
@@ -69,8 +79,8 @@ export default function TradeConfirmModal({
   };
 
   const handleConfirm = () => {
-    setConfirmedPrice(price.toString() || '0');
-    setConfirmedQuantity(quantity.toString() || '0');
+    setConfirmedPrice(price || 0);
+    setConfirmedQuantity(quantity);
 
     handleTrade();
   };
@@ -140,7 +150,7 @@ export default function TradeConfirmModal({
                           <span className="text-gray-500 dark:text-gray-400">
                             1 {ticker} 가격
                           </span>
-                          <span>{formatCurrency(price)}</span>
+                          <span>{formatCurrency(price || 0)}</span>
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-gray-500 dark:text-gray-400">
@@ -155,7 +165,7 @@ export default function TradeConfirmModal({
                             총 예상 {tradeType === 'buy' ? '구매' : '판매'} 금액
                           </span>
                           <span className="font-medium text-lg">
-                            {formatCurrency(amount)}
+                            {formatCurrency(amount || 0)}
                           </span>
                         </div>
                       </div>
@@ -174,10 +184,15 @@ export default function TradeConfirmModal({
                             tradeType === 'buy'
                               ? 'bg-red-500 dark:bg-red-600 dark:hover:bg-red-700'
                               : 'bg-blue-500 dark:bg-blue-600 dark:hover:bg-blue-700'
-                          }`}
+                          } ${isProcessing ? 'opacity-50 cursor-not-allowed' : ''}`}
                           onClick={handleConfirm}
+                          disabled={isProcessing}
                         >
-                          {tradeType === 'buy' ? '구매' : '판매'}
+                          {isProcessing
+                            ? '처리중...'
+                            : tradeType === 'buy'
+                              ? '구매'
+                              : '판매'}
                         </button>
                       </div>
                     </div>
@@ -194,10 +209,11 @@ export default function TradeConfirmModal({
         onClose={() => setShowComplete(false)}
         onConfirm={handleCompleteConfirm}
         ticker={ticker}
-        amount={amount.toString() || '0'}
+        amount={amount || 0}
         price={confirmedPrice}
         quantity={confirmedQuantity}
         tradeType={tradeType}
+        coinName={name}
       />
 
       <Toast

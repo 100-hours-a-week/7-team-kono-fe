@@ -1,5 +1,7 @@
+import { parseISO, format } from 'date-fns';
+
 /**
- * 숫자를 통화 형식으로 포맷팅합니다.
+ * 숫자를 통화 형식으로 포맷팅
  * 데이터 표기 기준에 따라 소수점 여섯번째 자리까지 표기하며, 소수점이 0인 경우 생략합니다.
  * @param value 포맷팅할 숫자
  * @param currency 통화 단위 (기본값: 'KRW')
@@ -12,6 +14,7 @@ export const formatCurrency = (
   currency: string = 'KRW',
   showCurrency: boolean = true,
   showSign: boolean = false,
+  showDecimal: boolean = false,
 ): string => {
   // 부호 처리
   const sign = showSign && value > 0 ? '+' : '';
@@ -19,7 +22,11 @@ export const formatCurrency = (
 
   // 소수점 처리 로직
   let formattedValue: string;
-  if (Number.isInteger(absValue)) {
+
+  if (!showDecimal) {
+    // 소수점 완전히 생략하고 정수만 표시
+    formattedValue = Math.floor(absValue).toLocaleString('ko-KR');
+  } else if (Number.isInteger(absValue)) {
     // 정수인 경우 소수점 표시 안함
     formattedValue = absValue.toLocaleString('ko-KR');
   } else {
@@ -60,7 +67,7 @@ export const formatCurrency = (
 };
 
 /**
- * 거래량을 K, M, B 단위로 포맷팅합니다.
+ * 거래량을 K, M, B 단위로 포맷팅
  */
 export const formatVolume = (value: number): string => {
   if (value >= 1_000_000_000) {
@@ -74,21 +81,45 @@ export const formatVolume = (value: number): string => {
 };
 
 /**
- * 날짜를 표기 기준에 맞게 포맷팅합니다. (yy-MM-dd HH:mm)
- * @param date 포맷팅할 Date 객체
- * @returns 'yy-MM-dd HH:mm' 형식의 문자열
+ * 날짜를 표기 기준에 맞게 포맷팅
+ * @param date 포맷팅할 Date 객체 또는 날짜 문자열
+ * @returns 'YYYY.MM.DD HH:mm' 형식의 문자열
  */
 export const formatDate = (date: string | Date) => {
-  const dateObj = typeof date === 'string' ? new Date(date) : date;
-  
   try {
-    const year = dateObj.getFullYear();
-    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-    const day = String(dateObj.getDate()).padStart(2, '0');
-    const hours = String(dateObj.getHours()).padStart(2, '0');
-    const minutes = String(dateObj.getMinutes()).padStart(2, '0');
+    // 빈 값 체크
+    if (date === null || date === undefined || date === '') {
+      return '날짜 없음';
+    }
 
-    return `${year}.${month}.${day} ${hours}:${minutes}`;
+    let dateObj: Date;
+
+    if (typeof date === 'string') {
+      // 단순히 parseISO로 파싱 시도
+      dateObj = parseISO(date);
+
+      // 유효하지 않은 경우 대체 방법 시도
+      if (isNaN(dateObj.getTime())) {
+        console.log('첫 번째 파싱 시도 실패, 대체 방법 시도:', date);
+        // ISO 형식에 Z 추가 시도
+        if (date.includes('T') && !date.includes('Z') && !date.includes('+')) {
+          dateObj = new Date(date);
+        } else {
+          // 마지막으로 그냥 Date 생성자 시도
+          dateObj = new Date(date);
+        }
+      }
+    } else {
+      dateObj = date;
+    }
+
+    // 여전히 유효하지 않은 경우
+    if (isNaN(dateObj.getTime())) {
+      console.error('유효하지 않은 날짜:', date);
+      return '유효하지 않은 날짜';
+    }
+
+    return format(dateObj, 'yyyy.MM.dd HH:mm');
   } catch (error) {
     console.error('날짜 형식 변환 오류:', error);
     return '날짜 형식 오류';
@@ -96,7 +127,7 @@ export const formatDate = (date: string | Date) => {
 };
 
 /**
- * 가격 변동률을 표기 기준에 맞게 포맷팅합니다. (소수점 둘째 자리까지, 소수점이 0인 경우 생략)
+ * 가격 변동률을 표기 기준에 맞게 포맷팅 (소수점 둘째 자리까지, 소수점이 0인 경우 생략)
  * @param change 변동률 (%)
  * @returns 형식의 문자열 예: '50%' 또는 '50.45%'
  */
@@ -125,7 +156,7 @@ export const formatPriceChange = (change: number): string => {
 };
 
 /**
- * 소수점이 있는 숫자를 포맷팅합니다.
+ * 소수점이 있는 숫자를 포맷팅
  * @param value 포맷팅할 숫자
  * @param decimals 소수점 자릿수 (기본값: 2)
  * @param removeTrailingZeros 소수점 뒤의 0 제거 여부 (기본값: false)
@@ -155,7 +186,7 @@ export const formatDecimal = (
 };
 
 /**
- * 금액에 단위를 붙여 읽기 쉬운 형태로 변환합니다.
+ * 금액에 단위를 붙여 읽기 쉬운 형태로 변환
  * @param value 변환할 금액
  * @param showUnit 단위 표시 여부 (기본값: true)
  */
@@ -174,7 +205,7 @@ export const formatAmount = (
 };
 
 /**
- * 퍼센트 값을 표기 기준에 맞게 포맷팅합니다. (소수점 둘째 자리까지)
+ * 퍼센트 값을 표기 기준에 맞게 포맷팅 (소수점 둘째 자리까지)
  * @param value 포맷팅할 퍼센트 값 (0.5 = 50%)
  * @returns 형식의 문자열 예: '50.00%'
  */

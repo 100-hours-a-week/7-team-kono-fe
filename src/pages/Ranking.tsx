@@ -3,14 +3,18 @@ import Header from '../components/layout/Header';
 import { getRanksAllMe, getRanksDaily, getRanksDailyMe } from '../api/ranking';
 import { getRanksAll } from '../api/ranking';
 import { format } from 'date-fns';
+import { formatCurrency } from '../utils/formatter';
+import {LazyLoadImage} from "react-lazy-load-image-component";
+import 'react-lazy-load-image-component/src/effects/blur.css'; // 블러 효과 스타일 (선택사항)
 
 interface Rank {
   nickname: string;
   profileImageUrl: string;
   badgeImageUrl?: string;
-  totalAsset?: number;
+  profit?: number;
   profitRate?: number;
   rank: number;
+  updatedAt: string;
 }
 
 type RankingPeriod = '일간' | '전체';
@@ -24,25 +28,19 @@ export default function Ranking() {
   const [myRank, setMyRank] = useState<Rank | null>(null);
   const [ranksDaily, setRanksDaily] = useState<Rank[]>([]);
   const [myRankDaily, setMyRankDaily] = useState<Rank | null>(null);
-  const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+  const [dailyUpdatedAt, setDailyUpdatedAt] = useState<string>('');
+  const [allUpdatedAt, setAllUpdatedAt] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
   const myUserRef = useRef<HTMLDivElement>(null);
 
   const REFRESH_INTERVAL = 5 * 60 * 1000; // 5분
+  const PLACEHOLDER = 'https://static.upbit.com/logos/BTC.png';
 
-  // 코인 심볼 목록 (프로필 이미지용)
-  const coinSymbols = [
-    'BTC',
-    'ETH',
-    'XRP',
-    'ADA',
-    'SOL',
-    'DOGE',
-    'DOT',
-    'AVAX',
-    'MATIC',
-    'LINK',
-  ];
+  // 이미지 URL 최적화 함수 (선택사항)
+  const optimizeImageUrl = (url: string) => {
+    if (!url || !url.includes('kakaocdn')) return url;
+    return url.replace('R640x640', 'R160x160'); // 더 작은 이미지 요청
+  };
 
   // 랭킹 데이터 가져오기
   const fetchRanks = async () => {
@@ -60,7 +58,9 @@ export default function Ranking() {
       setRanksDaily(dailyRanks);
       setMyRank(myRankData?.[0] || null);
       setMyRankDaily(myRankDailyData?.[0] || null);
-      setLastUpdated(new Date());
+      setDailyUpdatedAt(dailyRanks[0].updatedAt);
+      setAllUpdatedAt(allRanks[0].updatedAt)
+
     } catch (error) {
       console.error('Failed to fetch rankings:', error);
     } finally {
@@ -145,72 +145,111 @@ export default function Ranking() {
           {/* 2등 */}
           <div className="flex flex-col items-center">
             <div className="relative">
-              <img
-                src={topUsers[1]?.profileImageUrl}
+              <LazyLoadImage
+                src={optimizeImageUrl(topUsers[1]?.profileImageUrl)}
                 alt={topUsers[1]?.nickname}
-                className="w-16 h-16 rounded-full border-2 border-gray-300"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src =
-                    'https://via.placeholder.com/64';
+                className="w-16 h-16 rounded-full border-2 border-gray-300 object-cover"
+                onError={(e: any) => {
+                  (e.target as HTMLImageElement).src = PLACEHOLDER;
                 }}
               />
-              {topUsers[1]?.badgeImageUrl && (
-                <img
-                  src={topUsers[1].badgeImageUrl}
-                  alt="badge"
-                  className="absolute -bottom-2 -right-2 w-8 h-8"
-                />
-              )}
+              <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-zinc-200 rounded-full flex items-center justify-center text-lg font-bold">
+                2
+              </div>
             </div>
             <div className="mt-2 font-medium">{topUsers[1]?.nickname}</div>
-            <div className="text-red-500">
+            <div
+              className={`text-xs ${
+                activePeriod === '일간'
+                  ? (topUsers[1]?.profitRate ?? 0) === 0
+                    ? 'text-gray-500'
+                    : (topUsers[1]?.profitRate ?? 0) > 0
+                      ? 'text-red-500'
+                      : 'text-blue-500'
+                  : (topUsers[1]?.profit ?? 0) === 0
+                    ? 'text-gray-500'
+                    : (topUsers[1]?.profit ?? 0) > 0
+                      ? 'text-red-500'
+                      : 'text-blue-500'
+              }`}
+            >
               {activePeriod === '일간'
-                ? `+${topUsers[1]?.profitRate?.toFixed(2)}%`
-                : `${topUsers[1]?.totalAsset?.toLocaleString()}원`}
+                ? `${(topUsers[1]?.profitRate ?? 0) > 0 ? '+' : (topUsers[1]?.profitRate ?? 0) < 0 ? '-' : ''}${Math.abs(topUsers[1]?.profitRate ?? 0).toFixed(2)}%`
+                : `${(topUsers[1]?.profit ?? 0) > 0 ? '+' : (topUsers[1]?.profit ?? 0) < 0 ? '-' : ''}${formatCurrency(Math.abs(topUsers[1]?.profit ?? 0))}`}
             </div>
           </div>
 
           {/* 1등 */}
           <div className="flex flex-col items-center -mt-4 ">
             <div className="relative">
-              <img
-                src={`https://static.upbit.com/logos/${topUsers[0]?.profileCoin}.png`}
-                alt={topUsers[0]?.name}
-                className="w-20 h-20 rounded-full border-2 border-yellow-400"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src =
-                    'https://via.placeholder.com/80';
+              <LazyLoadImage
+                src={optimizeImageUrl(topUsers[0].profileImageUrl)}
+                alt={topUsers[0]?.nickname}
+                className="w-20 h-20 rounded-full border-2 border-yellow-400 object-cover"
+                onError={(e: any) => {
+                  (e.target as HTMLImageElement).src = PLACEHOLDER;
                 }}
               />
               <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center text-lg font-bold">
                 1
               </div>
             </div>
-            <div className="mt-2 font-medium">{topUsers[0]?.name}</div>
-            <div className="text-red-500">
-              +{topUsers[0]?.profitRate.toFixed(2)}%
+            <div className="mt-2 font-medium">{topUsers[0]?.nickname}</div>
+            <div
+              className={`text-xs ${
+                activePeriod === '일간'
+                  ? (topUsers[0]?.profitRate ?? 0) === 0
+                    ? 'text-gray-500'
+                    : (topUsers[0]?.profitRate ?? 0) > 0
+                      ? 'text-red-500'
+                      : 'text-blue-500'
+                  : (topUsers[0]?.profit ?? 0) === 0
+                    ? 'text-gray-500'
+                    : (topUsers[0]?.profit ?? 0) > 0
+                      ? 'text-red-500'
+                      : 'text-blue-500'
+              }`}
+            >
+              {activePeriod === '일간'
+                ? `${(topUsers[0]?.profitRate ?? 0) > 0 ? '+' : (topUsers[0]?.profitRate ?? 0) < 0 ? '-' : ''}${Math.abs(topUsers[0]?.profitRate ?? 0).toFixed(2)}%`
+                : `${(topUsers[0]?.profit ?? 0) > 0 ? '+' : (topUsers[0]?.profit ?? 0) < 0 ? '-' : ''}${formatCurrency(Math.abs(topUsers[0]?.profit ?? 0))}`}
             </div>
           </div>
 
           {/* 3등 */}
           <div className="flex flex-col items-center">
             <div className="relative">
-              <img
-                src={`https://static.upbit.com/logos/${topUsers[2]?.profileCoin}.png`}
-                alt={topUsers[2]?.name}
-                className="w-16 h-16 rounded-full border-2 border-orange-400"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src =
-                    'https://via.placeholder.com/64';
+              <LazyLoadImage
+                src={optimizeImageUrl(topUsers[2].profileImageUrl)}
+                alt={topUsers[2]?.nickname}
+                className="w-16 h-16 rounded-full border-2 border-orange-400 object-cover"
+                onError={(e: any) => {
+                  (e.target as HTMLImageElement).src = PLACEHOLDER;
                 }}
               />
               <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-orange-400 rounded-full flex items-center justify-center text-lg font-bold">
                 3
               </div>
             </div>
-            <div className="mt-2 font-medium">{topUsers[2]?.name}</div>
-            <div className="text-red-500">
-              +{topUsers[2]?.profitRate.toFixed(2)}%
+            <div className="mt-2 font-medium">{topUsers[2]?.nickname}</div>
+            <div
+              className={`text-xs ${
+                activePeriod === '일간'
+                  ? (topUsers[2]?.profitRate ?? 0) === 0
+                    ? 'text-gray-500'
+                    : (topUsers[2]?.profitRate ?? 0) > 0
+                      ? 'text-red-500'
+                      : 'text-blue-500'
+                  : (topUsers[2]?.profit ?? 0) === 0
+                    ? 'text-gray-500'
+                    : (topUsers[2]?.profit ?? 0) > 0
+                      ? 'text-red-500'
+                      : 'text-blue-500'
+              }`}
+            >
+              {activePeriod === '일간'
+                ? `${(topUsers[2]?.profitRate ?? 0) > 0 ? '+' : (topUsers[2]?.profitRate ?? 0) < 0 ? '-' : ''}${Math.abs(topUsers[2]?.profitRate ?? 0).toFixed(2)}%`
+                : `${(topUsers[2]?.profit ?? 0) > 0 ? '+' : (topUsers[2]?.profit ?? 0) < 0 ? '-' : ''}${formatCurrency(Math.abs(topUsers[2]?.profit ?? 0))}`}
             </div>
           </div>
         </div>
@@ -218,18 +257,20 @@ export default function Ranking() {
 
       {/* 랭킹 기간 정보 */}
       <div className="bg-white p-4 border-b rounded-t-xl dark:bg-gray-800 dark:text-white mx-4 dark:border-gray-600">
-        <div className="text-gray-500 text-sm dark:text-gray-400 flex justify-between items-center">
+        <div className="text-gray-500 text-sm dark:text-gray-400 flex flex-col">
           <span>
             {activePeriod === '일간'
-              ? `${format(lastUpdated, 'yyyy년 MM월 dd일 HH:mm')} 기준`
-              : '가입일부터 현재까지'}
+              ? dailyUpdatedAt
+                ? `${format(new Date(dailyUpdatedAt), 'yyyy년 MM월 dd일 HH:mm')} 기준` : '업데이트 시간 정보 없음'
+              : allUpdatedAt
+                ? `${format(new Date(allUpdatedAt), 'yyyy년 MM월 dd일 HH:mm')} 기준` : '가입일부터 현재까지'}
           </span>
-          <button
+          {/* <button
             onClick={fetchRanks}
             className="text-blue-500 hover:text-blue-600 text-sm"
           >
             새로고침
-          </button>
+          </button> */}
         </div>
       </div>
 
@@ -252,52 +293,39 @@ export default function Ranking() {
             }`}
           >
             <div className="w-8 text-center font-bold mr-4">{user.rank}</div>
-            <img
-              src={user.profileImageUrl}
+            <LazyLoadImage
+              src={optimizeImageUrl(user.profileImageUrl)}
               alt={user.nickname}
-              className="w-12 h-12 rounded-full mr-4"
-              onError={(e) => {
-                (e.target as HTMLImageElement).src =
-                  'https://via.placeholder.com/48';
+              className="w-12 h-12 rounded-full mr-4 object-cover"
+              onError={(e: any) => {
+                (e.target as HTMLImageElement).src = PLACEHOLDER;
               }}
             />
             <div className="flex-1">
-              <div className="font-medium">{user.nickname}</div>
+              <div className="font-md">{user.nickname}</div>
             </div>
-            <div className="text-red-500">
+            <div
+              className={`text-sm ${
+                activePeriod === '일간'
+                  ? (user?.profitRate ?? 0) === 0
+                    ? 'text-gray-500'
+                    : (user?.profitRate ?? 0) > 0
+                      ? 'text-red-500'
+                      : 'text-blue-500'
+                  : (user?.profit ?? 0) === 0
+                    ? 'text-gray-500'
+                    : (user?.profit ?? 0) > 0
+                      ? 'text-red-500'
+                      : 'text-blue-500'
+              }`}
+            >
               {activePeriod === '일간'
-                ? `+${user.profitRate?.toFixed(2)}%`
-                : `${user.totalAsset?.toLocaleString()}원`}
+                ? `${(user?.profitRate ?? 0) > 0 ? '+' : (user?.profitRate ?? 0) < 0 ? '-' : ''}${Math.abs(user?.profitRate ?? 0).toFixed(2)}%`
+                : `${(user?.profit ?? 0) > 0 ? '+' : (user?.profit ?? 0) < 0 ? '-' : ''}${formatCurrency(Math.abs(user?.profit ?? 0))}`}
             </div>
           </div>
         ))}
       </div>
-
-      {/* 내 랭킹
-      {myRanking && (
-        <div className="sticky bottom-16 rounded-xl min-w-[400px] mx-auto bg-white border-t p-4 shadow-md dark:bg-gray-800 dark:text-white dark:border-gray-700">
-          <div className="flex items-center">
-            <div className="w-8 text-center font-bold mr-4">
-              {myRanking.rank}
-            </div>
-            <img
-              src={`https://static.upbit.com/logos/${myRanking.profileCoin}.png`}
-              alt={myRanking.name}
-              className="w-12 h-12 rounded-full mr-4"
-              onError={(e) => {
-                (e.target as HTMLImageElement).src =
-                  'https://via.placeholder.com/48';
-              }}
-            />
-            <div className="flex-1">
-              <div className="font-medium">{myRanking.name}</div>
-            </div>
-            <div className="text-red-500">
-              +{myRanking.profitRate.toFixed(2)}%
-            </div>
-          </div>
-        </div>
-      )} */}
     </div>
   );
 }

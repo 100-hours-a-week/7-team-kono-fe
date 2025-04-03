@@ -1,21 +1,19 @@
 import api from './clients';
 import { API_ENDPOINTS } from '../config/apiEndpoints';
 
-interface Wallet {
-  nickname: string;
-  ticker: string;
-  holdingQuantity: number;
-  // 필요한 경우 다른 속성들 추가
-}
+// interface Wallet {
+//   nickname: string;
+//   ticker: string;
+//   holdingQuantity: number;
+//   // 필요한 경우 다른 속성들 추가
+// }
 
 /**
  * 특정 사용자의 특정 코인 보유량을 조회하는 함수
  * @param ticker 코인 티커 (예: BTC, ETH)
  * @returns 해당 코인의 보유량, 없으면 0 반환
  */
-export const getQuantityByTicker = async (
-  ticker: string,
-) => {
+export const getQuantityByTicker = async (ticker: string) => {
   try {
     const res = await api.get(API_ENDPOINTS.GET_IS_HOLDING_COIN(ticker));
     return res.data.data.holdingQuantity;
