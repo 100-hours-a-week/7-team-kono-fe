@@ -114,14 +114,23 @@ const Profile: React.FC = () => {
       toast.error('닉네임을 입력해주세요.');
       return;
     }
-
     try {
       await updateNickname(nickname);
       const updatedProfile = await getUserProfile();
       setProfile(updatedProfile);
+      // AuthContext 사용자 정보 업데이트
+      if (updatedProfile) {
+        updateUser({
+          nickname: updatedProfile.nickname,
+        });
+      }
+
+
       setIsEditingNickname(false);
       toast.success('닉네임이 업데이트되었습니다.');
-    } catch (error: any) {
+    }
+
+    catch (error: any) {
 
       const { status, message } = error;
 
