@@ -121,7 +121,7 @@ const Profile: React.FC = () => {
       setProfile(updatedProfile);
       setIsEditingNickname(false);
       
-      // AuthContext의 사용자 정보도 업데이트
+ 
       if (updatedProfile) {
         updateUser({
           nickname: updatedProfile.nickname
