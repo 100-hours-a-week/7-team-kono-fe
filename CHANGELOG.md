@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## <small>1.1.1 (2025-04-04)</small>
+
+* chore: merge remote-tracking branch 'origin/main' ([a53540f](https://github.com/100-hours-a-week/7-team-kono-fe/commit/a53540f))
+* docs: update deploy yml ([f5fbbe6](https://github.com/100-hours-a-week/7-team-kono-fe/commit/f5fbbe6))
+
 ## 1.1.0 (2025-04-04)
 
 * chore: add constants ([585fcfb](https://github.com/100-hours-a-week/7-team-kono-fe/commit/585fcfb))
