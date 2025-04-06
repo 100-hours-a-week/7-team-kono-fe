@@ -18,9 +18,6 @@ const KakaoRedirectHandler = () => {
           { withCredentials: true },
         );
 
-        // 사용자 정보 처리
-        console.log('사용자 정보:', response.data);
-
         // 로그인 성공 후 메인 페이지로 이동
         navigate('/');
       } catch (error) {

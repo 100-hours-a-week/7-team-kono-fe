@@ -5,6 +5,7 @@ labels: ["🐞 bug", "🧑‍💻 frontend"]
 projects: "@KONO"
 assignees: []
 type: "Bug"
+
 body:
   - type: textarea
     attributes:
@@ -13,7 +14,7 @@ body:
       placeholder: 자세히 적을수록 좋습니다!
     validations:
       required: true
-  
+
   - type: dropdown
     id: priority
     attributes:
@@ -27,6 +28,7 @@ body:
     validations:
       required: true
   
+
   - type: textarea
     attributes:
       label: 🔄 재현 방법
@@ -47,13 +49,14 @@ body:
         - 가끔 발생 (약 50%)
         - 드물게 발생 (약 25%)
         - 한 번만 발생
-  
+
   - type: textarea
     attributes:
       label: 🤔 예상 동작
       description: 어떤 동작이 일어날 것으로 예상했는지 명확하게 설명해주세요
       placeholder: 정상 작동시 어떻게 동작해야 하는지 설명해주세요
   
+
   - type: textarea
     attributes:
       label: 📸 스크린샷

@@ -6,7 +6,7 @@ import { formatAmount, formatCurrency } from '../utils/formatter';
 import { getCoinName } from '../api/coin';
 import { getBalance } from '../api/wallet';
 import { getQuantityByTicker } from '../api/wallet';
-import Header from "../components/layout/Header.tsx";
+import Header from '../components/layout/Header.tsx';
 // 거래 타입 정의
 type TradeType = 'buy' | 'sell';
 
@@ -22,8 +22,6 @@ interface CoinData {
 export default function Trade() {
   const { ticker, type } = useParams<{ ticker: string; type: TradeType }>();
   const navigate = useNavigate();
-
-  console.log('Trade params:', { ticker, type }); // 디버깅용 로그 추가
 
   // 상태 관리
   const [coin, setCoin] = useState<CoinData | null>(null);
@@ -125,22 +123,6 @@ export default function Trade() {
 
     fetchCoinData();
   }, [ticker, type]); // tickerData 의존성 제거
-
-  // 디버깅용 로그 - 파라미터 변경 시에만 로그 출력
-  useEffect(() => {
-    console.log('Trade params:', { ticker, type });
-  }, [ticker, type]);
-
-  // 모달 상태 변경 시에만 로그 출력
-  useEffect(() => {
-    if (isModalOpen) {
-      console.log('Modal props:', {
-        amount: submitAmount,
-        price: coin?.price,
-        tradeType: type,
-      });
-    }
-  }, [isModalOpen]);
 
   // 금액 입력 처리 함수 수정
   const handleAmountChange = (value: string) => {
@@ -421,10 +403,17 @@ export default function Trade() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         ticker={coin.ticker || ''}
-        amount={type === 'sell' && displayAmount === '최대' ? Number(maxAmount) : Number(submitAmount)}
+        amount={
+          type === 'sell' && displayAmount === '최대'
+            ? Number(maxAmount)
+            : Number(submitAmount)
+        }
         quantity={quantity}
-        price={type === 'sell' && displayAmount === '최대' ? coin.price : coin.price}
+        price={
+          type === 'sell' && displayAmount === '최대' ? coin.price : coin.price
+        }
         tradeType={type as TradeType}
+        name={coin.name}
       />
     </div>
   );

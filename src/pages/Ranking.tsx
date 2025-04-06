@@ -4,6 +4,8 @@ import { getRanksAllMe, getRanksDaily, getRanksDailyMe } from '../api/ranking';
 import { getRanksAll } from '../api/ranking';
 import { format } from 'date-fns';
 import { formatCurrency } from '../utils/formatter';
+import {LazyLoadImage} from "react-lazy-load-image-component";
+import 'react-lazy-load-image-component/src/effects/blur.css'; // 블러 효과 스타일 (선택사항)
 
 interface Rank {
   nickname: string;
@@ -33,6 +35,12 @@ export default function Ranking() {
 
   const REFRESH_INTERVAL = 5 * 60 * 1000; // 5분
   const PLACEHOLDER = 'https://static.upbit.com/logos/BTC.png';
+
+  // 이미지 URL 최적화 함수 (선택사항)
+  const optimizeImageUrl = (url: string) => {
+    if (!url || !url.includes('kakaocdn')) return url;
+    return url.replace('R640x640', 'R160x160'); // 더 작은 이미지 요청
+  };
 
   // 랭킹 데이터 가져오기
   const fetchRanks = async () => {
@@ -137,11 +145,11 @@ export default function Ranking() {
           {/* 2등 */}
           <div className="flex flex-col items-center">
             <div className="relative">
-              <img
-                src={topUsers[1]?.profileImageUrl}
+              <LazyLoadImage
+                src={optimizeImageUrl(topUsers[1]?.profileImageUrl)}
                 alt={topUsers[1]?.nickname}
                 className="w-16 h-16 rounded-full border-2 border-gray-300 object-cover"
-                onError={(e) => {
+                onError={(e: any) => {
                   (e.target as HTMLImageElement).src = PLACEHOLDER;
                 }}
               />
@@ -174,11 +182,11 @@ export default function Ranking() {
           {/* 1등 */}
           <div className="flex flex-col items-center -mt-4 ">
             <div className="relative">
-              <img
-                src={topUsers[0].profileImageUrl}
+              <LazyLoadImage
+                src={optimizeImageUrl(topUsers[0].profileImageUrl)}
                 alt={topUsers[0]?.nickname}
                 className="w-20 h-20 rounded-full border-2 border-yellow-400 object-cover"
-                onError={(e) => {
+                onError={(e: any) => {
                   (e.target as HTMLImageElement).src = PLACEHOLDER;
                 }}
               />
@@ -211,11 +219,11 @@ export default function Ranking() {
           {/* 3등 */}
           <div className="flex flex-col items-center">
             <div className="relative">
-              <img
-                src={topUsers[2].profileImageUrl}
+              <LazyLoadImage
+                src={optimizeImageUrl(topUsers[2].profileImageUrl)}
                 alt={topUsers[2]?.nickname}
                 className="w-16 h-16 rounded-full border-2 border-orange-400 object-cover"
-                onError={(e) => {
+                onError={(e: any) => {
                   (e.target as HTMLImageElement).src = PLACEHOLDER;
                 }}
               />
@@ -285,11 +293,11 @@ export default function Ranking() {
             }`}
           >
             <div className="w-8 text-center font-bold mr-4">{user.rank}</div>
-            <img
-              src={user.profileImageUrl}
+            <LazyLoadImage
+              src={optimizeImageUrl(user.profileImageUrl)}
               alt={user.nickname}
               className="w-12 h-12 rounded-full mr-4 object-cover"
-              onError={(e) => {
+              onError={(e: any) => {
                 (e.target as HTMLImageElement).src = PLACEHOLDER;
               }}
             />

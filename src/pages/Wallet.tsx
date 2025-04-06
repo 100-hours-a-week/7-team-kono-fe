@@ -91,11 +91,6 @@ const Wallet = () => {
       return;
     }
 
-    console.log(
-      'Available ticker data keys:',
-      Object.keys(tickerData.tickerData),
-    );
-
     // 보유 코인 정보 업데이트
     const updatedCoins = holdingCoins.map((coin) => {
       // 티커 데이터에서 해당 코인 정보 찾기
@@ -112,11 +107,13 @@ const Wallet = () => {
             ? coin.holdingPrice / coin.holdingQuantity
             : 0;
 
-        // 수익률 계산
-        const profitRate =
-          averageBuyPrice > 0
-            ? ((currentPrice - averageBuyPrice) / averageBuyPrice) * 100
-            : 0;
+        // 수익률 계산 수정
+        let profitRate = 0;
+        if (averageBuyPrice > 0) {
+          // 현재가와 평균 매수가의 차이를 백분율로 계산
+          profitRate =
+            ((currentPrice - averageBuyPrice) / averageBuyPrice) * 100;
+        }
 
         return {
           ...coin,
@@ -127,8 +124,6 @@ const Wallet = () => {
         };
       }
 
-      // 티커 데이터가 없는 경우 로그 출력
-      console.log(`No data found for ${marketCode}`);
       return coin;
     });
 
@@ -422,7 +417,7 @@ const Wallet = () => {
                   </span>
                 </div>
                 <div className="text-sm text-gray-500">
-                  {coin.holdingQuantity} {coin.ticker}
+                  {coin.holdingQuantity.toFixed(5)} {coin.ticker}
                 </div>
               </div>
               <div className="text-right">

@@ -1,10 +1,12 @@
 name: "✨ Feature"
+
 description: "새로운 기능 제안"
 title: "[FEAT] "
 labels: ["✨ feat", "🧑‍💻 frontend"]
 projects: "@KONO"
 type: "Feature"
 assignees: []
+
 body:
   - type: textarea
     attributes:
@@ -13,6 +15,7 @@ body:
       placeholder: 자세히 적을수록 좋습니다!
     validations:
       required: true
+
       
   - type: dropdown
     id: feature-type
@@ -60,8 +63,10 @@ body:
       description: 이 작업에 예상되는 소요 시간을 입력해주세요.
       placeholder: 예) 3일, 1주일, 2주일
       
+
   - type: textarea
     attributes:
       label: 🔗 참고 자료
       description: 참고 자료가 있다면 작성해 주세요.
       placeholder: 디자인 가이드, API 문서, 유사 사례 등
+

@@ -25,38 +25,16 @@ interface CoinData {
 }
 
 // 차트 컴포넌트를 메모이제이션
-const Chart = memo(
-  ({ ticker, timeframe }: { ticker: string; timeframe: string }) => {
-    // 타임프레임을 TradingView 형식으로 변환
-    const getTradingViewInterval = (tf: string) => {
-      switch (tf) {
-        case '1D':
-          return 'D';
-        case '1W':
-          return 'W';
-        case '1M':
-          return 'M';
-        case '1Y':
-          return 'Y';
-        default:
-          return '60';
-      }
-    };
+const Chart = memo(({ ticker }: { ticker: string }) => {
+  // 심볼 형식 변환
+  const symbol = `UPBIT:${ticker}KRW`;
 
-    // 심볼 형식 변환 (BTC -> UPBIT:BTCKRW)
-    const symbol = `UPBIT:${ticker}KRW`;
-
-    return (
-      <div className="w-full h-[400px] border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
-        <TradingViewWidget
-          symbol={symbol}
-          interval={getTradingViewInterval(timeframe)}
-          locale="kr"
-        />
-      </div>
-    );
-  },
-);
+  return (
+    <div className="w-full h-[400px] border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
+      <TradingViewWidget symbol={symbol} />
+    </div>
+  );
+});
 
 export default function CoinDetail() {
   const { ticker } = useParams<{ ticker: string }>();
@@ -65,7 +43,6 @@ export default function CoinDetail() {
   const [coin, setCoin] = useState<CoinData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [timeframe, setTimeframe] = useState<'1D' | '1W' | '1M' | '1Y'>('1D');
   const [isFavorite, setIsFavorite] = useState(false);
   const [isHolding, setIsHolding] = useState(false);
 
@@ -204,25 +181,8 @@ export default function CoinDetail() {
         name={coin.name}
       />
 
-      {/* 차트 타임프레임 선택 */}
-      <div className="p-4 border-b flex dark:bg-gray-800 dark:text-white dark:border-gray-700">
-        {(['1D', '1W', '1M', '1Y'] as const).map((tf) => (
-          <button
-            key={tf}
-            className={`flex-1 py-2 text-center ${
-              timeframe === tf
-                ? 'text-blue-500 border-b-2 border-blue-500 font-medium dark:text-blue-400 dark:border-blue-400'
-                : 'text-gray-500 dark:text-gray-400'
-            }`}
-            onClick={() => setTimeframe(tf)}
-          >
-            {tf}
-          </button>
-        ))}
-      </div>
-
       {/* 차트 */}
-      <Chart ticker={symbolToUse} timeframe={timeframe} />
+      <Chart ticker={symbolToUse} />
 
       {/* 코인 상세 정보 */}
       {tickerData && tickerData[`KRW-${symbolToUse}`] && (
