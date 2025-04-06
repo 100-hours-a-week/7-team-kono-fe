@@ -100,7 +100,6 @@ export const formatDate = (date: string | Date) => {
 
       // 유효하지 않은 경우 대체 방법 시도
       if (isNaN(dateObj.getTime())) {
-        console.log('첫 번째 파싱 시도 실패, 대체 방법 시도:', date);
         // ISO 형식에 Z 추가 시도
         if (date.includes('T') && !date.includes('Z') && !date.includes('+')) {
           dateObj = new Date(date);

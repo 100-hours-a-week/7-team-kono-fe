@@ -54,7 +54,6 @@ const Login: React.FC = () => {
       script.onload = () => {
         window.Kakao.init(import.meta.env.VITE_KAKAO_API_KEY);
         setIsKakaoInitialized(true);
-        console.log('Kakao SDK loaded and initialized');
       };
       document.body.appendChild(script);
     };
@@ -65,10 +64,8 @@ const Login: React.FC = () => {
     } else if (!window.Kakao.isInitialized()) {
       window.Kakao.init(import.meta.env.VITE_KAKAO_API_KEY);
       setIsKakaoInitialized(true);
-      console.log('Kakao SDK initialized');
     } else {
       setIsKakaoInitialized(true);
-      console.log('Kakao SDK already initialized');
     }
 
     // cleanup

@@ -44,25 +44,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   // 사용자 정보 로드 함수
   const loadUserInfo = async (isInitialLoad = true) => {
     try {
-      if (isInitialLoad) {
-        console.log('로그인 상태 확인을 위해 API 호출 시작...');
-      } else {
-        console.log('인증 코드 감지 후 사용자 정보 다시 로드 중...');
-      }
-
       setLoading(true);
 
       // 상대 경로로 API 요청 (Vite 프록시 사용)
       const apiUrl = '/api/v1/users/me';
-      console.log('API 요청 URL (상대 경로):', apiUrl);
 
       // 인증 정보와 함께 요청
       const res = await api.get(API_ENDPOINTS.GET_USER);
 
-      console.log('API 응답 데이터:', res.data);
-
       if (res.data) {
-        console.log('사용자 정보 로드 성공:', res.data);
         // API 응답 구조에 맞게 사용자 정보 추출
         const userData = {
           id: res.data.id,
@@ -72,7 +62,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         };
         setUser(userData);
       } else {
-        console.log('API 응답에 사용자 데이터가 없음');
         setUser(null);
       }
       setError(null);
@@ -87,7 +76,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
           // 401 또는 403 오류는 인증 실패로 간주
           if (err.response.status === 401 || err.response.status === 403) {
-            console.log('인증되지 않은 사용자');
             setUser(null);
           }
         } else if (err.request) {
@@ -104,7 +92,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
         // 네트워크 오류이고 첫 로드이며 아직 재시도하지 않은 경우 짧은 지연 후 재시도
         if (err.code === 'ERR_NETWORK' && isInitialLoad && !isRetrying) {
-          console.log('네트워크 오류로 3초 후 재시도합니다...');
           setIsRetrying(true);
           setTimeout(() => {
             loadUserInfo(false);
@@ -131,9 +118,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     const hasAuthCode = params.has('code');
 
     if (hasAuthCode) {
-      console.log('URL에 인증 코드 감지. 로그인 완료 후 사용자 정보 로드 예정');
-      console.log('인증 코드:', params.get('code'));
-
       const cleanUrl = window.location.pathname; // 쿼리 파라미터 제거
 
       // 인증 코드가 있으면 쿠키가 설정되기까지 약간의 지연 후 로드
@@ -163,30 +147,23 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   // 로그인 함수 - 카카오 로그인 페이지로 리다이렉트
   const login = () => {
-    console.log('카카오 로그인 시작...');
     const kakaoLoginPath = '/oauth2/authorization/kakao';
-    console.log('로그인 URL (상대 경로):', kakaoLoginPath);
     window.location.href = kakaoLoginPath;
   };
 
   // 로그아웃 함수
   const logout = async () => {
     try {
-      console.log('로그아웃 요청 시작...');
-
       // 로컬 상태 초기화
       setUser(null);
 
       // 서버에 로그아웃 요청
       await api.post(API_ENDPOINTS.LOGOUT);
-      console.log('로그아웃 성공');
     } catch (err) {
       // 에러가 발생해도 로컬에서 로그아웃 처리는 완료됨
       console.error('서버 로그아웃 요청 실패:', err);
-      console.log('로컬 로그아웃은 성공적으로 처리됨');
     } finally {
       // 항상 로그인 페이지로 리다이렉트
-      console.log('로그인 페이지로 리다이렉트');
       window.location.href = '/login';
     }
   };
@@ -194,14 +171,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   // 회원탈퇴 함수 추가
   const withdraw = async () => {
     try {
-      console.log('회원탈퇴 요청 시작...');
-
       // 서버에 회원탈퇴 요청
       await api.delete(API_ENDPOINTS.WITHDRAW);
 
       // 로컬 상태 초기화
       setUser(null);
-      console.log('회원탈퇴 성공');
 
       // 로그인 페이지로 리다이렉트
       window.location.href = '/login';
@@ -217,16 +191,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       setUser({ ...user, ...userData });
     }
   };
-
-  // 인증 상태가 변경될 때마다 로깅
-  useEffect(() => {
-    console.log('인증 상태 변경:', {
-      isAuthenticated: !!user,
-      loading,
-      hasUser: !!user,
-      userData: user,
-    });
-  }, [user, loading]);
 
   return (
     <AuthContext.Provider

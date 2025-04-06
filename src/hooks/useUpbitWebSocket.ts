@@ -45,7 +45,6 @@ export function useUpbitWebSocket(symbols: string[] = ['BTC']) {
     socket.current = new WebSocket('wss://api.playcono.com/ws/'); // 프록시 사용
 
     socket.current.onopen = function () {
-      console.log('웹소켓 연결됨');
       setIsConnected(true);
       setError(null);
 
@@ -86,13 +85,11 @@ export function useUpbitWebSocket(symbols: string[] = ['BTC']) {
     };
 
     socket.current.onerror = function (error) {
-      console.log('웹소켓 오류:', error);
       setError('웹소켓 연결 오류가 발생했습니다.');
       setIsConnected(false);
     };
 
     socket.current.onclose = function () {
-      console.log('웹소켓 연결 종료');
       setIsConnected(false);
     };
 
