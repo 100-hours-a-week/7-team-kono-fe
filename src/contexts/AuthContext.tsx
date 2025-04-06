@@ -118,9 +118,18 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   // 컴포넌트 마운트 시 사용자 정보 로드
   useEffect(() => {
+    // 현재 페이지가 로그인 페이지인지 확인
+    const isLoginPage = window.location.pathname === '/login';
+    
     // URL에 카카오 인증 코드가 있는지 확인 (로그인 직후)
     const params = new URLSearchParams(window.location.search);
     const hasAuthCode = params.has('code');
+    
+    // 로그인 페이지이고 인증 코드가 없으면 API 호출 건너뛰기
+    if (isLoginPage && !hasAuthCode) {
+      setLoading(false);
+      return;
+    }
     
     if (hasAuthCode) {
       console.log('URL에 인증 코드 감지. 로그인 완료 후 사용자 정보 로드 예정');
@@ -129,7 +138,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       // 인증 코드가 있으면 쿠키가 설정되기까지 약간의 지연 후 로드
       setTimeout(() => {
         loadUserInfo(false);
-      }, 2000); // 2초로 증가
+      }, 2000);
     } else {
       loadUserInfo();
     }

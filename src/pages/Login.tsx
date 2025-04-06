@@ -55,11 +55,9 @@ const Login: React.FC = () => {
     }
 
     try {
-      window.location.href = `${import.meta.env.VITE_API_URL}/oauth2/authorization/kakao`;
-      // window.Kakao.Auth.authorize({
-      //   redirectUri: import.meta.env.VITE_KAKAO_REDIRECT_URI,
-      //   scope: 'profile_nickname,profile_image',
-      // });
+      // API_URL에서 마지막 슬래시가 있으면 제거
+      const apiUrl = import.meta.env.VITE_API_URL.replace(/\/$/, '');
+      window.location.href = `${apiUrl}/oauth2/authorization/kakao`;
     } catch (error) {
       console.error('Failed to initiate Kakao login:', error);
     }
