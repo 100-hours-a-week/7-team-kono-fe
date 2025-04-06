@@ -113,9 +113,18 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   // 컴포넌트 마운트 시 사용자 정보 로드
   useEffect(() => {
+    // 현재 페이지가 로그인 페이지인지 확인
+    const isLoginPage = window.location.pathname === '/login';
+    
     // URL에 카카오 인증 코드가 있는지 확인 (로그인 직후)
     const params = new URLSearchParams(window.location.search);
     const hasAuthCode = params.has('code');
+
+    
+    if (isLoginPage && !hasAuthCode) {
+      setLoading(false);
+      return;
+    }
 
     if (hasAuthCode) {
       const cleanUrl = window.location.pathname; // 쿼리 파라미터 제거
@@ -129,6 +138,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         });
       }, 2000); // 2초로 증가
       window.history.replaceState({}, document.title, cleanUrl);
+    } else {
+      loadUserInfo();
+    }
     } else {
       loadUserInfo();
     }
