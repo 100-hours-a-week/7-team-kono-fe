@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## <small>1.1.3 (2025-04-06)</small>
+
+* chore: add sub base url ([cbd6e0c](https://github.com/100-hours-a-week/7-team-kono-fe/commit/cbd6e0c))
+* chore: change base url ([cce0ab4](https://github.com/100-hours-a-week/7-team-kono-fe/commit/cce0ab4))
+* chore: fix ts error ([0f16675](https://github.com/100-hours-a-week/7-team-kono-fe/commit/0f16675))
+* chore: remove comments ([1a3d60e](https://github.com/100-hours-a-week/7-team-kono-fe/commit/1a3d60e))
+* chore: remove unnecessary backtick ([602d739](https://github.com/100-hours-a-week/7-team-kono-fe/commit/602d739))
+* chore: remove unused json dummy files ([88ac93a](https://github.com/100-hours-a-week/7-team-kono-fe/commit/88ac93a))
+* refactor: remove timeframe selection from chart component ([9a4ecdb](https://github.com/100-hours-a-week/7-team-kono-fe/commit/9a4ecdb))
+* build: change s3 bucket ([16e5f63](https://github.com/100-hours-a-week/7-team-kono-fe/commit/16e5f63))
+* build: use proxy for web socket connection ([1ec425b](https://github.com/100-hours-a-week/7-team-kono-fe/commit/1ec425b))
+
 ## <small>1.1.2 (2025-04-04)</small>
 
 * fix: add base url to axios ([23347a0](https://github.com/100-hours-a-week/7-team-kono-fe/commit/23347a0))
