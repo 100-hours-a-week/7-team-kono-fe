@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## <small>1.1.4 (2025-04-06)</small>
+
+* fix: login-authentication (#158) ([0e4c213](https://github.com/100-hours-a-week/7-team-kono-fe/commit/0e4c213)), closes [#158](https://github.com/100-hours-a-week/7-team-kono-fe/issues/158)
+
 ## <small>1.1.3 (2025-04-06)</small>
 
 * chore: add sub base url ([cbd6e0c](https://github.com/100-hours-a-week/7-team-kono-fe/commit/cbd6e0c))
