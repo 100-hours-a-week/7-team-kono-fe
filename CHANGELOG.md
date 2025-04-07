@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## <small>1.1.5 (2025-04-07)</small>
+
+* fix: ts build errors ([3beba1d](https://github.com/100-hours-a-week/7-team-kono-fe/commit/3beba1d))
+
 ## <small>1.1.4 (2025-04-06)</small>
 
 * fix: login-authentication (#158) ([0e4c213](https://github.com/100-hours-a-week/7-team-kono-fe/commit/0e4c213)), closes [#158](https://github.com/100-hours-a-week/7-team-kono-fe/issues/158)
