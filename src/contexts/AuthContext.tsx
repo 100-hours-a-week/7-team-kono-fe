@@ -46,9 +46,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     try {
       setLoading(true);
 
-      // 상대 경로로 API 요청 (Vite 프록시 사용)
-      const apiUrl = '/api/v1/users/me';
-
       // 인증 정보와 함께 요청
       const res = await api.get(API_ENDPOINTS.GET_USER);
 
