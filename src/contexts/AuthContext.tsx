@@ -46,9 +46,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     try {
       setLoading(true);
 
-      // 상대 경로로 API 요청 (Vite 프록시 사용)
-      const apiUrl = '/api/v1/users/me';
-
       // 인증 정보와 함께 요청
       const res = await api.get(API_ENDPOINTS.GET_USER);
 
@@ -115,12 +112,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     // 현재 페이지가 로그인 페이지인지 확인
     const isLoginPage = window.location.pathname === '/login';
-    
+
     // URL에 카카오 인증 코드가 있는지 확인 (로그인 직후)
     const params = new URLSearchParams(window.location.search);
     const hasAuthCode = params.has('code');
 
-    
     if (isLoginPage && !hasAuthCode) {
       setLoading(false);
       return;
@@ -138,9 +134,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         });
       }, 2000); // 2초로 증가
       window.history.replaceState({}, document.title, cleanUrl);
-    } else {
-      loadUserInfo();
-    }
     } else {
       loadUserInfo();
     }

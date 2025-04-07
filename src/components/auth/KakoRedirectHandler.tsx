@@ -13,10 +13,9 @@ const KakaoRedirectHandler = () => {
     const getUserInfo = async () => {
       try {
         // 사용자 정보 요청 (Spring Security 인증된 상태에서)
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/v1/users`,
-          { withCredentials: true },
-        );
+        await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/users`, {
+          withCredentials: true,
+        });
 
         // 로그인 성공 후 메인 페이지로 이동
         navigate('/');

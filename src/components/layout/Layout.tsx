@@ -11,10 +11,6 @@ const Layout: React.FC = () => {
   const [redirecting, setRedirecting] = useState(false);
 
   useEffect(() => {
-    // URL에 인증 코드가 있으면 인증 처리 중으로 간주하고 리다이렉트하지 않음
-    const params = new URLSearchParams(window.location.search);
-    const hasAuthCode = params.has('code');
-
     // 인증 관련 페이지 확인
     const isLoginPage = location.pathname === '/login';
     const isSignupPage = location.pathname === '/signup';
