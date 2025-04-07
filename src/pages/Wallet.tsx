@@ -308,12 +308,21 @@ const Wallet = () => {
       <div className="mx-4 mt-4 p-4 bg-white rounded-xl shadow-sm dark:bg-gray-800 dark:text-white border border-gray-200 dark:border-gray-700">
         <div className="text-2xl font-bold">
           {formatCurrency(totalAsset, 'KRW', true, false)}
-          <span
+          {/* <span
             className={`text-${totalProfitRate >= 0 ? 'red' : 'blue'}-500 text-lg ml-2`}
-          >
-            ({totalProfitRate >= 0 ? '+' : ''}
-            {totalProfitRate.toFixed(2)}%)
-          </span>
+          > */}
+            <span
+              className={`text-lg ml-2 ${
+                totalProfitRate === 0 
+                  ? 'text-gray-500' 
+                  : totalProfitRate > 0 
+                    ? 'text-red-500' 
+                    : 'text-blue-500'
+              }`}
+            >
+              ({totalProfitRate > 0 ? '+' : ''}
+              {totalProfitRate.toFixed(2)}%)
+            </span>
         </div>
         <div className="flex justify-between mt-4 text-gray-600 dark:text-white">
           <div>
@@ -450,7 +459,7 @@ const Wallet = () => {
                 <div className="font-medium">
                   {formatCurrency(coin.value || 0, 'KRW')}
                 </div>
-                <div
+                {/* <div
                   className={`text-sm ${
                     (coin.profitRate || 0) >= 0
                       ? 'text-red-500'
@@ -459,6 +468,18 @@ const Wallet = () => {
                 >
                   {(coin.profitRate || 0) >= 0 ? '+' : ''}
                   {(coin.profitRate || 0).toFixed(2)}%
+                  </div> */}
+                  <div
+                    className={`text-sm ${
+                      (coin.profitRate || 0) === 0
+                        ? 'text-gray-500'
+                        : (coin.profitRate || 0) > 0
+                          ? 'text-red-500'
+                          : 'text-blue-500'
+                    }`}
+                  >
+                    {(coin.profitRate || 0) > 0 ? '+' : ''}
+                    {(coin.profitRate || 0).toFixed(2)}%
                   </div>
                 </div>
               </div>
