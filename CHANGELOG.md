@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.4.0 (2025-04-07)
+
+* feat: google Analytics ([3d4198c](https://github.com/100-hours-a-week/7-team-kono-fe/commit/3d4198c))
+* feat: google Analytics (#163) ([7834ed9](https://github.com/100-hours-a-week/7-team-kono-fe/commit/7834ed9)), closes [#163](https://github.com/100-hours-a-week/7-team-kono-fe/issues/163)
+* chore: build ([b0ebc50](https://github.com/100-hours-a-week/7-team-kono-fe/commit/b0ebc50))
+
 ## <small>1.3.1 (2025-04-07)</small>
 
 * refactor: change tab icon (#162) ([a422427](https://github.com/100-hours-a-week/7-team-kono-fe/commit/a422427)), closes [#162](https://github.com/100-hours-a-week/7-team-kono-fe/issues/162)
