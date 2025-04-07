@@ -418,13 +418,17 @@ const Wallet = () => {
           </div>
         ) : holdingCoins.length === 0 ? (
           <div className="p-8 flex flex-col items-center justify-center text-center">
-            <p className="text-gray-500 dark:text-gray-400 mb-4 text-sm">보유 코인이 없습니다.</p>
-            <button 
-              onClick={() => navigate(ROUTES.DISCOVER)} 
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                  <div className="p-8 text-center bg-white rounded-xl dark:bg-gray-800">
+            <div className="text-gray-500 mb-2 dark:text-gray-400">
+            현재 보유 코인이 없습니다.
+            </div>
+            <button
+              className="text-blue-500 font-medium dark:text-blue-400"
+              onClick={() => navigate(ROUTES.DISCOVER)}
             >
-              코인 탐색하러 가기
+              코인 탐색하기
             </button>
+          </div>
           </div>
   ) : (
         [...holdingCoins]

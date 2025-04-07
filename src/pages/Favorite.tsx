@@ -153,7 +153,7 @@ export default function Favorites() {
         ) : (
           <div className="p-8 text-center bg-white rounded-xl dark:bg-gray-800">
             <div className="text-gray-500 mb-2 dark:text-gray-400">
-              관심 종목이 없습니다
+              아직 관심 코인이 없습니다.
             </div>
             <button
               className="text-blue-500 font-medium dark:text-blue-400"
