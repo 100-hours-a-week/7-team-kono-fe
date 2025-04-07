@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 1.3.0 (2025-04-07)
+
+* feat: add buy me a beer ([ac69b52](https://github.com/100-hours-a-week/7-team-kono-fe/commit/ac69b52))
+* feat: add buy me a beer (#167) ([bc2e2aa](https://github.com/100-hours-a-week/7-team-kono-fe/commit/bc2e2aa)), closes [#167](https://github.com/100-hours-a-week/7-team-kono-fe/issues/167)
+* chore: add placeholder for user without holding coins ([5ad8e4a](https://github.com/100-hours-a-week/7-team-kono-fe/commit/5ad8e4a))
+* chore: set 0.00% gray ([f00da9a](https://github.com/100-hours-a-week/7-team-kono-fe/commit/f00da9a))
+* chore: set gap between buttons the same ([e140b81](https://github.com/100-hours-a-week/7-team-kono-fe/commit/e140b81))
+* chore: set layout margin the same ([a95506f](https://github.com/100-hours-a-week/7-team-kono-fe/commit/a95506f))
+* chore: set place holder when array is empty ([5afe6b1](https://github.com/100-hours-a-week/7-team-kono-fe/commit/5afe6b1))
+
 ## <small>1.2.1 (2025-04-07)</small>
 
 * fix: homepage-uri-accept (#165) ([77e04be](https://github.com/100-hours-a-week/7-team-kono-fe/commit/77e04be)), closes [#165](https://github.com/100-hours-a-week/7-team-kono-fe/issues/165)
