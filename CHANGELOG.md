@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## <small>1.3.1 (2025-04-07)</small>
+
+* refactor: change tab icon (#162) ([a422427](https://github.com/100-hours-a-week/7-team-kono-fe/commit/a422427)), closes [#162](https://github.com/100-hours-a-week/7-team-kono-fe/issues/162)
+* refactor: 브라우저탭 아이콘 이미지 변경 ([3d8a8d0](https://github.com/100-hours-a-week/7-team-kono-fe/commit/3d8a8d0))
+* design: add icon to dark mode toggle (#168) ([ae51d24](https://github.com/100-hours-a-week/7-team-kono-fe/commit/ae51d24)), closes [#168](https://github.com/100-hours-a-week/7-team-kono-fe/issues/168)
+* design: set font family mono ([3fb073c](https://github.com/100-hours-a-week/7-team-kono-fe/commit/3fb073c))
+* chore: add icon to dark mode toggle ([7c5003b](https://github.com/100-hours-a-week/7-team-kono-fe/commit/7c5003b))
+* chore: remove unused comments ([d9be880](https://github.com/100-hours-a-week/7-team-kono-fe/commit/d9be880))
+
 ## 1.3.0 (2025-04-07)
 
 * feat: add buy me a beer ([ac69b52](https://github.com/100-hours-a-week/7-team-kono-fe/commit/ac69b52))
