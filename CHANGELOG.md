@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## <small>1.2.1 (2025-04-07)</small>
+
+* fix: homepage-uri-accept (#165) ([77e04be](https://github.com/100-hours-a-week/7-team-kono-fe/commit/77e04be)), closes [#165](https://github.com/100-hours-a-week/7-team-kono-fe/issues/165)
+* fix:homepage-uri-accept ([6315bd9](https://github.com/100-hours-a-week/7-team-kono-fe/commit/6315bd9))
+
 ## 1.2.0 (2025-04-07)
 
 * feat: 네비게이션바 설명 텍스트 추가 ([4e34bed](https://github.com/100-hours-a-week/7-team-kono-fe/commit/4e34bed))
