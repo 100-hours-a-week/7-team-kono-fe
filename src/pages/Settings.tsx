@@ -104,7 +104,7 @@ const Settings = () => {
       <Header title="설정" />
 
       {/* 다크 모드 설정 */}
-      <div className="mx-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm mb-4 border border-gray-200 dark:border-gray-700">
+      <div className="mx-4 my-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm  border border-gray-200 dark:border-gray-700">
         <div className="p-4">
           <DarkModeToggle />
         </div>

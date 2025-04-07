@@ -302,7 +302,7 @@ function CoinList({
   }
 
   return (
-    <div className="mx-4 flex-1 rounded-b-xl overflow-hidden mb-4 shadow-lg">
+    <div className="mx-4 flex-1 rounded-b-xl overflow-hidden mb-6 shadow-lg">
       {coins.map((coin) => (
         <CoinItem key={coin.id} coin={coin} onClick={onCoinClick} />
       ))}

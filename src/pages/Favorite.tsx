@@ -103,7 +103,7 @@ export default function Favorites() {
       </div>
 
       {/* 코인 리스트 */}
-      <div className="mx-4 rounded-2xl overflow-hidden mb-4 shadow-lg">
+      <div className="mx-4 rounded-2xl overflow-hidden mb-6 shadow-lg">
         {isLoading ? (
           <div className="p-8 text-center bg-white rounded-xl dark:bg-gray-800">
             <div className="text-gray-500 dark:text-gray-400">로딩 중...</div>

@@ -123,7 +123,7 @@ export default function Ranking() {
       <Header title="랭킹" />
 
       {/* 기간 선택 탭 */}
-      <div className="mx-4 flex border-b bg-white sticky top-0 z-10 rounded-t-xl dark:bg-gray-800 dark:text-white dark:border-gray-700">
+      <div className="mx-4 mt-4 flex border-b bg-white sticky top-0 z-10 rounded-t-xl dark:bg-gray-800 dark:text-white dark:border-gray-700">
         {(['일간', '전체'] as RankingPeriod[]).map((period) => (
           <button
             key={period}
@@ -140,7 +140,7 @@ export default function Ranking() {
       </div>
 
       {/* 상위 3명 */}
-      <div className="bg-white p-4 py-6 rounded-b-xl mb-2 dark:bg-gray-800 dark:text-white mx-4 shadow-md">
+      <div className="bg-white p-4 py-6 rounded-b-xl mb-4 dark:bg-gray-800 dark:text-white mx-4 shadow-md">
         <div className="flex justify-around items-end">
           {/* 2등 */}
           <div className="flex flex-col items-center">
@@ -275,7 +275,7 @@ export default function Ranking() {
       </div>
 
       {/* 나머지 랭킹 */}
-      <div className="flex-1 bg-white rounded-b-xl dark:bg-gray-800 dark:text-white mx-4 shadow-lg">
+      <div className="flex-1 bg-white rounded-b-xl dark:bg-gray-800 dark:text-white mx-4 mb-6 shadow-lg">
         {otherUsers.map((user) => (
           <div
             key={user.rank}

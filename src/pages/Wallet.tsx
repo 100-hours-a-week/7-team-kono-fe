@@ -326,7 +326,7 @@ const Wallet = () => {
       </div>
 
       {/* 포트폴리오 차트 섹션 */}
-      <div className="flex flex-col mt-6 bg-white mx-4 rounded-xl p-4 dark:bg-gray-800 dark:text-white border border-gray-200 dark:border-gray-700">
+      <div className="flex flex-col mt-4 bg-white mx-4 rounded-xl p-4 dark:bg-gray-800 dark:text-white border border-gray-200 dark:border-gray-700">
         <h2 className="text-lg font-bold mb-4">자산 분배</h2>
         <div
           className="w-full max-w-[200px] mx-auto"
@@ -388,7 +388,7 @@ const Wallet = () => {
       </div>
 
       {/* 보유 코인 목록 */}
-      <div className="mx-4 mt-6 bg-white rounded-xl mb-4 dark:bg-gray-800 dark:text-white border border-gray-200 dark:border-gray-700">
+      <div className="mx-4 mt-4 mb-6 bg-white rounded-xl dark:bg-gray-800 dark:text-white border border-gray-200 dark:border-gray-700">
         <div className="p-4 border-b dark:border-gray-700">
           <h2 className="text-lg font-bold">보유 코인</h2>
         </div>
