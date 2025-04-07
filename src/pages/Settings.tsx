@@ -111,7 +111,7 @@ const Settings = () => {
       </div>
 
       {/* 프로필 수정 */}
-      <div className="mx-4 mt-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm mb-4 border border-gray-200 dark:border-gray-700">
+      <div className="mx-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm mb-4 border border-gray-200 dark:border-gray-700">
         <button
           onClick={() => navigate('/profile')}
           className="w-full text-left p-4 flex items-center"
