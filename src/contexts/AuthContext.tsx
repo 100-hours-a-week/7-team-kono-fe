@@ -141,9 +141,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     } else {
       loadUserInfo();
     }
-    } else {
-      loadUserInfo();
-    }
 
     // 인증 코드 처리 후 리디렉션 처리
     if (hasAuthCode) {
