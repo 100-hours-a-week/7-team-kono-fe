@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.2.0 (2025-04-07)
+
+* feat: 네비게이션바 설명 텍스트 추가 ([4e34bed](https://github.com/100-hours-a-week/7-team-kono-fe/commit/4e34bed))
+* feat: 네비게이션바 설명 텍스트 추가 (#161) ([33c309f](https://github.com/100-hours-a-week/7-team-kono-fe/commit/33c309f)), closes [#161](https://github.com/100-hours-a-week/7-team-kono-fe/issues/161) [#123](https://github.com/100-hours-a-week/7-team-kono-fe/issues/123) [#456](https://github.com/100-hours-a-week/7-team-kono-fe/issues/456) [#89](https://github.com/100-hours-a-week/7-team-kono-fe/issues/89)
+
 ## <small>1.1.5 (2025-04-07)</small>
 
 * fix: ts build errors ([3beba1d](https://github.com/100-hours-a-week/7-team-kono-fe/commit/3beba1d))
