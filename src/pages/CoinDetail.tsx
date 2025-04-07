@@ -173,7 +173,15 @@ export default function CoinDetail() {
           </button>
         }
       />
+      {/* Google tag (gtag.js) */}
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-R5EH3VPTG0"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
 
+        gtag('config', 'G-R5EH3VPTG0');
+      </script>
       {/* PriceInfo 컴포넌트 사용 */}
       <PriceInfo
         symbol={symbolToUse}

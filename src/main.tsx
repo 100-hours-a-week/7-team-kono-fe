@@ -20,7 +20,7 @@ import Layout from './components/layout/Layout';
 import AuthLayout from './components/layout/AuthLayout';
 import KakoRedirectHandler from './components/auth/KakoRedirectHandler.tsx';
 
-import * as Sentry from "@sentry/react";
+import * as Sentry from "@sentry/react"; //npm install @sentry/react @sentry/tracing
 
 Sentry.init({
   dsn: "https://9ba5351ae2788a1039d336aeb4b88082@o4509077698707456.ingest.us.sentry.io/4509077976449024",
