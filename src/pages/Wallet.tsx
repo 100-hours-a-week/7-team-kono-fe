@@ -41,6 +41,8 @@ interface ChartItem {
 
 const Wallet = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [holdingCoins, setHoldingCoins] = useState<Coin[]>([]);
   const [holdingCash, setHoldingCash] = useState<number>(0);
   const [tickers, setTickers] = useState<string[]>([]);
@@ -49,6 +51,7 @@ const Wallet = () => {
   useEffect(() => {
     const fetchHoldingCoins = async () => {
       try {
+        setIsLoading(true)
         const walletData = (await getHoldingCoins()) as unknown as CoinData[];
         const cash = await getBalance();
         // HoldingCoin 객체 형식으로 변환
@@ -71,8 +74,11 @@ const Wallet = () => {
         setTickers(tickerList);
       } catch (error) {
         console.error('Error fetching holding coins:', error);
+        setError('코인 정보를 불러오는데 실패했습니다.');
         setHoldingCoins([]);
         setTickers([]);
+      } finally {
+        setIsLoading(false)
       }
     };
 
@@ -392,7 +398,27 @@ const Wallet = () => {
         <div className="p-4 border-b dark:border-gray-700">
           <h2 className="text-lg font-bold">보유 코인</h2>
         </div>
-        {[...holdingCoins]
+
+        {isLoading ? (
+          <div className="p-8 flex flex-col items-center justify-center text-center">
+            <p className="text-gray-500 dark:text-gray-400">로딩 중...</p>
+          </div>
+        ) : error ? (
+          <div className="p-8 flex flex-col items-center justify-center text-center">
+            <p className="text-red-500 dark:text-red-400">{error}</p>
+          </div>
+        ) : holdingCoins.length === 0 ? (
+          <div className="p-8 flex flex-col items-center justify-center text-center">
+            <p className="text-gray-500 dark:text-gray-400 mb-4 text-sm">보유 코인이 없습니다.</p>
+            <button 
+              onClick={() => navigate(ROUTES.DISCOVER)} 
+              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+            >
+              코인 탐색하러 가기
+            </button>
+          </div>
+  ) : (
+        [...holdingCoins]
           .sort((a, b) => (b.value || 0) - (a.value || 0))
           .map((coin) => (
             <div
@@ -433,10 +459,11 @@ const Wallet = () => {
                 >
                   {(coin.profitRate || 0) >= 0 ? '+' : ''}
                   {(coin.profitRate || 0).toFixed(2)}%
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))
+        )}
       </div>
     </div>
   );
