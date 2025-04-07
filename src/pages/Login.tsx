@@ -118,7 +118,11 @@ const Login: React.FC = () => {
       <div className="flex-1 flex items-end justify-center w-full mb-8">
         <div className="w-full max-w-md">
           <div className="flex flex-col items-center justify-center">
-            <img src={konoLogo} alt="코노 로고" className="w-3/4 mx-auto" />
+            <img 
+              src={konoLogo} 
+              alt="코노 로고" 
+              className="h-15 w-auto object-contain mx-auto"
+            />
             <p className="text-center text-sm text-gray-500 mt-2">
               코인 놀이터 <strong>코노</strong>에서 실전 투자 감각을 키워보세요
             </p>
