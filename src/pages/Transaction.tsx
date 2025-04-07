@@ -97,7 +97,7 @@ export default function Transaction() {
       {/* 헤더 */}
       <Header title="매매 내역" />
       {/* 필터 표시 */}
-      <div className="mx-4 bg-white p-4 border-b flex justify-between rounded-t-xl dark:bg-gray-800 dark:text-white dark:border-gray-700">
+      <div className="mx-4 mt-4 bg-white p-4 border-b flex justify-between rounded-t-xl dark:bg-gray-800 dark:text-white dark:border-gray-700">
         <div className="flex items-center">
           <span className="text-sm text-gray-500 mr-2">필터:</span>
           <span className="text-sm font-medium">{activeFilter}</span>
@@ -109,7 +109,7 @@ export default function Transaction() {
 
       {/* 거래 내역 목록 */}
       {filteredTransactions.length > 0 ? (
-        <div className="flex-1 rounded-xl mx-4 mb-4">
+        <div className="flex-1 rounded-xl mx-4 mb-6">
           {filteredTransactions.map((transaction) => (
             <div
               key={transaction.transactionId}

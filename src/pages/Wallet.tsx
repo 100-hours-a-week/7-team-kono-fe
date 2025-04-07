@@ -41,6 +41,8 @@ interface ChartItem {
 
 const Wallet = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [holdingCoins, setHoldingCoins] = useState<Coin[]>([]);
   const [holdingCash, setHoldingCash] = useState<number>(0);
   const [tickers, setTickers] = useState<string[]>([]);
@@ -49,6 +51,7 @@ const Wallet = () => {
   useEffect(() => {
     const fetchHoldingCoins = async () => {
       try {
+        setIsLoading(true)
         const walletData = (await getHoldingCoins()) as unknown as CoinData[];
         const cash = await getBalance();
         // HoldingCoin 객체 형식으로 변환
@@ -71,8 +74,11 @@ const Wallet = () => {
         setTickers(tickerList);
       } catch (error) {
         console.error('Error fetching holding coins:', error);
+        setError('코인 정보를 불러오는데 실패했습니다.');
         setHoldingCoins([]);
         setTickers([]);
+      } finally {
+        setIsLoading(false)
       }
     };
 
@@ -302,12 +308,21 @@ const Wallet = () => {
       <div className="mx-4 mt-4 p-4 bg-white rounded-xl shadow-sm dark:bg-gray-800 dark:text-white border border-gray-200 dark:border-gray-700">
         <div className="text-2xl font-bold">
           {formatCurrency(totalAsset, 'KRW', true, false)}
-          <span
+          {/* <span
             className={`text-${totalProfitRate >= 0 ? 'red' : 'blue'}-500 text-lg ml-2`}
-          >
-            ({totalProfitRate >= 0 ? '+' : ''}
-            {totalProfitRate.toFixed(2)}%)
-          </span>
+          > */}
+            <span
+              className={`text-lg ml-2 ${
+                totalProfitRate === 0 
+                  ? 'text-gray-500' 
+                  : totalProfitRate > 0 
+                    ? 'text-red-500' 
+                    : 'text-blue-500'
+              }`}
+            >
+              ({totalProfitRate > 0 ? '+' : ''}
+              {totalProfitRate.toFixed(2)}%)
+            </span>
         </div>
         <div className="flex justify-between mt-4 text-gray-600 dark:text-white">
           <div>
@@ -326,7 +341,7 @@ const Wallet = () => {
       </div>
 
       {/* 포트폴리오 차트 섹션 */}
-      <div className="flex flex-col mt-6 bg-white mx-4 rounded-xl p-4 dark:bg-gray-800 dark:text-white border border-gray-200 dark:border-gray-700">
+      <div className="flex flex-col mt-4 bg-white mx-4 rounded-xl p-4 dark:bg-gray-800 dark:text-white border border-gray-200 dark:border-gray-700">
         <h2 className="text-lg font-bold mb-4">자산 분배</h2>
         <div
           className="w-full max-w-[200px] mx-auto"
@@ -388,11 +403,35 @@ const Wallet = () => {
       </div>
 
       {/* 보유 코인 목록 */}
-      <div className="mx-4 mt-6 bg-white rounded-xl mb-4 dark:bg-gray-800 dark:text-white border border-gray-200 dark:border-gray-700">
+      <div className="mx-4 mt-4 mb-6 bg-white rounded-xl dark:bg-gray-800 dark:text-white border border-gray-200 dark:border-gray-700">
         <div className="p-4 border-b dark:border-gray-700">
           <h2 className="text-lg font-bold">보유 코인</h2>
         </div>
-        {[...holdingCoins]
+
+        {isLoading ? (
+          <div className="p-8 flex flex-col items-center justify-center text-center">
+            <p className="text-gray-500 dark:text-gray-400">로딩 중...</p>
+          </div>
+        ) : error ? (
+          <div className="p-8 flex flex-col items-center justify-center text-center">
+            <p className="text-red-500 dark:text-red-400">{error}</p>
+          </div>
+        ) : holdingCoins.length === 0 ? (
+          <div className="p-8 flex flex-col items-center justify-center text-center">
+                  <div className="p-8 text-center bg-white rounded-xl dark:bg-gray-800">
+            <div className="text-gray-500 mb-2 dark:text-gray-400">
+            현재 보유 코인이 없습니다.
+            </div>
+            <button
+              className="text-blue-500 font-medium dark:text-blue-400"
+              onClick={() => navigate(ROUTES.DISCOVER)}
+            >
+              코인 탐색하기
+            </button>
+          </div>
+          </div>
+  ) : (
+        [...holdingCoins]
           .sort((a, b) => (b.value || 0) - (a.value || 0))
           .map((coin) => (
             <div
@@ -424,7 +463,7 @@ const Wallet = () => {
                 <div className="font-medium">
                   {formatCurrency(coin.value || 0, 'KRW')}
                 </div>
-                <div
+                {/* <div
                   className={`text-sm ${
                     (coin.profitRate || 0) >= 0
                       ? 'text-red-500'
@@ -433,10 +472,23 @@ const Wallet = () => {
                 >
                   {(coin.profitRate || 0) >= 0 ? '+' : ''}
                   {(coin.profitRate || 0).toFixed(2)}%
+                  </div> */}
+                  <div
+                    className={`text-sm ${
+                      (coin.profitRate || 0) === 0
+                        ? 'text-gray-500'
+                        : (coin.profitRate || 0) > 0
+                          ? 'text-red-500'
+                          : 'text-blue-500'
+                    }`}
+                  >
+                    {(coin.profitRate || 0) > 0 ? '+' : ''}
+                    {(coin.profitRate || 0).toFixed(2)}%
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))
+        )}
       </div>
     </div>
   );
