@@ -112,11 +112,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     // 현재 페이지가 로그인 페이지인지 확인
     const isLoginPage = window.location.pathname === '/login';
-
+    
     // URL에 카카오 인증 코드가 있는지 확인 (로그인 직후)
     const params = new URLSearchParams(window.location.search);
     const hasAuthCode = params.has('code');
 
+    
     if (isLoginPage && !hasAuthCode) {
       setLoading(false);
       return;
@@ -124,6 +125,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
     if (hasAuthCode) {
       const cleanUrl = window.location.pathname; // 쿼리 파라미터 제거
+
 
       // 인증 코드가 있으면 쿠키가 설정되기까지 약간의 지연 후 로드
       setTimeout(() => {

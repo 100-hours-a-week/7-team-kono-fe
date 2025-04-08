@@ -10,16 +10,20 @@ import {
   FaUserMinus,
   FaExclamationTriangle,
   FaBeer,
+  FaSun,
+  FaMoon,
 } from 'react-icons/fa';
 import DarkModeToggle from '../components/theme/DarkModeToggle';
 import Modal from '../components/modal/Modal';
 import { withdrawUser } from '../api/user';
 import { toast } from 'react-toastify';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
 
 const Settings = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();
+  const { darkMode } = useTheme();
   const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
 
     // Buy me a beer 스크립트 로드
@@ -104,11 +108,22 @@ const Settings = () => {
       <Header title="설정" />
 
       {/* 다크 모드 설정 */}
-      <div className="mx-4 my-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm  border border-gray-200 dark:border-gray-700">
+      {/* <div className="mx-4 my-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm  border border-gray-200 dark:border-gray-700">
         <div className="p-4">
           <DarkModeToggle />
         </div>
-      </div>
+      </div> */}
+        <div className="mx-4 my-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+          <div className="p-4 flex items-center">
+            {darkMode ? (
+              <FaMoon className="text-gray-500 dark:text-gray-400 text-xl mr-3" />
+            ) : (
+              <FaSun className="text-gray-500 dark:text-gray-400 text-xl mr-3" />
+            )}
+            <span className="flex-1">다크 모드</span>
+            <DarkModeToggle />
+          </div>
+        </div>
 
       {/* 프로필 수정 */}
       <div className="mx-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm mb-4 border border-gray-200 dark:border-gray-700">
@@ -127,7 +142,7 @@ const Settings = () => {
           onClick={handleBuyMeABeer}
           className="w-full text-left p-4 flex items-center"
         >
-          <FaBeer className="text-amber-500 mr-3" />
+          <FaBeer className="text-gray-500 dark:text-gray-400 mr-3" />
           <span className="text-base">개발자에게 맥주 사주기</span>
         </button>
       </div>
