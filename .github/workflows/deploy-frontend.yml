@@ -1,0 +1,47 @@
+name: Deploy React Frontend to EC2
+
+on:
+  push:
+    branches: [ "develop" ]
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/deploy-frontend.yml'
+
+  pull_request:
+    branches: [ "develop" ]
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/deploy-frontend.yml'
+
+jobs:
+  deploy-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build React
+        run: |
+          cd frontend
+          npm ci
+          npm run build
+
+      - name: Upload build to EC2
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.DEV_EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: frontend/build/**
+          target: /home/ubuntu/deploy-temp/frontend
+
+      - name: Deploy on EC2
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.DEV_EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            rm -rf /home/ubuntu/frontend/build
+            mv /home/ubuntu/deploy-temp/frontend /home/ubuntu/frontend/build
