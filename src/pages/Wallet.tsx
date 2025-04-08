@@ -179,7 +179,7 @@ const Wallet = () => {
   // 상위 5개 코인 선택
   const topCoins = positiveCoins
     .sort((a, b) => (b.value || 0) - (a.value || 0))
-    .slice(0, 5)
+    .slice(0, 4)
     .map((coin) => ({
       name: coin.ticker,
       value: coin.value,
