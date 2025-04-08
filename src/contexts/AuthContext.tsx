@@ -126,6 +126,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     if (hasAuthCode) {
       const cleanUrl = window.location.pathname; // 쿼리 파라미터 제거
 
+
       // 인증 코드가 있으면 쿠키가 설정되기까지 약간의 지연 후 로드
       setTimeout(() => {
         loadUserInfo(false).then(() => {

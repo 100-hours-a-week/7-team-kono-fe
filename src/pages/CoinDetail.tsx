@@ -173,7 +173,17 @@ export default function CoinDetail() {
           </button>
         }
       />
-
+      {/* Google Analytics 스크립트 */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'YOUR-GA-ID');
+          `
+        }}
+      />
       {/* PriceInfo 컴포넌트 사용 */}
       <PriceInfo
         symbol={symbolToUse}
