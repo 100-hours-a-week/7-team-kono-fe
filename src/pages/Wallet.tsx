@@ -235,30 +235,7 @@ const Wallet = () => {
   if (cashBalance > 0) {
     chartBackgroundColors.push('rgba(200, 200, 200, 0.8)');
   }
-
-  // 차트 데이터
-  // const data = {
-  //   labels: [
-  //     ...topCoins.map((coin) => coin.name),
-  //     otherCoinsValue > 0 ? '기타' : null,
-  //     cashBalance > 0 ? '현금' : null,
-  //   ].filter(Boolean),
-  //   datasets: [
-  //     {
-  //       data: [
-  //         ...topCoins.map((coin) => Math.max(0, coin.percent)),
-  //         otherCoinsValue > 0 ? Math.max(0, otherCoinsPercent) : null,
-  //         cashBalance > 0 ? Math.max(0, cashPercent) : null,
-  //       ].filter(Boolean),
-  //       backgroundColor: [
-  //         ...positiveCoins.slice(0, 5).map((coin) => coin.color),
-  //         otherCoinsValue > 0 ? 'rgba(150, 150, 150, 0.8)' : null,
-  //         cashBalance > 0 ? 'rgba(200, 200, 200, 0.8)' : null,
-  //       ].filter(Boolean),
-  //       borderWidth: 0,
-  //     },
-  //   ],
-  // };
+  
   // 차트 데이터
   const data = {
     labels: chartItems.map((item) => item.name),
@@ -308,9 +285,6 @@ const Wallet = () => {
       <div className="mx-4 mt-4 p-4 bg-white rounded-xl shadow-sm dark:bg-gray-800 dark:text-white border border-gray-200 dark:border-gray-700">
         <div className="text-2xl font-bold">
           {formatCurrency(totalAsset, 'KRW', true, false)}
-          {/* <span
-            className={`text-${totalProfitRate >= 0 ? 'red' : 'blue'}-500 text-lg ml-2`}
-          > */}
             <span
               className={`text-lg ml-2 ${
                 totalProfitRate === 0 
@@ -349,39 +323,6 @@ const Wallet = () => {
         >
           <Pie data={data} options={options} />
         </div>
-
-        {/* <div className="grid grid-cols-3 gap-4 mt-4">
-          {[
-            ...topCoins.map((coin) => ({
-              name: coin.name,
-              value: Math.max(0, coin.percent),
-            })),
-            otherCoinsValue > 0
-              ? { name: '기타', value: Math.max(0, otherCoinsPercent) }
-              : null,
-            cashBalance > 0
-              ? { name: '현금', value: Math.max(0, cashPercent) }
-              : null,
-          ]
-            .filter(Boolean)
-            .map((item, index) => (
-              <div key={item?.name} className="flex items-center">
-                <div
-                  className="w-4 h-4 rounded-md mr-2 flex-shrink-0"
-                  style={{
-                    backgroundColor: data.datasets[0].backgroundColor[index],
-                  }}
-                ></div>
-                <div>
-                  <div className="text-sm">{item?.name}</div>
-                  <div className="text-sm font-medium">
-                    {item?.value.toFixed(1)}%
-                  </div>
-                </div>
-              </div>
-            ))}
-        </div>
-      </div> */}
         <div className="grid grid-cols-3 gap-4 mt-4">
           {chartItems.map((item, index) => (
             <div key={item.name} className="flex items-center">
@@ -463,16 +404,6 @@ const Wallet = () => {
                 <div className="font-medium">
                   {formatCurrency(coin.value || 0, 'KRW')}
                 </div>
-                {/* <div
-                  className={`text-sm ${
-                    (coin.profitRate || 0) >= 0
-                      ? 'text-red-500'
-                      : 'text-blue-500'
-                  }`}
-                >
-                  {(coin.profitRate || 0) >= 0 ? '+' : ''}
-                  {(coin.profitRate || 0).toFixed(2)}%
-                  </div> */}
                   <div
                     className={`text-sm ${
                       (coin.profitRate || 0) === 0
