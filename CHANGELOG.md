@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## <small>1.4.1 (2025-04-08)</small>
+
+* fix: improve kakao auto login functionality and login page navigation ([46c174c](https://github.com/100-hours-a-week/7-team-kono-fe/commit/46c174c))
+* fix: login ([078f842](https://github.com/100-hours-a-week/7-team-kono-fe/commit/078f842))
+* fix: login (#169) ([3f86e66](https://github.com/100-hours-a-week/7-team-kono-fe/commit/3f86e66)), closes [#169](https://github.com/100-hours-a-week/7-team-kono-fe/issues/169)
+
 ## 1.4.0 (2025-04-07)
 
 * feat: google Analytics ([3d4198c](https://github.com/100-hours-a-week/7-team-kono-fe/commit/3d4198c))
