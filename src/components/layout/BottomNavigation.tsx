@@ -33,7 +33,6 @@ const BottomNavigation: React.FC = () => {
     });
   };
 
-
   // 네비게이션 아이템 컴포넌트
   const NavItem = ({ 
     to, 
@@ -47,8 +46,6 @@ const BottomNavigation: React.FC = () => {
     label: string 
   }) => {
     const active = isActive(category);
-    
-
 
 return (
   <li className="flex-1 h-full">
