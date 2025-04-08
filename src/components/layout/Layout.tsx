@@ -80,7 +80,10 @@ const Layout: React.FC = () => {
 
   // 정상적인 레이아웃 표시 (인증됨 또는 로그인 페이지)
   return (
-    <div className="flex flex-col min-h-screen max-w-[430px] w-full mx-auto relative overflow-y-auto bg-white dark:bg-gray-900 text-mainText dark:text-white">
+    <div
+      className="flex flex-col min-h-screen w-full mx-auto relative overflow-hidden bg-white dark:bg-gray-900 text-mainText dark:text-white"
+      style={{ maxWidth: '430px' }}
+    >
       <Header />
       {/* 헤더 높이만큼 상단 패딩 추가 */}
       <main className="flex-1 py-16">
