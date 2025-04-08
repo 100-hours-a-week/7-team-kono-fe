@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## <small>1.4.2 (2025-04-08)</small>
+
+* fix: ts error ([a7c9ba7](https://github.com/100-hours-a-week/7-team-kono-fe/commit/a7c9ba7))
+* fix: ts error (#171) ([3a7c6c3](https://github.com/100-hours-a-week/7-team-kono-fe/commit/3a7c6c3)), closes [#171](https://github.com/100-hours-a-week/7-team-kono-fe/issues/171)
+* design: set navbar active ([f81bf91](https://github.com/100-hours-a-week/7-team-kono-fe/commit/f81bf91))
+* design: set navbar active (#170) ([961f061](https://github.com/100-hours-a-week/7-team-kono-fe/commit/961f061)), closes [#170](https://github.com/100-hours-a-week/7-team-kono-fe/issues/170)
+
 ## <small>1.4.1 (2025-04-08)</small>
 
 * fix: improve kakao auto login functionality and login page navigation ([46c174c](https://github.com/100-hours-a-week/7-team-kono-fe/commit/46c174c))
