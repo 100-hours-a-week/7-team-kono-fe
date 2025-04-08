@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## <small>1.4.3 (2025-04-08)</small>
+
+* chore: fix layout ([af3cf11](https://github.com/100-hours-a-week/7-team-kono-fe/commit/af3cf11))
+* chore: fix layout (#174) ([10bcb7c](https://github.com/100-hours-a-week/7-team-kono-fe/commit/10bcb7c)), closes [#174](https://github.com/100-hours-a-week/7-team-kono-fe/issues/174)
+* Merge branch 'main' into hotfix/style ([0e69ad7](https://github.com/100-hours-a-week/7-team-kono-fe/commit/0e69ad7))
+* hotfix: style (#173) ([5912abe](https://github.com/100-hours-a-week/7-team-kono-fe/commit/5912abe)), closes [#173](https://github.com/100-hours-a-week/7-team-kono-fe/issues/173)
+* design: fix 0.0% color ([4c1c9b6](https://github.com/100-hours-a-week/7-team-kono-fe/commit/4c1c9b6))
+* style: update bottom navbar style ([7240560](https://github.com/100-hours-a-week/7-team-kono-fe/commit/7240560))
+
 ## <small>1.4.2 (2025-04-08)</small>
 
 * fix: ts error ([a7c9ba7](https://github.com/100-hours-a-week/7-team-kono-fe/commit/a7c9ba7))
