@@ -34,8 +34,8 @@ const BottomNavigation: React.FC = () => {
   };
 
   // 활성화된 아이템에 적용할 스타일
-  const activeStyle = "text-blue-500";
-  const inactiveStyle = "text-toastBg";
+  // const activeStyle = "text-blue-500";
+  // const inactiveStyle = "text-toastBg";
 
   // 네비게이션 아이템 컴포넌트
   const NavItem = ({ 
