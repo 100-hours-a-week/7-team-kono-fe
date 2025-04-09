@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 1.5.0 (2025-04-09)
+
+* feat: add clarity analytics integration ([ab6d7b2](https://github.com/100-hours-a-week/7-team-kono-fe/commit/ab6d7b2))
+* feat: add clarity analytics integration (#175) ([66a7441](https://github.com/100-hours-a-week/7-team-kono-fe/commit/66a7441)), closes [#175](https://github.com/100-hours-a-week/7-team-kono-fe/issues/175)
+* chore: fix layout index.css ([3e305dd](https://github.com/100-hours-a-week/7-team-kono-fe/commit/3e305dd))
+* chore: fix scrolling ([8d63598](https://github.com/100-hours-a-week/7-team-kono-fe/commit/8d63598))
+* chore: fix scrolling ([fe8f32e](https://github.com/100-hours-a-week/7-team-kono-fe/commit/fe8f32e))
+* fix:지갑 코인 최대 개수 7->6 수정 ([0e6bbc0](https://github.com/100-hours-a-week/7-team-kono-fe/commit/0e6bbc0))
+* fix:지갑 코인 최대 개수 7->6 수정 (#166) ([51d1043](https://github.com/100-hours-a-week/7-team-kono-fe/commit/51d1043)), closes [#166](https://github.com/100-hours-a-week/7-team-kono-fe/issues/166)
+
 ## <small>1.4.3 (2025-04-08)</small>
 
 * chore: fix layout ([af3cf11](https://github.com/100-hours-a-week/7-team-kono-fe/commit/af3cf11))
