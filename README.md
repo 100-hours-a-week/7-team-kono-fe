@@ -80,19 +80,7 @@
 
 <br/>
 
-# 4. Key Achievements
-
-- 💡 **Redis 기반 랭킹 캐시**: 2.74s → 64ms (43배 향상)
-- 🔍 **Nginx vs Apache 벤치마크**: Nginx 10배 처리량
-- ⚙️ **DB 벤치마크**: MySQL → MariaDB로 평균 1.75배 TPS 향상
-- 📈 **KONO 챌린지 운영 결과**:
-  - 평균 참여시간 10분
-  - 활성 사용자 447명, 신규 유저 568명
-  - 평균 스크롤 깊이 89.3%
-
-<br/>
-
-# 5. Stacks
+# 4. Stacks
 
 <div align=center> 
   <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"> 
@@ -110,7 +98,7 @@
 
 <br/>
 
-# 6. Commit Convention
+# 5. Commit Convention
 
 | 타입     | 설명                                             |
 | -------- | ------------------------------------------------ |
