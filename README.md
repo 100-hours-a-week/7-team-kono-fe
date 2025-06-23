@@ -11,16 +11,17 @@
 > 사용자는 실제 자금을 투입하지 않고도 다양한 코인을 사고팔며 투자 감각을 키울 수 있으며,  
 > 이를 통해 **무지성 투자, 높은 진입 장벽, 실거래 위험성** 등 기존 암호화폐 시장의 문제를 안전하게 학습 환경에서 극복할 수 있습니다.
 
-- 서비스 핵심 기능:
-  - **코인 탐색**: 163개 코인의 실시간 시세 제공 및 정렬
-  - **유저 포트폴리오**: 수익률 시각화 및 보유 코인 리스트 제공
-    <img src="https://github.com/100-hours-a-week/7-team-kono-fe/blob/develop/assets/2.png" width="100%"/>
-  - **코인 상세**: 시세, 차트, 시가·고가·저가 등 정보 제공
-  - **코인 매매**: 가입 시 가상 자산 1000만원 지급, 실시간 시세 기반 거래
-  - **관심 종목**: 빠른 접근 및 실시간 시세 확인
-    <img src="https://github.com/100-hours-a-week/7-team-kono-fe/blob/develop/assets/3.png" width="100%"/>
-  - **전체/일간 랭킹**: 투자 성과를 기준으로 순위화
-    <img src="https://github.com/100-hours-a-week/7-team-kono-fe/blob/develop/assets/4.png" width="100%"/>
+## 서비스 핵심 기능
+
+- **코인 탐색**: 163개 코인의 실시간 시세 제공 및 정렬
+- **유저 포트폴리오**: 수익률 시각화 및 보유 코인 리스트 제공
+  <img src="https://github.com/100-hours-a-week/7-team-kono-fe/blob/develop/assets/2.png" width="100%"/>
+- **코인 상세**: 시세, 차트, 시가·고가·저가 등 정보 제공
+- **코인 매매**: 가입 시 가상 자산 1000만원 지급, 실시간 시세 기반 거래
+- **관심 종목**: 빠른 접근 및 실시간 시세 확인
+  <img src="https://github.com/100-hours-a-week/7-team-kono-fe/blob/develop/assets/3.png" width="100%"/>
+- **전체/일간 랭킹**: 투자 성과를 기준으로 순위화
+  <img src="https://github.com/100-hours-a-week/7-team-kono-fe/blob/develop/assets/4.png" width="100%"/>
 
 <br/>
 <br/>
