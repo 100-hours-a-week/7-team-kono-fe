@@ -1,5 +1,5 @@
 <a href="https://playcono.com/" target="_blank">
-<img src="https://github.com/100-hours-a-week/7-team-kono-fe/assets/1.png" alt="KONO 배너" width="100%"/>
+<img src="https://github.com/100-hours-a-week/7-team-kono-fe/blob/develop/assets/1.png" alt="KONO 배너" width="100%"/>
 </a>
 
 <br/>
@@ -14,13 +14,13 @@
 - 서비스 핵심 기능:
   - **코인 탐색**: 163개 코인의 실시간 시세 제공 및 정렬
   - **유저 포트폴리오**: 수익률 시각화 및 보유 코인 리스트 제공
-    <img src="https://github.com/100-hours-a-week/7-team-kono-fe/assets/2.png" width="100%"/>
+    <img src="https://github.com/100-hours-a-week/7-team-kono-fe/blob/develop/assets/2.png" width="100%"/>
   - **코인 상세**: 시세, 차트, 시가·고가·저가 등 정보 제공
   - **코인 매매**: 가입 시 가상 자산 1000만원 지급, 실시간 시세 기반 거래
   - **관심 종목**: 빠른 접근 및 실시간 시세 확인
-    <img src="https://github.com/100-hours-a-week/7-team-kono-fe/assets/3.png" width="100%"/>
+    <img src="https://github.com/100-hours-a-week/7-team-kono-fe/blob/develop/assets/3.png" width="100%"/>
   - **전체/일간 랭킹**: 투자 성과를 기준으로 순위화
-    <img src="https://github.com/100-hours-a-week/7-team-kono-fe/assets/4.png" width="100%"/>
+    <img src="https://github.com/100-hours-a-week/7-team-kono-fe/blob/develop/assets/4.png" width="100%"/>
 
 <br/>
 <br/>
