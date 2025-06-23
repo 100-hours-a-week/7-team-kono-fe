@@ -16,6 +16,11 @@ interface ProfileUpdateResponse {
   };
 }
 
+interface ErrorResponse {
+  status: number;
+  message: string;
+}
+
 // 사용자 프로필 정보 가져오기
 export const getUserProfile = async (): Promise<ProfileData> => {
   try {
@@ -52,7 +57,7 @@ export const updateProfileImage = async (
     const { presignedUrl, uploadedFileUrl } = presignedUrlResponse.data;
 
     // 2. Presigned URL을 사용하여 S3에 직접 업로드
-    await axios.put(presignedUrl, imageFile, {
+    await api.put(presignedUrl, imageFile, {
       headers: {
         'Content-Type': imageFile.type,
       },
@@ -82,7 +87,7 @@ export const updateNickname = async (
   nickname: string,
 ): Promise<ProfileData> => {
   try {
-    await axios.put(
+    await api.put(
       '/api/v1/users/nickname',
       { nickname },
       {
@@ -96,12 +101,12 @@ export const updateNickname = async (
       // HTTP 상태 코드와 메시지를 함께 throw
       throw {
         status: error.response.status,
-        message: error.response.data.message
-      };
+        message: error.response.data.message,
+      } as ErrorResponse;
     }
     throw {
       status: 500,
-      message: '닉네임 변경에 실패했습니다.'
+      message: '닉네임 변경에 실패했습니다.',
     };
   }
 };
@@ -109,7 +114,7 @@ export const updateNickname = async (
 // 잔액 조회
 export const getBalance = async (): Promise<number> => {
   try {
-    const response = await axios.get('/api/v1/users/balance', {
+    const response = await api.get('/api/v1/users/balance', {
       withCredentials: true,
     });
 

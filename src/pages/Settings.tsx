@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/layout/Header';
 import { ROUTES } from '../config/routes';
@@ -9,23 +9,61 @@ import {
   FaInfoCircle,
   FaUserMinus,
   FaExclamationTriangle,
+  FaBeer,
+  FaSun,
+  FaMoon,
 } from 'react-icons/fa';
 import DarkModeToggle from '../components/theme/DarkModeToggle';
 import Modal from '../components/modal/Modal';
 import { withdrawUser } from '../api/user';
 import { toast } from 'react-toastify';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
 
 const Settings = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();
+  const { darkMode } = useTheme();
   const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
+
+    // Buy me a beer 스크립트 로드
+    useEffect(() => {
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js';
+      script.setAttribute('data-name', 'bmc-button');
+      script.setAttribute('data-slug', '98xb810ibl');
+      script.setAttribute('data-color', '#5F7FFF');
+      script.setAttribute('data-emoji', '🍺');
+      script.setAttribute('data-font', 'Inter');
+      script.setAttribute('data-text', 'Buy me a beer');
+      script.setAttribute('data-outline-color', '#000000');
+      script.setAttribute('data-font-color', '#ffffff');
+      script.setAttribute('data-coffee-color', '#FFDD00');
+      script.async = true;
+      
+      // 스크립트가 이미 존재하는지 확인
+      const existingScript = document.querySelector('script[data-name="bmc-button"]');
+      if (!existingScript) {
+        document.body.appendChild(script);
+      }
+      
+      return () => {
+        // 컴포넌트 언마운트 시 스크립트 제거
+        if (document.body.contains(script)) {
+          document.body.removeChild(script);
+        }
+      };
+    }, []);
 
   const openGitHubWiki = () => {
     window.open(
       'https://github.com/100-hours-a-week/7-team-secretjuju-kono-wiki/wiki',
       '_blank',
     );
+  };
+
+  const handleBuyMeABeer = () => {
+    window.open('https://www.buymeacoffee.com/98xb810ibl', '_blank');
   };
 
   const handleLogout = async () => {
@@ -70,20 +108,42 @@ const Settings = () => {
       <Header title="설정" />
 
       {/* 다크 모드 설정 */}
-      <div className="mx-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm mb-4 border border-gray-200 dark:border-gray-700">
+      {/* <div className="mx-4 my-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm  border border-gray-200 dark:border-gray-700">
         <div className="p-4">
           <DarkModeToggle />
         </div>
-      </div>
+      </div> */}
+        <div className="mx-4 my-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+          <div className="p-4 flex items-center">
+            {darkMode ? (
+              <FaMoon className="text-gray-500 dark:text-gray-400 text-xl mr-3" />
+            ) : (
+              <FaSun className="text-gray-500 dark:text-gray-400 text-xl mr-3" />
+            )}
+            <span className="flex-1">다크 모드</span>
+            <DarkModeToggle />
+          </div>
+        </div>
 
       {/* 프로필 수정 */}
-      <div className="mx-4 mt-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm mb-4 border border-gray-200 dark:border-gray-700">
+      <div className="mx-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm mb-4 border border-gray-200 dark:border-gray-700">
         <button
           onClick={() => navigate('/profile')}
           className="w-full text-left p-4 flex items-center"
         >
           <FaUser className="text-gray-500 dark:text-gray-400 mr-3" />
           <span className="text-base">프로필 수정</span>
+        </button>
+      </div>
+
+            {/* Buy me a beer 버튼 */}
+            <div className="mx-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm mb-4 border border-gray-200 dark:border-gray-700">
+        <button
+          onClick={handleBuyMeABeer}
+          className="w-full text-left p-4 flex items-center"
+        >
+          <FaBeer className="text-gray-500 dark:text-gray-400 mr-3" />
+          <span className="text-base">개발자에게 맥주 사주기</span>
         </button>
       </div>
 

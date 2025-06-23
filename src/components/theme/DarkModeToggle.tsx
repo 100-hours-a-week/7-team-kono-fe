@@ -8,7 +8,7 @@ type DarkModeToggleProps = {
 };
 
 const DarkModeToggle: React.FC<DarkModeToggleProps> = ({
-  label = '다크 모드',
+  label = '',
   className = '',
 }) => {
   const { darkMode, toggleDarkMode } = useTheme();

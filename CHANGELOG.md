@@ -1,5 +1,92 @@
 # CHANGELOG
 
+## 1.5.0 (2025-04-09)
+
+* feat: add clarity analytics integration ([ab6d7b2](https://github.com/100-hours-a-week/7-team-kono-fe/commit/ab6d7b2))
+* feat: add clarity analytics integration (#175) ([66a7441](https://github.com/100-hours-a-week/7-team-kono-fe/commit/66a7441)), closes [#175](https://github.com/100-hours-a-week/7-team-kono-fe/issues/175)
+* chore: fix layout index.css ([3e305dd](https://github.com/100-hours-a-week/7-team-kono-fe/commit/3e305dd))
+* chore: fix scrolling ([8d63598](https://github.com/100-hours-a-week/7-team-kono-fe/commit/8d63598))
+* chore: fix scrolling ([fe8f32e](https://github.com/100-hours-a-week/7-team-kono-fe/commit/fe8f32e))
+* fix:지갑 코인 최대 개수 7->6 수정 ([0e6bbc0](https://github.com/100-hours-a-week/7-team-kono-fe/commit/0e6bbc0))
+* fix:지갑 코인 최대 개수 7->6 수정 (#166) ([51d1043](https://github.com/100-hours-a-week/7-team-kono-fe/commit/51d1043)), closes [#166](https://github.com/100-hours-a-week/7-team-kono-fe/issues/166)
+
+## <small>1.4.3 (2025-04-08)</small>
+
+* chore: fix layout ([af3cf11](https://github.com/100-hours-a-week/7-team-kono-fe/commit/af3cf11))
+* chore: fix layout (#174) ([10bcb7c](https://github.com/100-hours-a-week/7-team-kono-fe/commit/10bcb7c)), closes [#174](https://github.com/100-hours-a-week/7-team-kono-fe/issues/174)
+* Merge branch 'main' into hotfix/style ([0e69ad7](https://github.com/100-hours-a-week/7-team-kono-fe/commit/0e69ad7))
+* hotfix: style (#173) ([5912abe](https://github.com/100-hours-a-week/7-team-kono-fe/commit/5912abe)), closes [#173](https://github.com/100-hours-a-week/7-team-kono-fe/issues/173)
+* design: fix 0.0% color ([4c1c9b6](https://github.com/100-hours-a-week/7-team-kono-fe/commit/4c1c9b6))
+* style: update bottom navbar style ([7240560](https://github.com/100-hours-a-week/7-team-kono-fe/commit/7240560))
+
+## <small>1.4.2 (2025-04-08)</small>
+
+* fix: ts error ([a7c9ba7](https://github.com/100-hours-a-week/7-team-kono-fe/commit/a7c9ba7))
+* fix: ts error (#171) ([3a7c6c3](https://github.com/100-hours-a-week/7-team-kono-fe/commit/3a7c6c3)), closes [#171](https://github.com/100-hours-a-week/7-team-kono-fe/issues/171)
+* design: set navbar active ([f81bf91](https://github.com/100-hours-a-week/7-team-kono-fe/commit/f81bf91))
+* design: set navbar active (#170) ([961f061](https://github.com/100-hours-a-week/7-team-kono-fe/commit/961f061)), closes [#170](https://github.com/100-hours-a-week/7-team-kono-fe/issues/170)
+
+## <small>1.4.1 (2025-04-08)</small>
+
+* fix: improve kakao auto login functionality and login page navigation ([46c174c](https://github.com/100-hours-a-week/7-team-kono-fe/commit/46c174c))
+* fix: login ([078f842](https://github.com/100-hours-a-week/7-team-kono-fe/commit/078f842))
+* fix: login (#169) ([3f86e66](https://github.com/100-hours-a-week/7-team-kono-fe/commit/3f86e66)), closes [#169](https://github.com/100-hours-a-week/7-team-kono-fe/issues/169)
+
+## 1.4.0 (2025-04-07)
+
+* feat: google Analytics ([3d4198c](https://github.com/100-hours-a-week/7-team-kono-fe/commit/3d4198c))
+* feat: google Analytics (#163) ([7834ed9](https://github.com/100-hours-a-week/7-team-kono-fe/commit/7834ed9)), closes [#163](https://github.com/100-hours-a-week/7-team-kono-fe/issues/163)
+* chore: build ([b0ebc50](https://github.com/100-hours-a-week/7-team-kono-fe/commit/b0ebc50))
+
+## <small>1.3.1 (2025-04-07)</small>
+
+* refactor: change tab icon (#162) ([a422427](https://github.com/100-hours-a-week/7-team-kono-fe/commit/a422427)), closes [#162](https://github.com/100-hours-a-week/7-team-kono-fe/issues/162)
+* refactor: 브라우저탭 아이콘 이미지 변경 ([3d8a8d0](https://github.com/100-hours-a-week/7-team-kono-fe/commit/3d8a8d0))
+* design: add icon to dark mode toggle (#168) ([ae51d24](https://github.com/100-hours-a-week/7-team-kono-fe/commit/ae51d24)), closes [#168](https://github.com/100-hours-a-week/7-team-kono-fe/issues/168)
+* design: set font family mono ([3fb073c](https://github.com/100-hours-a-week/7-team-kono-fe/commit/3fb073c))
+* chore: add icon to dark mode toggle ([7c5003b](https://github.com/100-hours-a-week/7-team-kono-fe/commit/7c5003b))
+* chore: remove unused comments ([d9be880](https://github.com/100-hours-a-week/7-team-kono-fe/commit/d9be880))
+
+## 1.3.0 (2025-04-07)
+
+* feat: add buy me a beer ([ac69b52](https://github.com/100-hours-a-week/7-team-kono-fe/commit/ac69b52))
+* feat: add buy me a beer (#167) ([bc2e2aa](https://github.com/100-hours-a-week/7-team-kono-fe/commit/bc2e2aa)), closes [#167](https://github.com/100-hours-a-week/7-team-kono-fe/issues/167)
+* chore: add placeholder for user without holding coins ([5ad8e4a](https://github.com/100-hours-a-week/7-team-kono-fe/commit/5ad8e4a))
+* chore: set 0.00% gray ([f00da9a](https://github.com/100-hours-a-week/7-team-kono-fe/commit/f00da9a))
+* chore: set gap between buttons the same ([e140b81](https://github.com/100-hours-a-week/7-team-kono-fe/commit/e140b81))
+* chore: set layout margin the same ([a95506f](https://github.com/100-hours-a-week/7-team-kono-fe/commit/a95506f))
+* chore: set place holder when array is empty ([5afe6b1](https://github.com/100-hours-a-week/7-team-kono-fe/commit/5afe6b1))
+
+## <small>1.2.1 (2025-04-07)</small>
+
+* fix: homepage-uri-accept (#165) ([77e04be](https://github.com/100-hours-a-week/7-team-kono-fe/commit/77e04be)), closes [#165](https://github.com/100-hours-a-week/7-team-kono-fe/issues/165)
+* fix:homepage-uri-accept ([6315bd9](https://github.com/100-hours-a-week/7-team-kono-fe/commit/6315bd9))
+
+## 1.2.0 (2025-04-07)
+
+* feat: 네비게이션바 설명 텍스트 추가 ([4e34bed](https://github.com/100-hours-a-week/7-team-kono-fe/commit/4e34bed))
+* feat: 네비게이션바 설명 텍스트 추가 (#161) ([33c309f](https://github.com/100-hours-a-week/7-team-kono-fe/commit/33c309f)), closes [#161](https://github.com/100-hours-a-week/7-team-kono-fe/issues/161) [#123](https://github.com/100-hours-a-week/7-team-kono-fe/issues/123) [#456](https://github.com/100-hours-a-week/7-team-kono-fe/issues/456) [#89](https://github.com/100-hours-a-week/7-team-kono-fe/issues/89)
+
+## <small>1.1.5 (2025-04-07)</small>
+
+* fix: ts build errors ([3beba1d](https://github.com/100-hours-a-week/7-team-kono-fe/commit/3beba1d))
+
+## <small>1.1.4 (2025-04-06)</small>
+
+* fix: login-authentication (#158) ([0e4c213](https://github.com/100-hours-a-week/7-team-kono-fe/commit/0e4c213)), closes [#158](https://github.com/100-hours-a-week/7-team-kono-fe/issues/158)
+
+## <small>1.1.3 (2025-04-06)</small>
+
+* chore: add sub base url ([cbd6e0c](https://github.com/100-hours-a-week/7-team-kono-fe/commit/cbd6e0c))
+* chore: change base url ([cce0ab4](https://github.com/100-hours-a-week/7-team-kono-fe/commit/cce0ab4))
+* chore: fix ts error ([0f16675](https://github.com/100-hours-a-week/7-team-kono-fe/commit/0f16675))
+* chore: remove comments ([1a3d60e](https://github.com/100-hours-a-week/7-team-kono-fe/commit/1a3d60e))
+* chore: remove unnecessary backtick ([602d739](https://github.com/100-hours-a-week/7-team-kono-fe/commit/602d739))
+* chore: remove unused json dummy files ([88ac93a](https://github.com/100-hours-a-week/7-team-kono-fe/commit/88ac93a))
+* refactor: remove timeframe selection from chart component ([9a4ecdb](https://github.com/100-hours-a-week/7-team-kono-fe/commit/9a4ecdb))
+* build: change s3 bucket ([16e5f63](https://github.com/100-hours-a-week/7-team-kono-fe/commit/16e5f63))
+* build: use proxy for web socket connection ([1ec425b](https://github.com/100-hours-a-week/7-team-kono-fe/commit/1ec425b))
+
 ## <small>1.1.2 (2025-04-04)</small>
 
 * fix: add base url to axios ([23347a0](https://github.com/100-hours-a-week/7-team-kono-fe/commit/23347a0))

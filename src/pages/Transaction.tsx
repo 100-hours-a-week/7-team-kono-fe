@@ -4,7 +4,10 @@ import { FaFilter } from 'react-icons/fa';
 import Header from '../components/layout/Header';
 import FilterModal, { FilterType } from '../components/modal/FilterModal';
 import { formatDate, formatCurrency } from '../utils/formatter';
-import { getTransactions, Transaction as TransactionType } from '../api/transaction';
+import {
+  getTransactions,
+  Transaction as TransactionType,
+} from '../api/transaction';
 
 export default function Transaction() {
   const navigate = useNavigate();
@@ -20,15 +23,7 @@ export default function Transaction() {
       try {
         setLoading(true);
         const data = await getTransactions();
-        console.log('거래 내역 데이터:', data); // 데이터 확인용 로그
-        
-        // 날짜 형식 디버깅을 위한 코드 추가
-        if (data && data.length > 0) {
-          console.log('첫 번째 거래의 날짜:', data[0].createdAt);
-          console.log('날짜 타입:', typeof data[0].createdAt);
-          console.log('날짜 변환 결과:', formatDate(data[0].createdAt));
-        }
-        
+
         setTransactions(data);
         setError(null);
       } catch (error) {
@@ -102,7 +97,7 @@ export default function Transaction() {
       {/* 헤더 */}
       <Header title="매매 내역" />
       {/* 필터 표시 */}
-      <div className="mx-4 bg-white p-4 border-b flex justify-between rounded-t-xl dark:bg-gray-800 dark:text-white dark:border-gray-700">
+      <div className="mx-4 mt-4 bg-white p-4 border-b flex justify-between rounded-t-xl dark:bg-gray-800 dark:text-white dark:border-gray-700">
         <div className="flex items-center">
           <span className="text-sm text-gray-500 mr-2">필터:</span>
           <span className="text-sm font-medium">{activeFilter}</span>
@@ -114,7 +109,7 @@ export default function Transaction() {
 
       {/* 거래 내역 목록 */}
       {filteredTransactions.length > 0 ? (
-        <div className="flex-1 rounded-xl mx-4 mb-4">
+        <div className="flex-1 rounded-xl mx-4 mb-6">
           {filteredTransactions.map((transaction) => (
             <div
               key={transaction.transactionId}
@@ -201,4 +196,3 @@ export default function Transaction() {
     </div>
   );
 }
-

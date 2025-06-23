@@ -4,7 +4,7 @@ import { getRanksAllMe, getRanksDaily, getRanksDailyMe } from '../api/ranking';
 import { getRanksAll } from '../api/ranking';
 import { format } from 'date-fns';
 import { formatCurrency } from '../utils/formatter';
-import {LazyLoadImage} from "react-lazy-load-image-component";
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css'; // 블러 효과 스타일 (선택사항)
 
 interface Rank {
@@ -36,6 +36,17 @@ export default function Ranking() {
   const REFRESH_INTERVAL = 5 * 60 * 1000; // 5분
   const PLACEHOLDER = 'https://static.upbit.com/logos/BTC.png';
 
+  // 퍼센트 표시 형식화 함수
+  const formatPercentage = (value: number | undefined) => {
+    if (value === undefined) return '0.00%';
+
+    // 절대 값이 0인 경우 부호 없이 표시
+    if (value === 0) return '0.00%';
+
+    // 부호 추가 및 소수점 두 자리로 고정
+    return `${value > 0 ? '+' : ''}${value.toFixed(2)}%`;
+  };
+
   // 이미지 URL 최적화 함수 (선택사항)
   const optimizeImageUrl = (url: string) => {
     if (!url || !url.includes('kakaocdn')) return url;
@@ -59,8 +70,7 @@ export default function Ranking() {
       setMyRank(myRankData?.[0] || null);
       setMyRankDaily(myRankDailyData?.[0] || null);
       setDailyUpdatedAt(dailyRanks[0].updatedAt);
-      setAllUpdatedAt(allRanks[0].updatedAt)
-
+      setAllUpdatedAt(allRanks[0].updatedAt);
     } catch (error) {
       console.error('Failed to fetch rankings:', error);
     } finally {
@@ -123,7 +133,7 @@ export default function Ranking() {
       <Header title="랭킹" />
 
       {/* 기간 선택 탭 */}
-      <div className="mx-4 flex border-b bg-white sticky top-0 z-10 rounded-t-xl dark:bg-gray-800 dark:text-white dark:border-gray-700">
+      <div className="mx-4 mt-4 flex border-b bg-white sticky top-0 z-10 rounded-t-xl dark:bg-gray-800 dark:text-white dark:border-gray-700">
         {(['일간', '전체'] as RankingPeriod[]).map((period) => (
           <button
             key={period}
@@ -140,7 +150,7 @@ export default function Ranking() {
       </div>
 
       {/* 상위 3명 */}
-      <div className="bg-white p-4 py-6 rounded-b-xl mb-2 dark:bg-gray-800 dark:text-white mx-4 shadow-md">
+      <div className="bg-white p-4 py-6 rounded-b-xl mb-4 dark:bg-gray-800 dark:text-white mx-4 shadow-md">
         <div className="flex justify-around items-end">
           {/* 2등 */}
           <div className="flex flex-col items-center">
@@ -174,7 +184,7 @@ export default function Ranking() {
               }`}
             >
               {activePeriod === '일간'
-                ? `${(topUsers[1]?.profitRate ?? 0) > 0 ? '+' : (topUsers[1]?.profitRate ?? 0) < 0 ? '-' : ''}${Math.abs(topUsers[1]?.profitRate ?? 0).toFixed(2)}%`
+                ? formatPercentage(topUsers[1]?.profitRate)
                 : `${(topUsers[1]?.profit ?? 0) > 0 ? '+' : (topUsers[1]?.profit ?? 0) < 0 ? '-' : ''}${formatCurrency(Math.abs(topUsers[1]?.profit ?? 0))}`}
             </div>
           </div>
@@ -211,7 +221,7 @@ export default function Ranking() {
               }`}
             >
               {activePeriod === '일간'
-                ? `${(topUsers[0]?.profitRate ?? 0) > 0 ? '+' : (topUsers[0]?.profitRate ?? 0) < 0 ? '-' : ''}${Math.abs(topUsers[0]?.profitRate ?? 0).toFixed(2)}%`
+                ? formatPercentage(topUsers[0]?.profitRate)
                 : `${(topUsers[0]?.profit ?? 0) > 0 ? '+' : (topUsers[0]?.profit ?? 0) < 0 ? '-' : ''}${formatCurrency(Math.abs(topUsers[0]?.profit ?? 0))}`}
             </div>
           </div>
@@ -248,7 +258,7 @@ export default function Ranking() {
               }`}
             >
               {activePeriod === '일간'
-                ? `${(topUsers[2]?.profitRate ?? 0) > 0 ? '+' : (topUsers[2]?.profitRate ?? 0) < 0 ? '-' : ''}${Math.abs(topUsers[2]?.profitRate ?? 0).toFixed(2)}%`
+                ? formatPercentage(topUsers[2]?.profitRate)
                 : `${(topUsers[2]?.profit ?? 0) > 0 ? '+' : (topUsers[2]?.profit ?? 0) < 0 ? '-' : ''}${formatCurrency(Math.abs(topUsers[2]?.profit ?? 0))}`}
             </div>
           </div>
@@ -261,9 +271,11 @@ export default function Ranking() {
           <span>
             {activePeriod === '일간'
               ? dailyUpdatedAt
-                ? `${format(new Date(dailyUpdatedAt), 'yyyy년 MM월 dd일 HH:mm')} 기준` : '업데이트 시간 정보 없음'
+                ? `${format(new Date(dailyUpdatedAt), 'yyyy년 MM월 dd일 HH:mm')} 기준`
+                : '업데이트 시간 정보 없음'
               : allUpdatedAt
-                ? `${format(new Date(allUpdatedAt), 'yyyy년 MM월 dd일 HH:mm')} 기준` : '가입일부터 현재까지'}
+                ? `${format(new Date(allUpdatedAt), 'yyyy년 MM월 dd일 HH:mm')} 기준`
+                : '가입일부터 현재까지'}
           </span>
           {/* <button
             onClick={fetchRanks}
@@ -275,7 +287,7 @@ export default function Ranking() {
       </div>
 
       {/* 나머지 랭킹 */}
-      <div className="flex-1 bg-white rounded-b-xl dark:bg-gray-800 dark:text-white mx-4 shadow-lg">
+      <div className="flex-1 bg-white rounded-b-xl dark:bg-gray-800 dark:text-white mx-4 mb-6 shadow-lg">
         {otherUsers.map((user) => (
           <div
             key={user.rank}
@@ -320,7 +332,7 @@ export default function Ranking() {
               }`}
             >
               {activePeriod === '일간'
-                ? `${(user?.profitRate ?? 0) > 0 ? '+' : (user?.profitRate ?? 0) < 0 ? '-' : ''}${Math.abs(user?.profitRate ?? 0).toFixed(2)}%`
+                ? formatPercentage(user?.profitRate)
                 : `${(user?.profit ?? 0) > 0 ? '+' : (user?.profit ?? 0) < 0 ? '-' : ''}${formatCurrency(Math.abs(user?.profit ?? 0))}`}
             </div>
           </div>

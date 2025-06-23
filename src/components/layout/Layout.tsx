@@ -11,20 +11,10 @@ const Layout: React.FC = () => {
   const [redirecting, setRedirecting] = useState(false);
 
   useEffect(() => {
-    // URL에 인증 코드가 있으면 인증 처리 중으로 간주하고 리다이렉트하지 않음
-    const params = new URLSearchParams(window.location.search);
-    const hasAuthCode = params.has('code');
-
     // 인증 관련 페이지 확인
     const isLoginPage = location.pathname === '/login';
     const isSignupPage = location.pathname === '/signup';
     const isAuthPage = isLoginPage || isSignupPage;
-
-    // 인증 코드 처리 중이거나 이미 인증 페이지에 있으면 리다이렉트하지 않음
-    if (hasAuthCode) {
-      console.log('인증 코드 감지됨, 리다이렉트 건너뜀');
-      return;
-    }
 
     // 로딩 중이면 리다이렉트하지 않음
     if (loading) {
@@ -38,7 +28,6 @@ const Layout: React.FC = () => {
 
     // 인증되지 않았고, 인증 페이지가 아닌 경우에만 리다이렉트
     if (!isAuthenticated && !isAuthPage) {
-      console.log('인증되지 않은 사용자, 로그인 페이지로 리다이렉트');
       setRedirecting(true);
       // 약간의 지연을 통해 리다이렉트 루프 방지
       setTimeout(() => {
@@ -91,7 +80,10 @@ const Layout: React.FC = () => {
 
   // 정상적인 레이아웃 표시 (인증됨 또는 로그인 페이지)
   return (
-    <div className="flex flex-col min-h-screen max-w-[430px] w-full mx-auto relative overflow-y-auto bg-white dark:bg-gray-900 text-mainText dark:text-white">
+    <div
+      className="flex flex-col min-h-screen w-full mx-auto relative overflow-hidden bg-white dark:bg-gray-900 text-mainText dark:text-white"
+      style={{ maxWidth: '430px' }}
+    >
       <Header />
       {/* 헤더 높이만큼 상단 패딩 추가 */}
       <main className="flex-1 py-16">
