@@ -53,11 +53,11 @@
     </td>
   </tr>
   <tr>
-    <td align="center">팀장 / FE / DevOps</td>
-    <td align="center">BE / 성능 최적화</td>
+    <td align="center">FE | DevOps | PM</td>
+    <td align="center">BE</td>
     <td align="center">Fullstack</td>
-    <td align="center">BE / 인증 및 보안</td>
-    <td align="center">DevOps 인프라 구축</td>
+    <td align="center">BE</td>
+    <td align="center">DevOps</td>
   </tr>
   <tr>
     <td align="center">WebSocket 기반 시세 수집,<br/>프론트 구현</td>
