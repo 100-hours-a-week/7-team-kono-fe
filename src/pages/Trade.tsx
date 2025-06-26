@@ -7,23 +7,21 @@ import { getCoinName } from '../api/coin';
 import { getBalance } from '../api/wallet';
 import { getQuantityByTicker } from '../api/wallet';
 import Header from '../components/layout/Header.tsx';
-// 거래 타입 정의
+
 type TradeType = 'buy' | 'sell';
 
-// 코인 데이터 인터페이스~
 interface CoinData {
   name: string;
   ticker: string;
   price: number;
-  balance?: number; // 보유 수량 (매도 시 필요)
-  quantity?: number; // 보유 수량 (매수 시 필요)
+  balance?: number;
+  quantity?: number;
 }
 
 export default function Trade() {
   const { ticker, type } = useParams<{ ticker: string; type: TradeType }>();
   const navigate = useNavigate();
 
-  // 상태 관리
   const [coin, setCoin] = useState<CoinData | null>(null);
   const [displayAmount, setDisplayAmount] = useState<number | '최대'>(0);
   const [submitAmount, setSubmitAmount] = useState<number | null>(null);
@@ -35,36 +33,29 @@ export default function Trade() {
   const [maxAmount, setMaxAmount] = useState<number>(0);
   const [quantity, setQuantity] = useState<number>(0);
 
-  // 퍼센트 버튼 옵션
   const percentOptions = [10, 25, 50, 100];
   const MIN_AMOUNT = 5000;
 
   const { tickerData } = useUpbitWebSocket([ticker || '']);
 
-  // 웹소켓 데이터 변경 시 즉시 반영되도록 수정
   useEffect(() => {
     if (ticker && tickerData[`KRW-${ticker}`]?.trade_price) {
       const currentPrice = tickerData[`KRW-${ticker}`]?.trade_price;
       setPrice(currentPrice);
 
-      // 코인 데이터 즉시 업데이트
       setCoin((prevCoin) =>
         prevCoin ? { ...prevCoin, price: currentPrice } : null,
       );
 
-      // 현재 선택된 상태에 따라 수량과 금액 업데이트
       if (type === 'sell' && displayAmount === '최대') {
-        // 매도 최대 선택 상태일 때는 최대값 유지
         setQuantity(coin?.quantity || 0);
       } else if (displayAmount && displayAmount !== '최대') {
-        // 일반적인 경우 수량 재계산
         const amount = Number(displayAmount);
         if (!isNaN(amount)) {
           setQuantity(amount / currentPrice);
         }
       }
 
-      // maxAmount 업데이트
       if (type === 'buy') {
         setMaxAmount(coin?.balance || cashBalance);
       } else {
@@ -73,9 +64,7 @@ export default function Trade() {
     }
   }, [tickerData, ticker, type, displayAmount, coin?.quantity, coin?.balance]);
 
-  // 코인 데이터 초기 로드 (한 번만 실행)
   useEffect(() => {
-    // 파라미터 검증 로직 수정
     if (!ticker) {
       console.error('ticker is missing');
       setError('코인 정보가 없습니다.');
@@ -90,7 +79,6 @@ export default function Trade() {
       return;
     }
 
-    // 비동기 로직을 별도 함수로 분리
     const fetchCoinData = async () => {
       try {
         setLoading(true);
@@ -99,7 +87,6 @@ export default function Trade() {
         const balance = await getBalance();
         const quantity = await getQuantityByTicker(ticker);
 
-        // 현재 가격 정보를 한 번만 가져옴
         const currentPrice = tickerData[`KRW-${ticker}`]?.trade_price || 0;
 
         setCoin({
@@ -110,7 +97,6 @@ export default function Trade() {
           quantity: quantity,
         });
 
-        // 가격 상태 업데이트
         setPrice(currentPrice);
 
         setLoading(false);
@@ -122,23 +108,20 @@ export default function Trade() {
     };
 
     fetchCoinData();
-  }, [ticker, type]); // tickerData 의존성 제거
+  }, [ticker, type]);
 
-  // 금액 입력 처리 함수 수정
   const handleAmountChange = (value: string) => {
     if (/^\d*\.?\d*$/.test(value) || value === '') {
       const numValue = value ? Number(value) : 0;
 
-      // 최대 금액 즉시 유효성 검사 (입력 중에도 최대값 초과 방지)
       const validatedValue = numValue > maxAmount ? maxAmount : numValue;
 
       setDisplayAmount(validatedValue);
 
-      // 입력값이 있을 때만 수량 계산
       if (value && coin?.price) {
         if (!isNaN(numValue)) {
           setQuantity(numValue / coin.price);
-          setSubmitAmount(numValue); // 입력값을 submitAmount에도 설정
+          setSubmitAmount(numValue);
         }
       } else {
         setQuantity(0);
@@ -147,19 +130,16 @@ export default function Trade() {
     }
   };
 
-  // 입력 값에 대한 유효성 검사 함수
   const validateAmount = () => {
     if (displayAmount !== '최대') {
       const currentAmount = Number(displayAmount);
 
-      // 입력값이 0보다 크고 최소 금액보다 작은 경우
       if (currentAmount > 0 && currentAmount < MIN_AMOUNT) {
         setDisplayAmount(MIN_AMOUNT);
         setSubmitAmount(MIN_AMOUNT);
         setQuantity(MIN_AMOUNT / price);
       }
 
-      // 입력값이 최대 금액보다 큰 경우
       if (currentAmount > maxAmount) {
         setDisplayAmount(maxAmount);
         setSubmitAmount(maxAmount);
@@ -168,12 +148,11 @@ export default function Trade() {
     }
   };
 
-  // 퍼센트 변경 처리 함수 수정
   const handlePercentChange = (percent: number) => {
     if (type === 'sell' && percent === 100) {
       setDisplayAmount('최대');
-      setSubmitAmount(null); // 금액은 null로 설정
-      setQuantity(coin?.quantity || 0); // 수량은 보유 수량으로 설정
+      setSubmitAmount(null);
+      setQuantity(coin?.quantity || 0);
     } else {
       const currentMaxAmount =
         type === 'buy'
@@ -182,7 +161,6 @@ export default function Trade() {
 
       const calculatedAmount = (currentMaxAmount * percent) / 100;
 
-      // 최소 금액 검사
       const finalAmount =
         calculatedAmount < MIN_AMOUNT && calculatedAmount > 0
           ? MIN_AMOUNT
@@ -194,16 +172,13 @@ export default function Trade() {
     }
   };
 
-  // 거래 실행
   const handleOpenModal = () => {
-    // 거래 시작 전 금액 유효성 검사 실행
     validateAmount();
     if (!displayAmount || !coin || !price) {
       alert('유효한 수량과 가격을 입력해주세요.');
       return;
     }
 
-    // 최소 금액 검사
     if (displayAmount !== '최대' && Number(displayAmount) < MIN_AMOUNT) {
       alert(`최소 거래 금액은 ${formatCurrency(MIN_AMOUNT)}입니다.`);
       setDisplayAmount(MIN_AMOUNT);
@@ -214,7 +189,6 @@ export default function Trade() {
     setIsModalOpen(true);
   };
 
-  // 로딩 중 표시
   if (loading) {
     return (
       <div className="flex flex-col min-h-screen">
@@ -228,7 +202,6 @@ export default function Trade() {
     );
   }
 
-  // 에러 표시
   if (error || !coin) {
     return (
       <div className="flex flex-col min-h-screen">
@@ -323,7 +296,7 @@ export default function Trade() {
           <input
             value={displayAmount}
             onChange={(e) => handleAmountChange(e.target.value)}
-            onBlur={validateAmount} // 입력 완료 시 유효성 검사
+            onBlur={validateAmount}
             className="w-full p-3 border rounded-xl text-right pr-16 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-400 dark:border-gray-700"
             placeholder="0"
             min={MIN_AMOUNT}

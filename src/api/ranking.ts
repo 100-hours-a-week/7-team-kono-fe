@@ -19,7 +19,6 @@ interface RankDaily {
   updatedAt: string;
 }
 
-//일간 랭킹 조회
 export const getRanksDaily = async (): Promise<RankDaily[]> => {
   try {
     const res = await api.get(API_ENDPOINTS.GET_RANK_DAILY);
@@ -30,7 +29,6 @@ export const getRanksDaily = async (): Promise<RankDaily[]> => {
   }
 };
 
-//일간 랭킹 사용자 조회
 export const getRanksDailyMe = async (): Promise<RankDaily[]> => {
   try {
     const res = await api.get(API_ENDPOINTS.GET_RANK_DAILY_ME);
@@ -41,7 +39,6 @@ export const getRanksDailyMe = async (): Promise<RankDaily[]> => {
   }
 };
 
-//전체 랭킹 조회
 export const getRanksAll = async (): Promise<Rank[]> => {
   try {
     const res = await api.get(API_ENDPOINTS.GET_RANK_ALL);
@@ -52,7 +49,6 @@ export const getRanksAll = async (): Promise<Rank[]> => {
   }
 };
 
-// 전체 랭킹 사용자 조회
 export const getRanksAllMe = async (): Promise<Rank[]> => {
   try {
     const res = await api.get(API_ENDPOINTS.GET_RANK_ALL_ME);

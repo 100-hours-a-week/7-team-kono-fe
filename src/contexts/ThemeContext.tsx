@@ -19,11 +19,9 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({
   const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
-    // localStorage에서 다크 모드 설정 불러오기
     const savedDarkMode = localStorage.getItem('darkMode') === 'true';
     setDarkMode(savedDarkMode);
 
-    // 다크 모드 클래스 적용
     if (savedDarkMode) {
       document.documentElement.classList.add('dark');
     } else {

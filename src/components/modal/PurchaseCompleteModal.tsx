@@ -23,7 +23,7 @@ export default function PurchaseCompleteModal({
   price,
   tradeType,
   quantity,
-  coinName = ticker, // 기본값으로 ticker
+  coinName = ticker,
 }: PurchaseCompleteModalProps) {
   return (
     <Transition.Root show={isOpen} as={Fragment}>

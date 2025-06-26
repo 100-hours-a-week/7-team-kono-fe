@@ -3,15 +3,13 @@ import { API_ENDPOINTS } from '../config/apiEndpoints';
 
 export type OrderType = 'sell' | 'buy';
 
-// 주문 정보 인터페이스
 export interface OrderRequest {
   ticker: string;
   orderType: OrderType;
-  orderAmount?: number; // 매수 시 사용할 금액 (원화)
-  orderQuantity?: number; // 매도 시 사용할 수량
+  orderAmount?: number;
+  orderQuantity?: number;
 }
 
-// 주문 응답 인터페이스
 export interface OrderResponse {
   id: string;
   ticker: string;
@@ -23,7 +21,6 @@ export interface OrderResponse {
   timestamp: string;
   status: 'pending' | 'completed' | 'failed';
 }
-
 
 export const marketBuy = async (
   ticker: string,
@@ -48,7 +45,6 @@ export const marketBuy = async (
     return null;
   }
 };
-
 
 export const marketSell = async (
   ticker: string,

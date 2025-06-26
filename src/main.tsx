@@ -21,7 +21,7 @@ import Layout from './components/layout/Layout';
 import AuthLayout from './components/layout/AuthLayout';
 import KakoRedirectHandler from './components/auth/KakoRedirectHandler.tsx';
 
-import * as Sentry from "@sentry/react"; //npm install @sentry/react @sentry/tracing
+import * as Sentry from '@sentry/react'; //npm install @sentry/react @sentry/tracing
 
 // Clarity 초기화
 Clarity.init('r1aim0c7qk');
@@ -36,9 +36,9 @@ const identifyUser = (userId: string, nickname: string) => {
 
 // 중요 이벤트 태깅
 const setUserTags = (userId: string, userType: string) => {
-  Clarity.setTag("userId", userId);
-  Clarity.setTag("userType", userType);
-  Clarity.setTag("platform", "web");
+  Clarity.setTag('userId', userId);
+  Clarity.setTag('userType', userType);
+  Clarity.setTag('platform', 'web');
 };
 
 // 주요 이벤트 트래킹
@@ -52,7 +52,7 @@ const trackImportantEvent = (eventName: string) => {
 window.clarityHelpers = {
   identifyUser,
   setUserTags,
-  trackImportantEvent
+  trackImportantEvent,
 };
 
 // 타입 정의 추가
@@ -68,14 +68,13 @@ declare global {
 
 // Sentry 초기화 (기존 코드)
 Sentry.init({
-  dsn: "https://9ba5351ae2788a1039d336aeb4b88082@o4509077698707456.ingest.us.sentry.io/4509077976449024",
-  integrations: [
-    Sentry.browserTracingIntegration()
+  dsn: 'https://9ba5351ae2788a1039d336aeb4b88082@o4509077698707456.ingest.us.sentry.io/4509077976449024',
+  integrations: [Sentry.browserTracingIntegration()],
+  tracesSampleRate: 1.0,
+  tracePropagationTargets: [
+    'localhost',
+    /^https:\/\/dev.playkono.com\.io\/api/,
   ],
-  // Tracing
-  tracesSampleRate: 1.0, //  Capture 100% of the transactions
-  // Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
-  tracePropagationTargets: ["localhost", /^https:\/\/dev.playkono.com\.io\/api/]
 });
 const router = createBrowserRouter([
   {

@@ -5,7 +5,7 @@ const api = axios.create({
     import.meta.env.MODE === 'production'
       ? import.meta.env.VITE_API_URL
       : undefined,
-  withCredentials: true, // 세션 쿠키를 주고받기 위해 필요
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },

@@ -18,15 +18,13 @@ const Card: React.FC<CardProps> = ({
   hoverEffect = false,
   className = '',
 }) => {
-  // Basic card style from styles constant
   const baseCardStyle = styles.cardStyle;
 
-  // Additional styles based on props
   const hoverStyle = hoverEffect ? styles.hoverEffect : '';
 
   return (
     <div className={`${baseCardStyle} ${hoverStyle} ${className}`}>
-      {/* Card Header */}
+      {/* 카드 헤더 */}
       {(title || subtitle) && (
         <div className="mb-4">
           {title && (
@@ -38,10 +36,10 @@ const Card: React.FC<CardProps> = ({
         </div>
       )}
 
-      {/* Card Content */}
+      {/* 카드 내용 */}
       <div className="mb-4">{children}</div>
 
-      {/* Card Footer */}
+      {/* 카드 푸터 */}
       {footer && (
         <div className="pt-4 border-t border-gray-200 mt-auto">{footer}</div>
       )}

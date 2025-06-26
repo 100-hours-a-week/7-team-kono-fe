@@ -17,10 +17,6 @@ const Button: React.FC<ButtonProps> = ({
   disabled,
   ...rest
 }) => {
-  // Base styles for all buttons
-  // let baseStyles = `font-pretendardMedium rounded-lg transition-all ${styles.transition}`;
-
-  // 버튼 스타일 클래스 계산
   const variantClasses = {
     primary: 'bg-konoBlue text-white hover:bg-blue-600',
     secondary: 'bg-gray-200 text-gray-800 hover:bg-gray-300',

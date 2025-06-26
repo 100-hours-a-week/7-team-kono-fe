@@ -17,7 +17,6 @@ export default function Transaction() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // API로부터 거래 내역 조회
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
@@ -38,18 +37,15 @@ export default function Transaction() {
     fetchTransactions();
   }, []);
 
-  // 필터링된 거래 내역
   const filteredTransactions = transactions.filter((transaction) => {
     if (activeFilter === '전체') return true;
     return transaction.orderType === (activeFilter === '매수' ? 'buy' : 'sell');
   });
 
-  // 필터 모달 토글
   const toggleFilterModal = () => {
     setShowFilterModal(!showFilterModal);
   };
 
-  // 로딩 상태 표시
   if (loading) {
     return (
       <div className="flex flex-col min-h-screen">
@@ -61,7 +57,6 @@ export default function Transaction() {
     );
   }
 
-  // 에러 상태 표시
   if (error) {
     return (
       <div className="flex flex-col min-h-screen">
@@ -81,13 +76,11 @@ export default function Transaction() {
     );
   }
 
-  // 필터 변경
   const changeFilter = (filter: FilterType) => {
     setActiveFilter(filter);
     setShowFilterModal(false);
   };
 
-  // 코인 상세 페이지로 이동
   const goToCoinDetail = (ticker: string) => {
     navigate(`/coins/${ticker}`);
   };

@@ -5,7 +5,7 @@ import { getRanksAll } from '../api/ranking';
 import { format } from 'date-fns';
 import { formatCurrency } from '../utils/formatter';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import 'react-lazy-load-image-component/src/effects/blur.css'; // 블러 효과 스타일 (선택사항)
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 interface Rank {
   nickname: string;
@@ -33,27 +33,22 @@ export default function Ranking() {
   const [isLoading, setIsLoading] = useState(true);
   const myUserRef = useRef<HTMLDivElement>(null);
 
-  const REFRESH_INTERVAL = 5 * 60 * 1000; // 5분
+  const REFRESH_INTERVAL = 5 * 60 * 1000;
   const PLACEHOLDER = 'https://static.upbit.com/logos/BTC.png';
 
-  // 퍼센트 표시 형식화 함수
   const formatPercentage = (value: number | undefined) => {
     if (value === undefined) return '0.00%';
 
-    // 절대 값이 0인 경우 부호 없이 표시
     if (value === 0) return '0.00%';
 
-    // 부호 추가 및 소수점 두 자리로 고정
     return `${value > 0 ? '+' : ''}${value.toFixed(2)}%`;
   };
 
-  // 이미지 URL 최적화 함수 (선택사항)
   const optimizeImageUrl = (url: string) => {
     if (!url || !url.includes('kakaocdn')) return url;
-    return url.replace('R640x640', 'R160x160'); // 더 작은 이미지 요청
+    return url.replace('R640x640', 'R160x160');
   };
 
-  // 랭킹 데이터 가져오기
   const fetchRanks = async () => {
     setIsLoading(true);
     try {
@@ -78,7 +73,6 @@ export default function Ranking() {
     }
   };
 
-  // 초기 데이터 로드 및 5분마다 새로고침
   useEffect(() => {
     fetchRanks();
     const intervalId = setInterval(fetchRanks, REFRESH_INTERVAL);
@@ -94,13 +88,10 @@ export default function Ranking() {
       const windowHeight = window.innerHeight;
 
       if (rect.bottom > windowHeight) {
-        // 내 순위가 화면 아래로 벗어나면 top-0으로 고정
         setMyUserSticky('top');
       } else if (rect.top < 0) {
-        // 내 순위가 화면 위로 벗어나면 bottom-0으로 고정
         setMyUserSticky('bottom');
       } else {
-        // 화면 안에 있으면 고정 해제
         setMyUserSticky(null);
       }
     };
@@ -109,11 +100,9 @@ export default function Ranking() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // 현재 활성화된 기간에 따른 랭킹 데이터
   const currentRanks = activePeriod === '일간' ? ranksDaily : ranks;
   const currentMyRank = activePeriod === '일간' ? myRankDaily : myRank;
 
-  // 상위 3명과 나머지 유저 분리
   const topUsers = currentRanks.slice(0, 3);
   const otherUsers = currentRanks.slice(3);
 
@@ -277,12 +266,6 @@ export default function Ranking() {
                 ? `${format(new Date(allUpdatedAt), 'yyyy년 MM월 dd일 HH:mm')} 기준`
                 : '가입일부터 현재까지'}
           </span>
-          {/* <button
-            onClick={fetchRanks}
-            className="text-blue-500 hover:text-blue-600 text-sm"
-          >
-            새로고침
-          </button> */}
         </div>
       </div>
 

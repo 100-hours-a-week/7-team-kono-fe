@@ -16,18 +16,14 @@ export const formatCurrency = (
   showSign: boolean = false,
   showDecimal: boolean = false,
 ): string => {
-  // 부호 처리
   const sign = showSign && value > 0 ? '+' : '';
   const absValue = Math.abs(value);
 
-  // 소수점 처리 로직
   let formattedValue: string;
 
   if (!showDecimal) {
-    // 소수점 완전히 생략하고 정수만 표시
     formattedValue = Math.floor(absValue).toLocaleString('ko-KR');
   } else if (Number.isInteger(absValue)) {
-    // 정수인 경우 소수점 표시 안함
     formattedValue = absValue.toLocaleString('ko-KR');
   } else {
     // 소수점이 있는 경우, 필요한 소수점 자리까지만 표시 (최대 6자리)
@@ -39,7 +35,6 @@ export const formatCurrency = (
       decimalPart = decimalPart.substring(0, 6);
     }
 
-    // 소수점 끝의 불필요한 0 제거
     while (decimalPart.endsWith('0')) {
       decimalPart = decimalPart.slice(0, -1);
     }
@@ -48,20 +43,13 @@ export const formatCurrency = (
       decimalPart.length > 0 ? `${integerPart}.${decimalPart}` : integerPart;
   }
 
-  // 부호가 있고 통화 단위 표시가 필요한 경우
   if (sign && showCurrency) {
     return `${sign}${formattedValue}`;
-  }
-  // 부호가 있고 통화 단위 표시가 필요 없는 경우
-  else if (sign) {
+  } else if (sign) {
     return `${sign}${formattedValue}`;
-  }
-  // 통화 단위 표시가 필요한 경우
-  else if (showCurrency) {
+  } else if (showCurrency) {
     return `${formattedValue} ${currency}`;
-  }
-  // 숫자만 표시
-  else {
+  } else {
     return formattedValue;
   }
 };
@@ -87,7 +75,6 @@ export const formatVolume = (value: number): string => {
  */
 export const formatDate = (date: string | Date) => {
   try {
-    // 빈 값 체크
     if (date === null || date === undefined || date === '') {
       return '날짜 없음';
     }
@@ -95,16 +82,12 @@ export const formatDate = (date: string | Date) => {
     let dateObj: Date;
 
     if (typeof date === 'string') {
-      // 단순히 parseISO로 파싱 시도
       dateObj = parseISO(date);
 
-      // 유효하지 않은 경우 대체 방법 시도
       if (isNaN(dateObj.getTime())) {
-        // ISO 형식에 Z 추가 시도
         if (date.includes('T') && !date.includes('Z') && !date.includes('+')) {
           dateObj = new Date(date);
         } else {
-          // 마지막으로 그냥 Date 생성자 시도
           dateObj = new Date(date);
         }
       }
@@ -112,7 +95,6 @@ export const formatDate = (date: string | Date) => {
       dateObj = date;
     }
 
-    // 여전히 유효하지 않은 경우
     if (isNaN(dateObj.getTime())) {
       console.error('유효하지 않은 날짜:', date);
       return '유효하지 않은 날짜';
@@ -133,22 +115,18 @@ export const formatDate = (date: string | Date) => {
 export const formatPriceChange = (change: number): string => {
   const sign = change > 0 ? '+' : '';
 
-  // 정수인지 확인
   if (Number.isInteger(change)) {
     return `${sign}${change}%`;
   }
 
-  // 소수점이 있는 경우 처리
   const fixed = change.toFixed(2);
   const parts = fixed.split('.');
   let decimalPart = parts[1];
 
-  // 소수점 끝의 불필요한 0 제거
   while (decimalPart.endsWith('0')) {
     decimalPart = decimalPart.slice(0, -1);
   }
 
-  // 소수부가 남아있으면 소수점 포함, 아니면 정수만 반환
   return decimalPart.length > 0
     ? `${sign}${parts[0]}.${decimalPart}%`
     : `${sign}${parts[0]}%`;
@@ -168,7 +146,6 @@ export const formatDecimal = (
   const fixed = value.toFixed(decimals);
 
   if (removeTrailingZeros) {
-    // 소수점 뒤의 0 제거
     if (fixed.includes('.')) {
       const parts = fixed.split('.');
       let decimalPart = parts[1];
@@ -209,6 +186,5 @@ export const formatAmount = (
  * @returns 형식의 문자열 예: '50.00%'
  */
 export const formatPercent = (value: number): string => {
-  // 소수점을 100 곱하고 소수점 둘째 자리까지 표시
   return `${(value * 100).toFixed(2)}%`;
 };
