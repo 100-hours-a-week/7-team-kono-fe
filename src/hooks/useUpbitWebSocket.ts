@@ -42,7 +42,8 @@ export function useUpbitWebSocket(symbols: string[] = ['BTC']) {
     const symbolsToUse = symbols.length > 0 ? symbols : ['BTC'];
 
     // socket.current = new WebSocket('wss://api.upbit.com/websocket/v1');
-    socket.current = new WebSocket('wss://api.playcono.com/ws/'); // 프록시 사용
+    // socket.current = new WebSocket('wss://api.playcono.com/ws/'); // 프록시 사용
+    socket.current = new WebSocket(import.meta.env.VITE_WS_URL);
 
     socket.current.onopen = function () {
       setIsConnected(true);
