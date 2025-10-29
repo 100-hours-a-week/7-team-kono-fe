@@ -1,32 +1,29 @@
+# Cypto Trading Simulator
 <a href="https://playcono.com/" target="_blank">
-<img src="https://github.com/100-hours-a-week/7-team-kono-fe/blob/develop/assets/1.png" alt="KONO 배너" width="100%"/>
+<img src="https://github.com/100-hours-a-week/7-team-kono-fe/blob/develop/assets/1.png" alt="KONO banner" width="100%"/>
 </a>
 
 <br/>
 <br/>
 
-# 1. Project Overview (프로젝트 개요)
+## 1. Project Overview
 
-> 코노(KONO)는 ‘코인 노리터’의 줄임말로, 가상의 자산으로 실시간 암호화폐 거래를 체험할 수 있는 코인 모의투자 서비스입니다.  
-> 사용자는 실제 자금을 투입하지 않고도 다양한 코인을 사고팔며 투자 감각을 키울 수 있으며,  
-> 이를 통해 **무지성 투자, 높은 진입 장벽, 실거래 위험성** 등 기존 암호화폐 시장의 문제를 안전하게 학습 환경에서 극복할 수 있습니다.
+> **KONO** (short for *Coin Noriteo*, meaning “Coin Playground”) is a **crypto trading simulator** where users can experience real-time cryptocurrency trading using **virtual assets**.
+> Users can practice buying and selling various coins without risking real money, allowing them to safely overcome the challenges of the crypto market such as **mindless investing, high entry barriers, and real-trade risks** within a learning environment.
 
-## 서비스 핵심 기능
+### Core Features
 
-- **코인 탐색**: 163개 코인의 실시간 시세 제공 및 정렬
-- **유저 포트폴리오**: 수익률 시각화 및 보유 코인 리스트 제공
-  <img src="https://github.com/100-hours-a-week/7-team-kono-fe/blob/develop/assets/2.png" width="100%"/>
-- **코인 상세**: 시세, 차트, 시가·고가·저가 등 정보 제공
-- **코인 매매**: 가입 시 가상 자산 1000만원 지급, 실시간 시세 기반 거래
-- **관심 종목**: 빠른 접근 및 실시간 시세 확인
-  <img src="https://github.com/100-hours-a-week/7-team-kono-fe/blob/develop/assets/3.png" width="100%"/>
-- **전체/일간 랭킹**: 투자 성과를 기준으로 순위화
-  <img src="https://github.com/100-hours-a-week/7-team-kono-fe/blob/develop/assets/4.png" width="100%"/>
+* **Coin Explorer**: Real-time prices and sorting for 163 cryptocurrencies
+* **User Portfolio**: Visualized profit rate and list of owned coins <img src="https://github.com/100-hours-a-week/7-team-kono-fe/blob/develop/assets/2.png" width="100%"/>
+* **Coin Details**: Provides charts, price info (open, high, low), and more
+* **Trading System**: Receive ₩10,000,000 in virtual assets upon signup, trade in real time
+* **Watchlist**: Quick access to favorite coins and live prices <img src="https://github.com/100-hours-a-week/7-team-kono-fe/blob/develop/assets/3.png" width="100%"/>
+* **Global/Daily Rankings**: Leaderboards based on investment performance <img src="https://github.com/100-hours-a-week/7-team-kono-fe/blob/develop/assets/4.png" width="100%"/>
 
 <br/>
 <br/>
 
-# 2. Team Members (팀원 및 팀 소개)
+## 2. Team Members
 
 <div align="center">
 <table>
@@ -60,10 +57,10 @@
     <td align="center">DevOps</td>
   </tr>
   <tr>
-    <td align="center">WebSocket 기반 시세 수집,<br/>프론트 구현</td>
-    <td align="center">랭킹 API,<br/>Redis 캐싱</td>
-    <td align="center">매수/매도 로직,<br/>API 연동</td>
-    <td align="center">OAuth2,<br/>Presigned URL,<br/>RateLimit</td>
+    <td align="center">WebSocket-based<br/>real-time price collector,<br/>frontend implementation</td>
+    <td align="center">Ranking API,<br/>Redis caching</td>
+    <td align="center">Buy/Sell logic,<br/>API integration</td>
+    <td align="center">OAuth2,<br/>Presigned URL,<br/>Rate limiting</td>
     <td align="center">CI/CD,<br/>Docker,<br/>Grafana</td>
   </tr>
 </table>
@@ -72,16 +69,16 @@
 <br/>
 <br/>
 
-# 3. Development Workflow
+## 3. Development Workflow
 
-- 1차 스프린트: 기획, 설계 (화면/ERD/API 명세)
-- 2차 스프린트: MVP 개발, 환경 세팅
-- 3차 스프린트: 출시, 성능 개선
-- 4차 스프린트: 모의 투자 대회 이벤트 운영, 사용자 피드백 반영
+* **Sprint 1:** Planning and design (UI, ERD, API specifications)
+* **Sprint 2:** MVP development and environment setup
+* **Sprint 3:** Launch and performance optimization
+* **Sprint 4:** Trading competition event and user feedback integration
 
 <br/>
 
-# 4. Stacks
+## 4. Tech Stack
 
 <div align=center> 
   <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"> 
@@ -99,15 +96,15 @@
 
 <br/>
 
-# 5. Commit Convention
+## 5. Commit Convention
 
-| 타입     | 설명                                             |
-| -------- | ------------------------------------------------ |
-| feat     | 기능 추가                                        |
-| fix      | 버그 수정                                        |
-| docs     | 문서                                             |
-| style    | 스타일 변경                                      |
-| refactor | 기능변화가 아닌 코드 리팩토링 ex. 변수 이름 변경 |
-| chore    | 설정, 배포                                       |
-| build    | 빌드 관련 수정                                   |
-| test     | 테스트 코드 추가/수정                            |
+| Type     | Description                                                               |
+| -------- | ------------------------------------------------------------------------- |
+| feat     | Add a new feature                                                         |
+| fix      | Fix a bug                                                                 |
+| docs     | Documentation updates                                                     |
+| style    | Code style changes (formatting, missing semicolons, etc.)                 |
+| refactor | Code refactoring without changing functionality (e.g., variable renaming) |
+| chore    | Build or configuration changes                                            |
+| build    | Build-related changes                                                     |
+| test     | Add or modify test code                                                   |
