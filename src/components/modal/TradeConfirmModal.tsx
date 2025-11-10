@@ -16,7 +16,6 @@ interface TradeConfirmModalProps {
   quantity: number;
   tradeType: 'buy' | 'sell';
   name: string;
-  // totalAmount: number;
 }
 
 export default function TradeConfirmModal({
@@ -37,10 +36,6 @@ export default function TradeConfirmModal({
   const [confirmedQuantity, setConfirmedQuantity] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
 
-  // 값이 없을 때의 기본값 처리
-  // const safeAmount = amount || 0;
-  // const safePrice = price || 0;
-
   const handleTrade = async () => {
     if (isProcessing) return;
     try {
@@ -58,15 +53,14 @@ export default function TradeConfirmModal({
       setShowComplete(true);
     } catch (error) {
       console.error('거래 실패:', error);
-      setShowToast(true); // 에러 토스트 메시지 표시
+      setShowToast(true);
     } finally {
-      setIsProcessing(false); // 처리 완료 플래그 리셋
+      setIsProcessing(false);
     }
   };
 
   const handleCompleteConfirm = () => {
     setShowComplete(false);
-    // Store toast info in sessionStorage before navigation
     sessionStorage.setItem(
       'tradeToast',
       JSON.stringify({

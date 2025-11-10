@@ -1,7 +1,6 @@
 import { memo } from 'react';
 import { formatCurrency, formatPriceChange } from '../utils/formatter';
 
-// 틱커 데이터 인터페이스
 interface TickerDataItem {
   trade_price: number;
   signed_change_rate: number;
@@ -22,9 +21,7 @@ interface PriceInfoProps {
   name?: string;
 }
 
-// 가격 정보 컴포넌트를 메모이제이션
 const PriceInfo = memo(({ symbol, tickerData, name }: PriceInfoProps) => {
-  // 티커 데이터가 없거나 해당 심볼에 대한 데이터가 없는 경우 로딩 표시
   if (!tickerData || !tickerData[`KRW-${symbol}`]) {
     return (
       <div className="p-4 border-b flex items-center justify-center h-24 dark:bg-gray-800 dark:text-white dark:border-gray-700">
@@ -37,10 +34,8 @@ const PriceInfo = memo(({ symbol, tickerData, name }: PriceInfoProps) => {
 
   const data = tickerData[`KRW-${symbol}`];
 
-  // 가격 변화율 (퍼센트)
   const rateChange = data.signed_change_rate * 100;
 
-  // 가격 변화 방향에 따른 스타일 클래스
   const rateChangeClass =
     data.change === 'RISE'
       ? 'text-red-500 dark:text-red-400'
@@ -68,16 +63,6 @@ const PriceInfo = memo(({ symbol, tickerData, name }: PriceInfoProps) => {
             </div>
           </div>
         </div>
-
-        {/* 즐겨찾기 버튼이 제공된 경우에만 표시 */}
-        {/* {onFavoriteToggle && (
-            <button
-              onClick={onFavoriteToggle}
-              className="text-2xl focus:outline-none"
-            >
-              {isFavorite ? '★' : '☆'}
-            </button>
-          )} */}
       </div>
 
       <div className="mt-3">

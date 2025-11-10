@@ -28,13 +28,11 @@ const Profile: React.FC = () => {
     profileImageUrl: 'https://static.upbit.com/logos/BTC.png',
   };
 
-  // 프로필 정보 로드
   useEffect(() => {
     const loadProfile = async () => {
       try {
         setLoading(true);
 
-        // 1. AuthContext의 사용자 정보가 있으면 사용
         if (user) {
           setProfile({
             nickname: user.nickname,
@@ -45,20 +43,18 @@ const Profile: React.FC = () => {
           return;
         }
 
-        // 2. AuthContext에 사용자 정보가 없으면 API 호출
         const data = await getUserProfile();
         if (data) {
           setProfile(data);
           setError(false);
         } else {
-          // 데이터가 없는 경우 더미 데이터 사용
           setProfile(dummyProfile);
           setNickname(dummyProfile.nickname);
           setError(true);
         }
       } catch (err) {
         console.error('프로필 로드 중 오류 발생:', err);
-        // 오류 발생 시 더미 데이터 사용
+
         setProfile(dummyProfile);
         setNickname(dummyProfile.nickname);
         setError(true);
@@ -70,13 +66,12 @@ const Profile: React.FC = () => {
     loadProfile();
   }, [user]);
 
-  // 프로필 이미지 변경 핸들러
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
     const file = files[0];
-    // 이미지 파일 타입 검증
+
     if (!file.type.startsWith('image/')) {
       toast.error('이미지 파일만 업로드 가능합니다.');
       return;
@@ -86,11 +81,9 @@ const Profile: React.FC = () => {
       setImageUploading(true);
       await updateProfileImage(file);
 
-      // 프로필 정보 다시 로드
       const updatedProfile = await getUserProfile();
       setProfile(updatedProfile);
 
-      // AuthContext의 사용자 정보도 업데이트
       if (updatedProfile) {
         updateUser({
           profileImageUrl: updatedProfile.profileImageUrl,
@@ -106,7 +99,6 @@ const Profile: React.FC = () => {
     }
   };
 
-  // 닉네임 변경 핸들러
   const handleNicknameSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -118,20 +110,16 @@ const Profile: React.FC = () => {
       await updateNickname(nickname);
       const updatedProfile = await getUserProfile();
       setProfile(updatedProfile);
-      // AuthContext 사용자 정보 업데이트
+
       if (updatedProfile) {
         updateUser({
           nickname: updatedProfile.nickname,
         });
       }
 
-
       setIsEditingNickname(false);
       toast.success('닉네임이 업데이트되었습니다.');
-    }
-
-    catch (error: any) {
-
+    } catch (error: any) {
       const { status, message } = error;
 
       switch (status) {
@@ -154,7 +142,6 @@ const Profile: React.FC = () => {
     }
   };
 
-  // 파일 선택 다이얼로그 열기
   const handleImageClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
@@ -169,12 +156,10 @@ const Profile: React.FC = () => {
     );
   }
 
-  // profile이 null인 경우 처리
   const displayProfile = profile || dummyProfile;
 
   return (
     <div className="p-4 max-w-md mx-auto">
-      {/* 오류 메시지 표시 영역 */}
       {error && (
         <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
           <p className="text-center">
@@ -186,7 +171,6 @@ const Profile: React.FC = () => {
       )}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
         <div className="text-center">
-          {/* 프로필 이미지 영역 */}
           <div className="relative inline-block mb-4">
             <input
               type="file"
@@ -227,7 +211,6 @@ const Profile: React.FC = () => {
             </div>
           </div>
 
-          {/* 닉네임 영역 */}
           {isEditingNickname ? (
             <form onSubmit={handleNicknameSubmit} className="mb-4">
               <input

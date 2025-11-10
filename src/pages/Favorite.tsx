@@ -22,7 +22,6 @@ export default function Favorites() {
     rateChange24h: number;
   }
 
-  // 관심 종목 목록 가져오기
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
@@ -38,11 +37,9 @@ export default function Favorites() {
     fetchFavorites();
   }, []);
 
-  // 티커 목록 생성 및 웹소켓 연결
   const tickers = favoriteList.map((item) => item.ticker);
   const { tickerData } = useUpbitWebSocket(tickers);
 
-  // 웹소켓 데이터와 관심 종목 정보 결합
   const favoriteCoins: CoinData[] = useMemo(() => {
     if (
       !tickerData ||
@@ -69,10 +66,9 @@ export default function Favorites() {
           rateChange24h: data.signed_change_rate * 100 || 0,
         };
       })
-      .filter((coin): coin is CoinData => coin !== null); // null 제거
+      .filter((coin): coin is CoinData => coin !== null);
   }, [tickerData, favoriteList]);
 
-  // 검색 필터링
   const filteredCoins = favoriteCoins.filter(
     (coin) =>
       coin.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -102,7 +98,6 @@ export default function Favorites() {
         </div>
       </div>
 
-      {/* 코인 리스트 */}
       <div className="mx-4 rounded-2xl overflow-hidden mb-6 shadow-lg">
         {isLoading ? (
           <div className="p-8 text-center bg-white rounded-xl dark:bg-gray-800">

@@ -34,21 +34,18 @@ export function useUpbitWebSocket(symbols: string[] = ['BTC']) {
   const [error, setError] = useState<string | null>(null);
   const socket = useRef<WebSocket | null>(null);
 
-  // 심볼이 변경될 때마다 의존성 배열에 문자열로 직렬화된 값을 사용
   const symbolsKey = JSON.stringify(symbols);
 
   useEffect(() => {
-    // 심볼이 비어있으면 기본값으로 BTC 사용
     const symbolsToUse = symbols.length > 0 ? symbols : ['BTC'];
 
     // socket.current = new WebSocket('wss://api.upbit.com/websocket/v1');
-    socket.current = new WebSocket('wss://api.playcono.com/ws/'); // 프록시 사용
+    socket.current = new WebSocket('wss://api.playcono.com/ws/');
 
     socket.current.onopen = function () {
       setIsConnected(true);
       setError(null);
 
-      // 업비트 API 형식에 맞게 메시지 구성
       const message = [
         { ticket: 'test' },
         {
@@ -98,7 +95,7 @@ export function useUpbitWebSocket(symbols: string[] = ['BTC']) {
         socket.current.close();
       }
     };
-  }, [symbolsKey]); // symbolsKey를 의존성으로 사용
+  }, [symbolsKey]);
 
   return { tickerData, isConnected, error };
 }

@@ -1,10 +1,7 @@
-// 프론트엔드 라우트 정의
 export const ROUTES = {
-  // 공통
   HOME: '/',
   NOT_FOUND: '/404',
 
-  // 인증
   AUTH: {
     LOGIN: '/login',
     SIGNUP: '/signup',
@@ -19,7 +16,6 @@ export const ROUTES = {
     DETAIL: (ticker: string) => `/coins/${ticker}`,
   },
 
-  // 메인 기능
   WALLET: '/wallet',
   TRANSACTION: '/transaction',
   DISCOVER: '/discover',
@@ -28,7 +24,6 @@ export const ROUTES = {
   SETTINGS: '/settings',
 };
 
-// 네비게이션 메뉴 항목 정의s
 export const NAV_ITEMS = [
   { label: '지갑', path: ROUTES.WALLET },
   { label: '탐색', path: ROUTES.DISCOVER },

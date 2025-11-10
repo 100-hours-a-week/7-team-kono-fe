@@ -21,21 +21,13 @@ interface ErrorResponse {
   message: string;
 }
 
-// 사용자 프로필 정보 가져오기
 export const getUserProfile = async (): Promise<ProfileData> => {
   try {
-    // API 서버에서 인증된 사용자 정보 가져오기
     const response = await api.get(API_ENDPOINTS.GET_USER);
 
-    // API 응답 형식에 맞게 데이터 변환
     return response.data;
-    // nickname: response.data.nickname || '사용자',
-    // profileImage: response.data.profileImage || 'https://via.placeholder.com/150',
-    // id: response.data.id,
-    // cashBalance: response.data.cashBalance
   } catch (error) {
     console.error('사용자 프로필 정보를 가져오는 중 오류 발생:', error);
-    // 오류 발생 시 기본 더미 데이터 반환
     return {
       nickname: '사용자',
       profileImageUrl: 'https://via.placeholder.com/150',
@@ -43,12 +35,10 @@ export const getUserProfile = async (): Promise<ProfileData> => {
   }
 };
 
-// 프로필 이미지 업데이트
 export const updateProfileImage = async (
   imageFile: File,
 ): Promise<ProfileData> => {
   try {
-    // 1. Presigned URL 요청 - body로 전송
     const presignedUrlResponse = await api.post('/api/v1/s3/presigned-url', {
       fileName: imageFile.name,
       contentType: imageFile.type,
@@ -56,14 +46,12 @@ export const updateProfileImage = async (
 
     const { presignedUrl, uploadedFileUrl } = presignedUrlResponse.data;
 
-    // 2. Presigned URL을 사용하여 S3에 직접 업로드
     await api.put(presignedUrl, imageFile, {
       headers: {
         'Content-Type': imageFile.type,
       },
     });
 
-    // 3. 업로드된 이미지 URL로 프로필 업데이트
     const updateResponse = await api.put<ProfileUpdateResponse>(
       '/api/v1/users/profile-image',
       {
@@ -71,7 +59,6 @@ export const updateProfileImage = async (
       },
     );
 
-    // 4. 업데이트된 프로필 정보 반환
     return {
       nickname: updateResponse.data.data.nickname,
       profileImageUrl: updateResponse.data.data.profileImageUrl,
@@ -82,7 +69,6 @@ export const updateProfileImage = async (
   }
 };
 
-// 닉네임 업데이트
 export const updateNickname = async (
   nickname: string,
 ): Promise<ProfileData> => {
@@ -95,10 +81,9 @@ export const updateNickname = async (
         withCredentials: true,
       },
     );
-    return getUserProfile(); // 업데이트 후 최신 프로필 정보 반환
+    return getUserProfile();
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
-      // HTTP 상태 코드와 메시지를 함께 throw
       throw {
         status: error.response.status,
         message: error.response.data.message,
@@ -111,7 +96,6 @@ export const updateNickname = async (
   }
 };
 
-// 잔액 조회
 export const getBalance = async (): Promise<number> => {
   try {
     const response = await api.get('/api/v1/users/balance', {
@@ -125,7 +109,6 @@ export const getBalance = async (): Promise<number> => {
   }
 };
 
-// 회원 탈퇴
 export const withdrawUser = async (): Promise<void> => {
   try {
     await api.delete('/api/v1/users/withdraw');
