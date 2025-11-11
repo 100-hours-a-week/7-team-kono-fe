@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   getUserProfile,
   updateProfileImage,
@@ -15,6 +16,7 @@ interface ProfileData {
 }
 
 const Profile: React.FC = () => {
+  const { t } = useTranslation();
   const { user, updateUser } = useAuth();
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -25,7 +27,7 @@ const Profile: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const dummyProfile: ProfileData = {
-    nickname: '닉네임',
+    nickname: t('profile.nickname'),
     profileImageUrl: 'https://static.upbit.com/logos/BTC.png',
   };
 
@@ -166,9 +168,7 @@ const Profile: React.FC = () => {
       {error && (
         <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
           <p className="text-center">
-            {
-              '프로필 정보를 불러오는 중 문제가 발생했습니다. 임시 프로필이 표시됩니다.'
-            }
+            {t('profile.errorLoading')}
           </p>
         </div>
       )}
@@ -184,7 +184,7 @@ const Profile: React.FC = () => {
             />
             <img
               src={displayProfile.profileImageUrl}
-              alt="프로필 이미지"
+              alt={t('profile.profileImage')}
               className="w-32 h-32 rounded-full object-cover border-4 border-gray-200 dark:border-gray-700 cursor-pointer"
               onClick={handleImageClick}
             />
@@ -221,14 +221,14 @@ const Profile: React.FC = () => {
                 value={nickname}
                 onChange={(e) => setNickname(e.target.value)}
                 className="text-lg font-semibold mb-2 text-center block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white"
-                placeholder="새 닉네임 입력"
+                placeholder={t('profile.newNicknamePlaceholder')}
               />
               <div className="flex gap-2 justify-center">
                 <button
                   type="submit"
                   className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
                 >
-                  저장
+                  {t('common.save')}
                 </button>
                 <button
                   type="button"
@@ -238,7 +238,7 @@ const Profile: React.FC = () => {
                   }}
                   className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
                 >
-                  취소
+                  {t('common.cancel')}
                 </button>
               </div>
             </form>

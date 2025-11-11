@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Header from '../components/layout/Header';
 import { ROUTES } from '../config/routes';
 import {
@@ -22,6 +23,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import { LOG, UI } from '../config/constants';
 
 const Settings = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { logout } = useAuth();
   const { darkMode } = useTheme();
@@ -105,7 +107,7 @@ const Settings = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Header title="설정" />
+      <Header title={t('pages.settings')} />
 
       <div className="mx-4 my-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
         <div className="p-4 flex items-center">
@@ -114,7 +116,7 @@ const Settings = () => {
           ) : (
             <FaSun className="text-gray-500 dark:text-gray-400 text-xl mr-3" />
           )}
-          <span className="flex-1">다크 모드</span>
+          <span className="flex-1">{t('settings.darkMode')}</span>
           <DarkModeToggle />
         </div>
       </div>
@@ -125,7 +127,7 @@ const Settings = () => {
           className="w-full text-left p-4 flex items-center"
         >
           <FaUser className="text-gray-500 dark:text-gray-400 mr-3" />
-          <span className="text-base">프로필 수정</span>
+          <span className="text-base">{t('profile.edit')}</span>
         </button>
       </div>
 
@@ -135,13 +137,13 @@ const Settings = () => {
           className="w-full text-left p-4 flex items-center"
         >
           <FaBeer className="text-gray-500 dark:text-gray-400 mr-3" />
-          <span className="text-base">개발자에게 맥주 사주기</span>
+          <span className="text-base">{t('settings.buyBeer')}</span>
         </button>
       </div>
 
       <div className="mx-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm mb-4 border border-gray-200 dark:border-gray-700">
         <h2 className="p-4 border-b dark:border-gray-700 text-sm font-medium text-gray-500 dark:text-gray-400">
-          앱 정보
+          {t('settings.appInfo')}
         </h2>
 
         <button
@@ -150,7 +152,7 @@ const Settings = () => {
         >
           <FaGithub className="text-gray-500 dark:text-gray-400 mr-3" />
           <div>
-            <span className="text-base block">개발자 정보</span>
+            <span className="text-base block">{t('settings.developerInfo')}</span>
             <span className="text-xs text-gray-500 dark:text-gray-400">
               7-team-secretjuju
             </span>
@@ -160,7 +162,7 @@ const Settings = () => {
         <div className="p-4 flex items-center">
           <FaInfoCircle className="text-gray-500 dark:text-gray-400 mr-3" />
           <div>
-            <span className="text-base block">앱 버전</span>
+            <span className="text-base block">{t('settings.appVersion')}</span>
             <span className="text-xs text-gray-500 dark:text-gray-400">
               1.0.0
             </span>
@@ -170,7 +172,7 @@ const Settings = () => {
 
       <div className="mx-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm mb-4 border border-gray-200 dark:border-gray-700">
         <h2 className="p-4 border-b dark:border-gray-700 text-sm font-medium text-gray-500 dark:text-gray-400">
-          계정 관리
+          {t('settings.account')}
         </h2>
 
         <button
@@ -178,7 +180,7 @@ const Settings = () => {
           className="w-full text-left p-4 flex items-center text-red-500"
         >
           <FaSignOutAlt className="mr-3" />
-          <span className="text-base">로그아웃</span>
+          <span className="text-base">{t('auth.logout')}</span>
         </button>
       </div>
 
@@ -188,7 +190,7 @@ const Settings = () => {
           className="flex items-center w-full text-left p-4 text-red-500"
         >
           <FaUserMinus className="mr-3" />
-          <span className="text-base">회원 탈퇴</span>
+          <span className="text-base">{t('auth.deleteAccount')}</span>
         </button>
       </div>
 
@@ -201,13 +203,13 @@ const Settings = () => {
               onClick={closeDeleteAccountModal}
               className="flex-1 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
             >
-              취소
+              {t('common.cancel')}
             </button>
             <button
               onClick={confirmDeleteAccount}
               className="flex-1 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
             >
-              탈퇴하기
+              {t('auth.deleteAccount')}
             </button>
           </>
         }
@@ -217,10 +219,10 @@ const Settings = () => {
             <FaExclamationTriangle className="text-4xl text-red-500" />
           </div>
           <p className="text-center font-medium dark:text-white">
-            정말 탈퇴하시겠습니까?
+            {t('auth.deleteAccountConfirm')}
           </p>
           <p className="text-center text-gray-600 dark:text-gray-400 text-sm">
-            회원 탈퇴 시 모든 데이터가 삭제되며 <br /> 복구할 수 없습니다.
+            {t('auth.deleteAccountWarning')}
           </p>
         </div>
       </Modal>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { FaFilter } from 'react-icons/fa';
 import Header from '../components/layout/Header';
 import FilterModal, { FilterType } from '../components/modal/FilterModal';
@@ -11,8 +12,9 @@ import {
 import { LOG } from '../config/constants';
 
 export default function Transaction() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
-  const [activeFilter, setActiveFilter] = useState<FilterType>('전체');
+  const [activeFilter, setActiveFilter] = useState<FilterType>(t('transactions.all'));
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [transactions, setTransactions] = useState<TransactionType[]>([]);
   const [loading, setLoading] = useState(true);

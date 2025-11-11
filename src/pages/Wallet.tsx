@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Header from '../components/layout/Header';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
@@ -39,6 +40,7 @@ interface ChartItem {
 }
 
 const Wallet = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -72,7 +74,7 @@ const Wallet = () => {
         setTickers(tickerList);
       } catch (error) {
         console.error(LOG.ERR.WALLETS.GET_HOLDING_COIN, error);
-        setError('코인 정보를 불러오는데 실패했습니다.');
+        setError(t('wallet.failedLoad'));
         setHoldingCoins([]);
         setTickers([]);
       } finally {
@@ -81,7 +83,7 @@ const Wallet = () => {
     };
 
     fetchHoldingCoins();
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     if (
@@ -180,7 +182,7 @@ const Wallet = () => {
 
   if (otherCoinsValue > 0) {
     chartItems.push({
-      name: '기타',
+      name: t('wallet.others'),
       value: otherCoinsValue,
       percent: otherCoinsPercent,
     });
@@ -188,7 +190,7 @@ const Wallet = () => {
 
   if (cashBalance > 0) {
     chartItems.push({
-      name: '현금',
+      name: t('wallet.cash'),
       value: cashBalance,
       percent: cashPercent,
     });
@@ -242,7 +244,7 @@ const Wallet = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <Header
-        title="지갑"
+        title={t('pages.wallet')}
         rightElement={
           <button onClick={goToTransaction}>
             <FaHistory className="mr-1 text-xl text-gray-500 dark:text-white" />
@@ -268,13 +270,13 @@ const Wallet = () => {
         </div>
         <div className="flex justify-between mt-4 text-gray-600 dark:text-white">
           <div>
-            <div>투자금</div>
+            <div>{t('wallet.invested')}</div>
             <div className="font-medium">
               {formatCurrency(initialInvestment, 'KRW')}
             </div>
           </div>
           <div className="text-left">
-            <div>현금</div>
+            <div>{t('wallet.cash')}</div>
             <div className="font-medium">
               {formatCurrency(cashBalance, 'KRW')}
             </div>
@@ -283,7 +285,7 @@ const Wallet = () => {
       </div>
 
       <div className="flex flex-col mt-4 bg-white mx-4 rounded-xl p-4 dark:bg-gray-800 dark:text-white border border-gray-200 dark:border-gray-700">
-        <h2 className="text-lg font-bold mb-4">자산 분배</h2>
+        <h2 className="text-lg font-bold mb-4">{t('wallet.assetDistribution')}</h2>
         <div
           className="w-full max-w-[200px] mx-auto"
           style={{ height: '200px' }}
@@ -312,12 +314,12 @@ const Wallet = () => {
 
       <div className="mx-4 mt-4 mb-6 bg-white rounded-xl dark:bg-gray-800 dark:text-white border border-gray-200 dark:border-gray-700">
         <div className="p-4 border-b dark:border-gray-700">
-          <h2 className="text-lg font-bold">보유 코인</h2>
+          <h2 className="text-lg font-bold">{t('wallet.myCoins')}</h2>
         </div>
 
         {isLoading ? (
           <div className="p-8 flex flex-col items-center justify-center text-center">
-            <p className="text-gray-500 dark:text-gray-400">로딩 중...</p>
+            <p className="text-gray-500 dark:text-gray-400">{t('common.loading')}</p>
           </div>
         ) : error ? (
           <div className="p-8 flex flex-col items-center justify-center text-center">
@@ -327,13 +329,13 @@ const Wallet = () => {
           <div className="p-8 flex flex-col items-center justify-center text-center">
             <div className="p-8 text-center bg-white rounded-xl dark:bg-gray-800">
               <div className="text-gray-500 mb-2 dark:text-gray-400">
-                현재 보유 코인이 없습니다.
+                {t('wallet.noCoins')}
               </div>
               <button
                 className="text-blue-500 font-medium dark:text-blue-400"
                 onClick={() => navigate(ROUTES.DISCOVER)}
               >
-                코인 탐색하기
+                {t('wallet.exploreCoins')}
               </button>
             </div>
           </div>
