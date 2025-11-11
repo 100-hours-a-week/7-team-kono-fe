@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, memo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import Header from '../components/layout/Header';
 import TradingViewWidget from '../components/TradingViewWidget';
@@ -39,6 +40,7 @@ const Chart = memo(({ ticker }: { ticker: string }) => {
 });
 
 export default function CoinDetail() {
+  const { t } = useTranslation();
   const { ticker } = useParams<{ ticker: string }>();
   const navigate = useNavigate();
 
@@ -124,7 +126,7 @@ export default function CoinDetail() {
   if (loading) {
     return (
       <div className="flex flex-col min-h-screen">
-        <Header title="로딩 중..." />
+        <Header title={t('common.loading')} />
         <div className="flex-1 flex items-center justify-center">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 dark:border-blue-400"></div>
         </div>
@@ -135,17 +137,17 @@ export default function CoinDetail() {
   if (error || !coin) {
     return (
       <div className="flex flex-col min-h-screen">
-        <Header title="오류" />
+        <Header title={t('common.error')} />
         <div className="flex-1 flex items-center justify-center p-4">
           <div className="text-center">
             <p className="text-red-500 mb-4 dark:text-red-400">
-              {error || '코인 정보를 불러올 수 없습니다.'}
+              {error || t('coin.failedLoad')}
             </p>
             <button
               className="px-4 py-2 bg-blue-500 text-white rounded-lg dark:bg-blue-400"
               onClick={() => navigate(-1)}
             >
-              돌아가기
+              {t('common.goBack')}
             </button>
           </div>
         </div>
@@ -190,22 +192,22 @@ export default function CoinDetail() {
 
       {tickerData && tickerData[`KRW-${symbolToUse}`] && (
         <div className="p-4">
-          <h2 className="text-lg font-bold mb-4">코인 정보</h2>
+          <h2 className="text-lg font-bold mb-4">{t('coin.info')}</h2>
           <div className="space-y-2">
             <div className="flex justify-between">
-              <span className="text-gray-500">최고가 (24h)</span>
+              <span className="text-gray-500">{t('coin.high24h')}</span>
               <span>
                 {formatCurrency(tickerData[`KRW-${symbolToUse}`].high_price)}
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-500">최저가 (24h)</span>
+              <span className="text-gray-500">{t('coin.low24h')}</span>
               <span>
                 {formatCurrency(tickerData[`KRW-${symbolToUse}`].low_price)}
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-500">거래대금 (24h)</span>
+              <span className="text-gray-500">{t('coin.volume24h')}</span>
               <span>
                 {formatAmount(
                   tickerData[`KRW-${symbolToUse}`].acc_trade_price_24h,
@@ -213,7 +215,7 @@ export default function CoinDetail() {
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-500">거래량 (24h)</span>
+              <span className="text-gray-500">{t('coin.traded24h')}</span>
               <span>
                 {tickerData[`KRW-${symbolToUse}`].acc_trade_volume_24h.toFixed(
                   2,

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import Header from '../components/layout/Header';
 import {
   getRanksAllMe,
@@ -25,6 +26,7 @@ interface Rank {
 type RankingPeriod = '일간' | '전체';
 
 export default function Ranking() {
+  const { t } = useTranslation();
   const [activePeriod, setActivePeriod] = useState<RankingPeriod>('일간');
   const [myUserSticky, setMyUserSticky] = useState<'bottom' | 'top' | null>(
     null,
@@ -114,9 +116,9 @@ export default function Ranking() {
   if (isLoading && currentRanks.length === 0) {
     return (
       <div className="flex flex-col min-h-screen">
-        <Header title="랭킹" />
+        <Header title={t('pages.rankings')} />
         <div className="flex-1 flex items-center justify-center">
-          <div className="text-gray-500">로딩 중...</div>
+          <div className="text-gray-500">{t('common.loading')}</div>
         </div>
       </div>
     );
@@ -124,7 +126,7 @@ export default function Ranking() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Header title="랭킹" />
+      <Header title={t('pages.rankings')} />
 
       <div className="mx-4 mt-4 flex border-b bg-white sticky top-0 z-10 rounded-t-xl dark:bg-gray-800 dark:text-white dark:border-gray-700">
         {(['일간', '전체'] as RankingPeriod[]).map((period) => (
@@ -137,7 +139,7 @@ export default function Ranking() {
             }`}
             onClick={() => setActivePeriod(period)}
           >
-            {period}
+            {period === '일간' ? t('rankings.daily') : t('rankings.allTime')}
           </button>
         ))}
       </div>
@@ -259,11 +261,11 @@ export default function Ranking() {
           <span>
             {activePeriod === '일간'
               ? dailyUpdatedAt
-                ? `${format(new Date(dailyUpdatedAt), 'yyyy년 MM월 dd일 HH:mm')} 기준`
-                : '업데이트 시간 정보 없음'
+                ? `${t('rankings.asOf')}: ${format(new Date(dailyUpdatedAt), 'yyyy-MM-dd HH:mm')}`
+                : t('rankings.noUpdateInfo')
               : allUpdatedAt
-                ? `${format(new Date(allUpdatedAt), 'yyyy년 MM월 dd일 HH:mm')} 기준`
-                : '가입일부터 현재까지'}
+                ? `${t('rankings.asOf')}: ${format(new Date(allUpdatedAt), 'yyyy-MM-dd HH:mm')}`
+                : t('rankings.sinceRegistration')}
           </span>
           {/* <button
             onClick={fetchRanks}

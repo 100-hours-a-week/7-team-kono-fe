@@ -104,7 +104,9 @@ export default function Favorites() {
       <div className="mx-4 rounded-2xl overflow-hidden mb-6 shadow-lg">
         {isLoading ? (
           <div className="p-8 text-center bg-white rounded-xl dark:bg-gray-800">
-            <div className="text-gray-500 dark:text-gray-400">{t('common.loading')}</div>
+            <div className="text-gray-500 dark:text-gray-400">
+              {t('common.loading')}
+            </div>
           </div>
         ) : filteredCoins.length > 0 ? (
           filteredCoins.map((coin) => (

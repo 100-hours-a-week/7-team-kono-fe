@@ -263,7 +263,7 @@ function CoinList({
   onCoinClick: (ticker: string) => void;
 }) {
   const { t } = useTranslation();
-  
+
   if (isLoading) {
     return (
       <div className="mx-4 flex-1 flex items-center justify-center p-8 bg-white rounded-b-xl dark:bg-gray-800 dark:text-white">

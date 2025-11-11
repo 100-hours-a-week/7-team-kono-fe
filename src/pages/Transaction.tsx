@@ -94,7 +94,9 @@ export default function Transaction() {
 
       <div className="mx-4 mt-4 bg-white p-4 border-b flex justify-between rounded-t-xl dark:bg-gray-800 dark:text-white dark:border-gray-700">
         <div className="flex items-center">
-          <span className="text-sm text-gray-500 mr-2">{t('common.filter')}:</span>
+          <span className="text-sm text-gray-500 mr-2">
+            {t('common.filter')}:
+          </span>
           <span className="text-sm font-medium">{activeFilter}</span>
         </div>
         <button onClick={toggleFilterModal} className="p-1">
@@ -140,26 +142,34 @@ export default function Transaction() {
               </div>
 
               <div className="flex justify-between text-sm mb-1">
-                <span className="text-gray-500 dark:text-gray-400">{t('trade.quantity')}</span>
+                <span className="text-gray-500 dark:text-gray-400">
+                  {t('trade.quantity')}
+                </span>
                 <span>
                   {transaction.orderQuantity} {transaction.ticker}
                 </span>
               </div>
 
               <div className="flex justify-between text-sm mb-1">
-                <span className="text-gray-500 dark:text-gray-400">{t('trade.price')}</span>
+                <span className="text-gray-500 dark:text-gray-400">
+                  {t('trade.price')}
+                </span>
                 <span>{formatCurrency(transaction.orderPrice)}</span>
               </div>
 
               <div className="flex justify-between text-sm mb-1">
-                <span className="text-gray-500 dark:text-gray-400">{t('trade.total')}</span>
+                <span className="text-gray-500 dark:text-gray-400">
+                  {t('trade.total')}
+                </span>
                 <span className="font-medium">
                   {formatCurrency(transaction.orderAmount)}
                 </span>
               </div>
 
               <div className="flex justify-between text-sm">
-                <span className="text-gray-500 dark:text-gray-400">{t('transactions.date')}</span>
+                <span className="text-gray-500 dark:text-gray-400">
+                  {t('transactions.date')}
+                </span>
                 <span>{formatDate(transaction.createdAt)}</span>
               </div>
             </div>
@@ -167,7 +177,9 @@ export default function Transaction() {
         </div>
       ) : (
         <div className="flex-1 flex flex-col items-center justify-center p-8">
-          <div className="text-xl font-bold mb-2">{t('transactions.noTrades')}</div>
+          <div className="text-xl font-bold mb-2">
+            {t('transactions.noTrades')}
+          </div>
           <div className="text-gray-500 text-center mb-6 dark:text-gray-400">
             {t('transactions.firstTrade')}
           </div>

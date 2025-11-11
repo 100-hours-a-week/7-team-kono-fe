@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import TradeConfirmModal from '../components/modal/TradeConfirmModal';
 import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
 import { formatAmount, formatCurrency } from '../utils/formatter';
@@ -20,6 +21,7 @@ interface CoinData {
 }
 
 export default function Trade() {
+  const { t } = useTranslation();
   const { ticker, type } = useParams<{ ticker: string; type: TradeType }>();
   const navigate = useNavigate();
 
