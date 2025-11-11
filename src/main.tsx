@@ -5,6 +5,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import Clarity from '@microsoft/clarity';
 import App from './App';
 import './index.css';
+import './i18n/config';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import NotFound from './pages/NotFound.tsx';
 import Wallet from './pages/Wallet.tsx';
