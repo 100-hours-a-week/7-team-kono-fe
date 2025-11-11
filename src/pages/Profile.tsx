@@ -167,9 +167,7 @@ const Profile: React.FC = () => {
     <div className="p-4 max-w-md mx-auto">
       {error && (
         <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
-          <p className="text-center">
-            {t('profile.errorLoading')}
-          </p>
+          <p className="text-center">{t('profile.errorLoading')}</p>
         </div>
       )}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">

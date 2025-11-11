@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { IoIosClose } from 'react-icons/io';
 import Header from '../components/layout/Header';
 import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
@@ -29,6 +30,7 @@ const SORT_TYPES: SortType[] = ['거래대금', '가격', '등락률'];
 const PLACEHOLDER = 'https://static.upbit.com/logos/BTC.png';
 
 export default function Discover() {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState<SortType>('거래대금');
   const [coinInfo, setCoinInfo] = useState<CoinInfo[]>([]);
@@ -50,12 +52,12 @@ export default function Discover() {
       })
       .catch((err) => {
         console.error(LOG.ERR.COINS.FETCH_DATA, err);
-        setError('코인 정보를 불러오는데 실패했습니다.');
+        setError(t('discover.failedLoad'));
       })
       .finally(() => {
         setIsLoading(false);
       });
-  }, []);
+  }, [t]);
 
   const { tickerData } = useUpbitWebSocket(tickers);
 
@@ -124,12 +126,13 @@ export default function Discover() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Header title="탐색" />
+      <Header title={t('pages.discover')} />
 
       <SearchBar
         searchTerm={searchTerm}
         onSearch={handleSearch}
         onClear={handleClearSearch}
+        placeholder={t('discover.searchPlaceholder')}
       />
 
       <SortTabs activeTab={activeTab} onTabChange={handleTabChange} />
@@ -148,17 +151,19 @@ function SearchBar({
   searchTerm,
   onSearch,
   onClear,
+  placeholder,
 }: {
   searchTerm: string;
   onSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onClear: () => void;
+  placeholder: string;
 }) {
   return (
     <div className="p-4 sticky top-0 z-10 rounded-xl mb-4">
       <div className="relative">
         <input
           type="text"
-          placeholder="코인 검색"
+          placeholder={placeholder}
           className="w-full p-3 bg-gray-100 dark:bg-gray-800 rounded-full px-6"
           value={searchTerm}
           onChange={onSearch}
@@ -257,10 +262,12 @@ function CoinList({
   error: string | null;
   onCoinClick: (ticker: string) => void;
 }) {
+  const { t } = useTranslation();
+  
   if (isLoading) {
     return (
       <div className="mx-4 flex-1 flex items-center justify-center p-8 bg-white rounded-b-xl dark:bg-gray-800 dark:text-white">
-        <p>로딩 중...</p>
+        <p>{t('common.loading')}</p>
       </div>
     );
   }
@@ -276,7 +283,7 @@ function CoinList({
   if (coins.length === 0) {
     return (
       <div className="mx-4 flex-1 flex items-center justify-center p-8 bg-white rounded-b-xl dark:bg-gray-800 dark:text-white">
-        <p>검색 결과가 없습니다.</p>
+        <p>{t('discover.noResults')}</p>
       </div>
     );
   }

@@ -14,7 +14,7 @@ import { LOG } from '../config/constants';
 export default function Transaction() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [activeFilter, setActiveFilter] = useState<FilterType>(t('transactions.all'));
+  const [activeFilter, setActiveFilter] = useState<FilterType>('전체');
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [transactions, setTransactions] = useState<TransactionType[]>([]);
   const [loading, setLoading] = useState(true);
@@ -30,7 +30,7 @@ export default function Transaction() {
         setError(null);
       } catch (error) {
         console.error(LOG.ERR.TRANSACTIONS.GET_HISTORY, error);
-        setError('거래 내역을 불러오는데 실패했습니다.');
+        setError(t('transactions.failedLoad'));
         setTransactions([]);
       } finally {
         setLoading(false);
@@ -38,7 +38,7 @@ export default function Transaction() {
     };
 
     fetchTransactions();
-  }, []);
+  }, [t]);
 
   const filteredTransactions = transactions.filter((transaction) => {
     if (activeFilter === '전체') return true;
@@ -52,7 +52,7 @@ export default function Transaction() {
   if (loading) {
     return (
       <div className="flex flex-col min-h-screen">
-        <Header title="매매 내역" />
+        <Header title={t('pages.transactions')} />
         <div className="flex-1 flex items-center justify-center">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
         </div>
@@ -63,7 +63,7 @@ export default function Transaction() {
   if (error) {
     return (
       <div className="flex flex-col min-h-screen">
-        <Header title="매매 내역" />
+        <Header title={t('pages.transactions')} />
         <div className="flex-1 flex items-center justify-center p-4">
           <div className="text-center">
             <p className="text-red-500 mb-4">{error}</p>
@@ -71,7 +71,7 @@ export default function Transaction() {
               className="px-4 py-2 bg-blue-500 text-white rounded-lg"
               onClick={() => window.location.reload()}
             >
-              다시 시도
+              {t('common.retry')}
             </button>
           </div>
         </div>
@@ -90,11 +90,11 @@ export default function Transaction() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Header title="매매 내역" />
+      <Header title={t('pages.transactions')} />
 
       <div className="mx-4 mt-4 bg-white p-4 border-b flex justify-between rounded-t-xl dark:bg-gray-800 dark:text-white dark:border-gray-700">
         <div className="flex items-center">
-          <span className="text-sm text-gray-500 mr-2">필터:</span>
+          <span className="text-sm text-gray-500 mr-2">{t('common.filter')}:</span>
           <span className="text-sm font-medium">{activeFilter}</span>
         </div>
         <button onClick={toggleFilterModal} className="p-1">
@@ -140,26 +140,26 @@ export default function Transaction() {
               </div>
 
               <div className="flex justify-between text-sm mb-1">
-                <span className="text-gray-500 dark:text-gray-400">수량</span>
+                <span className="text-gray-500 dark:text-gray-400">{t('trade.quantity')}</span>
                 <span>
                   {transaction.orderQuantity} {transaction.ticker}
                 </span>
               </div>
 
               <div className="flex justify-between text-sm mb-1">
-                <span className="text-gray-500 dark:text-gray-400">가격</span>
+                <span className="text-gray-500 dark:text-gray-400">{t('trade.price')}</span>
                 <span>{formatCurrency(transaction.orderPrice)}</span>
               </div>
 
               <div className="flex justify-between text-sm mb-1">
-                <span className="text-gray-500 dark:text-gray-400">총액</span>
+                <span className="text-gray-500 dark:text-gray-400">{t('trade.total')}</span>
                 <span className="font-medium">
                   {formatCurrency(transaction.orderAmount)}
                 </span>
               </div>
 
               <div className="flex justify-between text-sm">
-                <span className="text-gray-500 dark:text-gray-400">날짜</span>
+                <span className="text-gray-500 dark:text-gray-400">{t('transactions.date')}</span>
                 <span>{formatDate(transaction.createdAt)}</span>
               </div>
             </div>
@@ -167,15 +167,15 @@ export default function Transaction() {
         </div>
       ) : (
         <div className="flex-1 flex flex-col items-center justify-center p-8">
-          <div className="text-xl font-bold mb-2">거래 내역이 없습니다</div>
+          <div className="text-xl font-bold mb-2">{t('transactions.noTrades')}</div>
           <div className="text-gray-500 text-center mb-6 dark:text-gray-400">
-            첫 번째 코인을 구매해보세요
+            {t('transactions.firstTrade')}
           </div>
           <button
             className="px-6 py-3 bg-blue-500 text-white rounded-xl font-medium dark:bg-blue-400"
             onClick={() => navigate('/discover')}
           >
-            탐색하러 가기
+            {t('wallet.exploreCoins')}
           </button>
         </div>
       )}

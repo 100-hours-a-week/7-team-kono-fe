@@ -152,7 +152,9 @@ const Settings = () => {
         >
           <FaGithub className="text-gray-500 dark:text-gray-400 mr-3" />
           <div>
-            <span className="text-base block">{t('settings.developerInfo')}</span>
+            <span className="text-base block">
+              {t('settings.developerInfo')}
+            </span>
             <span className="text-xs text-gray-500 dark:text-gray-400">
               7-team-secretjuju
             </span>

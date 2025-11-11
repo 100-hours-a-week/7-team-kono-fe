@@ -285,7 +285,9 @@ const Wallet = () => {
       </div>
 
       <div className="flex flex-col mt-4 bg-white mx-4 rounded-xl p-4 dark:bg-gray-800 dark:text-white border border-gray-200 dark:border-gray-700">
-        <h2 className="text-lg font-bold mb-4">{t('wallet.assetDistribution')}</h2>
+        <h2 className="text-lg font-bold mb-4">
+          {t('wallet.assetDistribution')}
+        </h2>
         <div
           className="w-full max-w-[200px] mx-auto"
           style={{ height: '200px' }}
@@ -319,7 +321,9 @@ const Wallet = () => {
 
         {isLoading ? (
           <div className="p-8 flex flex-col items-center justify-center text-center">
-            <p className="text-gray-500 dark:text-gray-400">{t('common.loading')}</p>
+            <p className="text-gray-500 dark:text-gray-400">
+              {t('common.loading')}
+            </p>
           </div>
         ) : error ? (
           <div className="p-8 flex flex-col items-center justify-center text-center">

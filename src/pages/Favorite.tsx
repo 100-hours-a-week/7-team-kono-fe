@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { IoIosClose } from 'react-icons/io';
 import Header from '../components/layout/Header';
 import { formatAmount } from '../utils/formatter';
@@ -8,6 +9,7 @@ import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
 import { LOG } from '../config/constants';
 
 export default function Favorites() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [favoriteList, setFavoriteList] = useState<any[]>([]);
@@ -78,12 +80,12 @@ export default function Favorites() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Header title="관심종목" />
+      <Header title={t('pages.favorites')} />
       <div className="p-4 sticky top-0 z-10 rounded-full mb-4">
         <div className="relative">
           <input
             type="text"
-            placeholder="코인 검색"
+            placeholder={t('favorites.searchPlaceholder')}
             className="w-full p-3 bg-gray-100 dark:bg-gray-800 rounded-full px-6 dark:text-white"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -102,7 +104,7 @@ export default function Favorites() {
       <div className="mx-4 rounded-2xl overflow-hidden mb-6 shadow-lg">
         {isLoading ? (
           <div className="p-8 text-center bg-white rounded-xl dark:bg-gray-800">
-            <div className="text-gray-500 dark:text-gray-400">로딩 중...</div>
+            <div className="text-gray-500 dark:text-gray-400">{t('common.loading')}</div>
           </div>
         ) : filteredCoins.length > 0 ? (
           filteredCoins.map((coin) => (
@@ -149,13 +151,13 @@ export default function Favorites() {
         ) : (
           <div className="p-8 text-center bg-white rounded-xl dark:bg-gray-800">
             <div className="text-gray-500 mb-2 dark:text-gray-400">
-              아직 관심 코인이 없습니다.
+              {t('favorites.noFavorites')}
             </div>
             <button
               className="text-blue-500 font-medium dark:text-blue-400"
               onClick={() => navigate('/discover')}
             >
-              코인 탐색하기
+              {t('favorites.exploreCoins')}
             </button>
           </div>
         )}
