@@ -39,10 +39,13 @@ export const updateProfileImage = async (
   imageFile: File,
 ): Promise<ProfileData> => {
   try {
-    const presignedUrlResponse = await api.post('/api/v1/s3/presigned-url', {
-      fileName: imageFile.name,
-      contentType: imageFile.type,
-    });
+    const presignedUrlResponse = await api.post(
+      API_ENDPOINTS.POST_PROFILE_IMAGE,
+      {
+        fileName: imageFile.name,
+        contentType: imageFile.type,
+      },
+    );
 
     const { presignedUrl, uploadedFileUrl } = presignedUrlResponse.data;
 
@@ -53,7 +56,7 @@ export const updateProfileImage = async (
     });
 
     const updateResponse = await api.put<ProfileUpdateResponse>(
-      '/api/v1/users/profile-image',
+      API_ENDPOINTS.PUT_NICKNAME,
       {
         imageUrl: uploadedFileUrl,
       },
@@ -74,7 +77,7 @@ export const updateNickname = async (
 ): Promise<ProfileData> => {
   try {
     await api.put(
-      '/api/v1/users/nickname',
+      API_ENDPOINTS.PUT_NICKNAME,
       { nickname },
       {
         headers: { 'Content-Type': 'application/json' },
@@ -98,7 +101,7 @@ export const updateNickname = async (
 
 export const getBalance = async (): Promise<number> => {
   try {
-    const response = await api.get('/api/v1/users/balance', {
+    const response = await api.get(API_ENDPOINTS.GET_BALANCE, {
       withCredentials: true,
     });
 
@@ -111,7 +114,7 @@ export const getBalance = async (): Promise<number> => {
 
 export const withdrawUser = async (): Promise<void> => {
   try {
-    await api.delete('/api/v1/users/withdraw');
+    await api.delete(API_ENDPOINTS.WITHDRAW);
   } catch (error) {
     console.error('회원탈퇴 처리 중 오류 발생:', error);
     throw error;

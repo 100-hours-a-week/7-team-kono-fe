@@ -5,8 +5,8 @@ export const getQuantityByTicker = async (ticker: string) => {
   try {
     const res = await api.get(API_ENDPOINTS.GET_IS_HOLDING_COIN(ticker));
     return res.data.data.holdingQuantity;
-  } catch (err) {
-    console.error(`Error fetching wallet data for ${ticker}:`, err);
+  } catch (error) {
+    console.error(`Error fetching wallet data for ${ticker}:`, error);
     return 0;
   }
 };
@@ -16,8 +16,8 @@ export const getHoldingCoins = async (): Promise<string[]> => {
     const response = await api.get(API_ENDPOINTS.GET_HOLDING_COIN);
 
     return response.data.data;
-  } catch (err) {
-    console.error(`Error fetching holding coins ticker and name:`, err);
+  } catch (error) {
+    console.error(`Error fetching holding coins ticker and name:`, error);
     return [];
   }
 };
@@ -26,8 +26,8 @@ export const getTransactions = async (): Promise<any[]> => {
   try {
     const response = await api.get(API_ENDPOINTS.GET_TRANSACTION);
     return response.data.data;
-  } catch (err) {
-    console.error(`Error fetching transactions:`, err);
+  } catch (error) {
+    console.error(`Error fetching transactions:`, error);
     return [];
   }
 };
