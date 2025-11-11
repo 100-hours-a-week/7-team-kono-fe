@@ -93,59 +93,60 @@ export const LOG = {
 export const UI = {
   OK: {
     AUTH: {
-      SIGNUP: 'Register success.',
-      LOGIN: 'Login success.',
-      LOGOUT: '로그아웃 되었습니다.',
+      SIGNUP: '🎉 Welcome to KONO! Let the trading begin!',
+      LOGIN: '👋 Welcome back, trader!',
+      LOGOUT: '👋 See you later! Happy trading!',
     },
     USER: {
-      GET_INFO: 'User information retrieved.',
-      UPDATE_PROFILE: 'User information updated.',
-      UPDATE_NICKNAME: 'Nickname updated successfully.',
-      UPDATE_PROFILE_IMAGE: '프로필 이미지가 업데이트되었습니다.',
-      DELETE_ACCOUNT: '회원탈퇴가 완료되었습니다.',
+      GET_INFO: 'Got your info! Looking good! 😎',
+      UPDATE_PROFILE: '✨ Profile updated! You look amazing!',
+      UPDATE_NICKNAME: '🎯 Nickname changed! Fresh new you!',
+      UPDATE_PROFILE_IMAGE: '📸 New profile pic is fire! 🔥',
+      DELETE_ACCOUNT: "👋 Account deleted. We'll miss you!",
     },
     COINS: {
-      LIST: 'Coin list retrieved.',
-      DETAILS: 'Coin details retrieved.',
+      LIST: '💰 Coins loaded! Time to explore!',
+      DETAILS: '📊 Coin details ready!',
     },
     FAVORITES: {
-      ADD: 'Favorite coin added.',
-      REMOVE: 'Favorite coin removed.',
+      ADD: '⭐ Added to favorites! Smart choice!',
+      REMOVE: '💔 Removed from favorites!',
     },
     WALLETS: {
-      CASH: 'Cash data retrieved.',
-      COINS: 'Coin holdings retrieved.',
+      CASH: '💵 Cash balance loaded!',
+      COINS: '🪙 Your crypto stash is ready!',
     },
     TRANSACTIONS: {
-      HISTORY: 'Transaction history retrieved.',
+      HISTORY: '📜 Transaction history loaded!',
     },
     RANKINGS: {
-      DAILY: 'Daily ranking retrieved.',
-      TOTAL: 'Total ranking retrieved.',
+      DAILY: '🏆 Daily leaderboard loaded!',
+      TOTAL: '👑 All-time rankings loaded!',
     },
   },
   ERR: {
     AUTH: {
-      UNAUTHORIZED: '인증에 실패했습니다.',
+      UNAUTHORIZED: '🔒 Oops! Authentication failed. Please login again.',
     },
     USER: {
-      LOGOUT: '로그아웃 중 오류가 발생했습니다.',
-      WITHDRAW: '회원탈퇴 처리 중 오류가 발생했습니다.',
-      WITHDRAW_UNAUTHORIZED: '로그인이 필요합니다.',
-      WITHDRAW_FORBIDDEN: '탈퇴 권한이 없습니다.',
-      UPDATE_PROFILE_IMAGE: '이미지 업로드에 실패했습니다.',
-      UPDATE_PROFILE_IMAGE_INVALID: '이미지 파일만 업로드 가능합니다.',
-      UPDATE_NICKNAME_REQUIRED: '닉네임을 입력해주세요.',
-      UPDATE_NICKNAME: '닉네임 변경에 실패했습니다.',
+      LOGOUT: '😅 Logout failed. Try again?',
+      WITHDRAW: '⚠️ Account deletion failed. Please try again.',
+      WITHDRAW_UNAUTHORIZED: '🔐 Please login first!',
+      WITHDRAW_FORBIDDEN: "🚫 You don't have permission to do that.",
+      UPDATE_PROFILE_IMAGE: '📷 Image upload failed. Try another one?',
+      UPDATE_PROFILE_IMAGE_INVALID:
+        '🖼️ Please upload an image file (JPG, PNG, etc.)',
+      UPDATE_NICKNAME_REQUIRED: "✏️ Nickname can't be empty!",
+      UPDATE_NICKNAME: '😕 Nickname update failed. Try again?',
     },
     COINS: {
-      FETCH: '코인 정보를 불러오는데 실패했습니다.',
+      FETCH: '💔 Failed to load coin data. Refresh?',
     },
     FAVORITES: {
-      TOGGLE: '즐겨찾기 변경에 실패했습니다.',
+      TOGGLE: '⭐ Oops! Favorite toggle failed.',
     },
     TRANSACTIONS: {
-      TRANSACTION: '거래에 실패했습니다.',
+      TRANSACTION: '😬 Transaction failed. Please try again!',
     },
   },
 } as const;
