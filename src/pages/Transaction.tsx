@@ -8,6 +8,7 @@ import {
   getTransactions,
   Transaction as TransactionType,
 } from '../services/transaction';
+import { LOG } from '../config/constants';
 
 export default function Transaction() {
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ export default function Transaction() {
         setTransactions(data);
         setError(null);
       } catch (error) {
-        console.error('거래 내역 조회 실패:', error);
+        console.error(LOG.ERR.TRANSACTIONS.GET_HISTORY, error);
         setError('거래 내역을 불러오는데 실패했습니다.');
         setTransactions([]);
       } finally {

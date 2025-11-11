@@ -8,7 +8,7 @@ import { ROUTES } from '../config/routes';
 import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
 import { getBalance, getHoldingCoins } from '../services/wallet';
 import { formatCurrency } from '../utils/formatter';
-import { MESSAGES } from '../config/constants';
+import { LOG } from '../config/constants';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -71,7 +71,7 @@ const Wallet = () => {
         const tickerList = coins.map((coin) => coin.ticker);
         setTickers(tickerList);
       } catch (error) {
-        console.error(MESSAGES.ERROR.WALLET.GET_HOLDING_COIN_FAILED, error);
+        console.error(LOG.ERR.WALLETS.GET_HOLDING_COIN, error);
         setError('코인 정보를 불러오는데 실패했습니다.');
         setHoldingCoins([]);
         setTickers([]);

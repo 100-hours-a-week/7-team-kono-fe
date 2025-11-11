@@ -19,7 +19,7 @@ import { withdrawUser } from '../services/user';
 import { toast } from 'react-toastify';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
-import { MESSAGES } from '../config/constants';
+import { LOG, UI } from '../config/constants';
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -69,10 +69,10 @@ const Settings = () => {
   const handleLogout = async () => {
     try {
       await logout();
-      toast.success('로그아웃 되었습니다.');
+      toast.success(UI.OK.AUTH.LOGOUT);
     } catch (error) {
-      console.error(MESSAGES.ERROR.USER.LOGOUT_FAILED, error);
-      toast.error('로그아웃 중 오류가 발생했습니다.');
+      console.error(LOG.ERR.USER.LOGOUT, error);
+      toast.error(UI.ERR.USER.LOGOUT);
     }
   };
 
@@ -87,17 +87,17 @@ const Settings = () => {
   const confirmDeleteAccount = async () => {
     try {
       await withdrawUser();
-      toast.success('회원탈퇴가 완료되었습니다.');
+      toast.success(UI.OK.USER.DELETE_ACCOUNT);
       closeDeleteAccountModal();
       window.location.href = ROUTES.AUTH.LOGIN;
     } catch (error) {
-      console.error(MESSAGES.ERROR.USER.DELETE_USER_FAILED, error);
+      console.error(LOG.ERR.USER.DELETE, error);
       if (error.response?.status === 401) {
-        toast.error('로그인이 필요합니다.');
+        toast.error(UI.ERR.USER.WITHDRAW_UNAUTHORIZED);
       } else if (error.response?.status === 403) {
-        toast.error('탈퇴 권한이 없습니다.');
+        toast.error(UI.ERR.USER.WITHDRAW_FORBIDDEN);
       } else {
-        toast.error('회원탈퇴 처리 중 오류가 발생했습니다.');
+        toast.error(UI.ERR.USER.WITHDRAW);
       }
       closeDeleteAccountModal();
     }

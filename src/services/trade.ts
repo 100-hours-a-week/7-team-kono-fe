@@ -1,6 +1,6 @@
 import api from './clients';
 import { API_ENDPOINTS } from '../config/apiEndpoints';
-import { MESSAGES } from '../config/constants';
+import { LOG } from '../config/constants';
 
 export type OrderType = 'sell' | 'buy';
 
@@ -42,7 +42,7 @@ export const marketBuy = async (
 
     return null;
   } catch (error) {
-    console.error(MESSAGES.ERROR.TRANSACTIONS.MARKET_BUY_FAILED, error);
+    console.error(LOG.ERR.TRANSACTIONS.MARKET_BUY, error);
     return null;
   }
 };
@@ -68,7 +68,7 @@ export const marketSell = async (
 
     return null;
   } catch (error) {
-    console.error(MESSAGES.ERROR.TRANSACTIONS.MARKET_SELL_FAILED, error);
+    console.error(LOG.ERR.TRANSACTIONS.MARKET_SELL, error);
     return null;
   }
 };

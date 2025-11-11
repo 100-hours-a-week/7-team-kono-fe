@@ -8,7 +8,7 @@ import React, {
 import axios from 'axios';
 import api from '../services/clients';
 import { API_ENDPOINTS } from '../config/apiEndpoints';
-import { MESSAGES } from '../config/constants';
+import { LOG } from '../config/constants';
 
 axios.defaults.withCredentials = true;
 
@@ -62,12 +62,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       }
       setError(null);
     } catch (error) {
-      console.error(MESSAGES.ERROR.USER.GET_INFO_FAILED, error);
+      console.error(LOG.ERR.USER.GET_INFO, error);
 
       if (axios.isAxiosError(error)) {
         if (error.response) {
           console.error(
-            MESSAGES.ERROR.AUTH.RESPONSE_ERROR,
+            LOG.ERR.AUTH.RESPONSE,
             error.response.status,
             error.response.data,
           );
@@ -76,9 +76,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
             setUser(null);
           }
         } else if (error.request) {
-          console.error(MESSAGES.ERROR.AUTH.NETWORK_ERROR, error.request);
+          console.error(LOG.ERR.AUTH.NETWORK, error.request);
         } else {
-          console.error(MESSAGES.ERROR.AUTH.REQUEST_ERROR, error.message);
+          console.error(LOG.ERR.AUTH.REQUEST, error.message);
         }
 
         if (error.code === 'ERR_NETWORK' && isInitialLoad && !isRetrying) {
@@ -147,7 +147,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
       await api.post(API_ENDPOINTS.LOGOUT);
     } catch (error) {
-      console.error(MESSAGES.ERROR.USER.LOGOUT_FAILED, error);
+      console.error(LOG.ERR.USER.LOGOUT, error);
     } finally {
       window.location.href = '/login';
     }
@@ -161,7 +161,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
       window.location.href = '/login';
     } catch (error) {
-      console.error(MESSAGES.ERROR.USER.WITHDRAW_FAILED, error);
+      console.error(LOG.ERR.USER.WITHDRAW, error);
       throw error;
     }
   };

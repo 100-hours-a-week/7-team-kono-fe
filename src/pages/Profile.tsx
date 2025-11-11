@@ -6,7 +6,7 @@ import {
 } from '../services/user';
 import { toast } from 'react-toastify';
 import { useAuth } from '../contexts/AuthContext';
-import { MESSAGES } from '../config/constants';
+import { LOG, UI } from '../config/constants';
 
 interface ProfileData {
   nickname: string;
@@ -54,7 +54,7 @@ const Profile: React.FC = () => {
           setError(true);
         }
       } catch (error) {
-        console.error(MESSAGES.ERROR.USER.GET_PROFILE_FAILED, error);
+        console.error(LOG.ERR.USER.GET_PROFILE, error);
 
         setProfile(dummyProfile);
         setNickname(dummyProfile.nickname);
@@ -74,7 +74,7 @@ const Profile: React.FC = () => {
     const file = files[0];
 
     if (!file.type.startsWith('image/')) {
-      toast.error('이미지 파일만 업로드 가능합니다.');
+      toast.error(UI.ERR.USER.UPDATE_PROFILE_IMAGE_INVALID);
       return;
     }
 
@@ -91,10 +91,10 @@ const Profile: React.FC = () => {
         });
       }
 
-      toast.success('프로필 이미지가 업데이트되었습니다.');
+      toast.success(UI.OK.USER.UPDATE_PROFILE_IMAGE);
     } catch (error) {
-      toast.error('이미지 업로드에 실패했습니다.');
-      console.error(MESSAGES.ERROR.USER.UPDATE_PROFILE_IMAGE_FAILED, error);
+      toast.error(UI.ERR.USER.UPDATE_PROFILE_IMAGE);
+      console.error(LOG.ERR.USER.UPDATE_PROFILE_IMAGE, error);
     } finally {
       setImageUploading(false);
     }
@@ -104,7 +104,7 @@ const Profile: React.FC = () => {
     e.preventDefault();
 
     if (!nickname.trim()) {
-      toast.error('닉네임을 입력해주세요.');
+      toast.error(UI.ERR.USER.UPDATE_NICKNAME_REQUIRED);
       return;
     }
     try {
@@ -119,7 +119,7 @@ const Profile: React.FC = () => {
       }
 
       setIsEditingNickname(false);
-      toast.success('닉네임이 업데이트되었습니다.');
+      toast.success(UI.OK.USER.UPDATE_NICKNAME);
     } catch (error: any) {
       const { status, message } = error;
 
@@ -139,13 +139,12 @@ const Profile: React.FC = () => {
         default:
           toast.error(`[${status}] ${message}`);
       }
-      console.error(MESSAGES.ERROR.USER.UPDATE_NICKNAME_FAILED, {
+      console.error(LOG.ERR.USER.UPDATE_NICKNAME, {
         status,
         message,
       });
     }
   };
-
   const handleImageClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();

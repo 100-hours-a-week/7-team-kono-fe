@@ -13,7 +13,7 @@ import {
 } from '../services/favorite';
 import { getCoinName } from '../services/coin';
 import { getQuantityByTicker } from '../services/wallet';
-import { MESSAGES } from '../config/constants';
+import { LOG } from '../config/constants';
 
 interface CoinData {
   id: string;
@@ -73,7 +73,7 @@ export default function CoinDetail() {
         setCoin(exampleCoin);
         setLoading(false);
       } catch (error) {
-        setError(MESSAGES.ERROR.COINS.GET_DETAIL_FAILED);
+        setError(LOG.ERR.COINS.GET_INFO);
         setLoading(false);
       }
     };
@@ -117,7 +117,7 @@ export default function CoinDetail() {
         }
       }
     } catch (error) {
-      console.error(MESSAGES.ERROR.FAVORITES.TOGGLE_FAILED, error);
+      console.error(LOG.ERR.FAVORITES.TOGGLE, error);
     }
   }, [isFavorite, symbolToUse]);
 

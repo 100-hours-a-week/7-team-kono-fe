@@ -5,7 +5,7 @@ import Header from '../components/layout/Header';
 import { formatAmount } from '../utils/formatter';
 import { getFavoriteList } from '../services/favorite';
 import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
-import { MESSAGES } from '../config/constants';
+import { LOG } from '../config/constants';
 
 export default function Favorites() {
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ export default function Favorites() {
         setFavoriteList(favorites);
         setIsLoading(false);
       } catch (error) {
-        console.error(MESSAGES.ERROR.FAVORITES.GET_LIST_FAILED, error);
+        console.error(LOG.ERR.FAVORITES.GET_LIST, error);
         setIsLoading(false);
       }
     };

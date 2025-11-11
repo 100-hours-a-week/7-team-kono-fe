@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { API_ENDPOINTS } from '../config/apiEndpoints';
-import { MESSAGES } from '../config/constants';
+import { LOG } from '../config/constants';
 
 interface TickerData {
   type: string;
@@ -74,7 +74,7 @@ export function useUpbitWebSocket(symbols: string[] = ['BTC']) {
             }));
           }
         } catch (error) {
-          console.error(MESSAGES.ERROR.JSON_PARSE_FAILED, error);
+          console.error(LOG.ERR.GENERAL.JSON_PARSE, error);
         }
       };
 

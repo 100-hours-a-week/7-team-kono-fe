@@ -1,7 +1,7 @@
 import axios from 'axios';
 import api from './clients';
 import { API_ENDPOINTS } from '../config/apiEndpoints';
-import { MESSAGES } from '../config/constants';
+import { LOG } from '../config/constants';
 
 interface ProfileData {
   nickname: string;
@@ -28,7 +28,7 @@ export const getUserProfile = async (): Promise<ProfileData> => {
 
     return response.data;
   } catch (error) {
-    console.error(MESSAGES.ERROR.USER.GET_PROFILE_FAILED, error);
+    console.error(LOG.ERR.USER.GET_PROFILE, error);
     return {
       nickname: '사용자',
       profileImageUrl: 'https://via.placeholder.com/150',
@@ -68,7 +68,7 @@ export const updateProfileImage = async (
       profileImageUrl: updateResponse.data.data.profileImageUrl,
     };
   } catch (error) {
-    console.error(MESSAGES.ERROR.USER.UPDATE_PROFILE_IMAGE_FAILED, error);
+    console.error(LOG.ERR.USER.UPDATE_PROFILE_IMAGE, error);
     throw error;
   }
 };
@@ -108,7 +108,7 @@ export const getBalance = async (): Promise<number> => {
 
     return response.data.balance;
   } catch (error) {
-    console.error(MESSAGES.ERROR.WALLETS.GET_BALANCE_FAILED, error);
+    console.error(LOG.ERR.WALLETS.GET_BALANCE, error);
     return 0;
   }
 };
@@ -117,7 +117,7 @@ export const withdrawUser = async (): Promise<void> => {
   try {
     await api.delete(API_ENDPOINTS.WITHDRAW);
   } catch (error) {
-    console.error(MESSAGES.ERROR.USER.WITHDRAW_FAILED, error);
+    console.error(LOG.ERR.USER.WITHDRAW, error);
     throw error;
   }
 };

@@ -6,7 +6,7 @@ import PurchaseCompleteModal from './PurchaseCompleteModal';
 import { useNavigate } from 'react-router-dom';
 import { formatAmount, formatCurrency } from '../../utils/formatter';
 import { marketBuy, marketSell } from '../../services/trade';
-import { MESSAGES } from '../../config/constants';
+import { LOG } from '../../config/constants';
 
 interface TradeConfirmModalProps {
   isOpen: boolean;
@@ -53,7 +53,7 @@ export default function TradeConfirmModal({
       onClose();
       setShowComplete(true);
     } catch (error) {
-      console.error(MESSAGES.ERROR.TRANSACTIONS.TRANSACTION_FAILED, error);
+      console.error(LOG.ERR.TRANSACTIONS.TRANSACTION, error);
       setShowToast(true);
     } finally {
       setIsProcessing(false);

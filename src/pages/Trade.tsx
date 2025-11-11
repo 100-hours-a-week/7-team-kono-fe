@@ -7,7 +7,7 @@ import { getCoinName } from '../services/coin';
 import { getBalance } from '../services/wallet';
 import { getQuantityByTicker } from '../services/wallet';
 import Header from '../components/layout/Header.tsx';
-import { MESSAGES } from '../config/constants.ts';
+import { LOG } from '../config/constants';
 
 type TradeType = 'buy' | 'sell';
 
@@ -67,14 +67,14 @@ export default function Trade() {
 
   useEffect(() => {
     if (!ticker) {
-      console.error(MESSAGES.ERROR.TICKER_MISSING);
+      console.error(LOG.ERR.GENERAL.TICKER_MISSING);
       setError('코인 정보가 없습니다.');
       setLoading(false);
       return;
     }
 
     if (type !== 'buy' && type !== 'sell') {
-      console.error(MESSAGES.ERROR.INVALID_TRADE_TYPE, type);
+      console.error(LOG.ERR.GENERAL.INVALID_TRADE_TYPE, type);
       setError('잘못된 거래 유형입니다.');
       setLoading(false);
       return;
@@ -102,7 +102,7 @@ export default function Trade() {
 
         setLoading(false);
       } catch (error) {
-        console.error(MESSAGES.ERROR.COINS.GET_INFO_FAILED, error);
+        console.error(LOG.ERR.COINS.GET_INFO, error);
         setError('코인 정보를 불러오는 중 오류가 발생했습니다.');
         setLoading(false);
       }

@@ -5,7 +5,7 @@ import Header from '../components/layout/Header';
 import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
 import { formatAmount } from '../utils/formatter';
 import { getCoins } from '../services/coin';
-import { MESSAGES } from '../config/constants';
+import { LOG } from '../config/constants';
 
 type SortType = '거래대금' | '가격' | '등락률';
 
@@ -49,7 +49,7 @@ export default function Discover() {
         setTickers(tickerList);
       })
       .catch((err) => {
-        console.error(MESSAGES.ERROR.COINS.FETCH_DATA_FAILED, err);
+        console.error(LOG.ERR.COINS.FETCH_DATA, err);
         setError('코인 정보를 불러오는데 실패했습니다.');
       })
       .finally(() => {

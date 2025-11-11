@@ -10,7 +10,7 @@ import { format } from 'date-fns';
 import { formatCurrency } from '../utils/formatter';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
-import { MESSAGES } from '../config/constants';
+import { LOG } from '../config/constants';
 
 interface Rank {
   nickname: string;
@@ -72,7 +72,7 @@ export default function Ranking() {
       setDailyUpdatedAt(dailyRanks[0].updatedAt);
       setAllUpdatedAt(allRanks[0].updatedAt);
     } catch (error) {
-      console.error(MESSAGES.ERROR.RANKINGS.GET_INFO_FAILED, error);
+      console.error(LOG.ERR.RANKINGS.GET_INFO, error);
     } finally {
       setIsLoading(false);
     }

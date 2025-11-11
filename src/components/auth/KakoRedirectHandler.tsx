@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_ENDPOINTS } from '../../config/apiEndpoints';
-import { MESSAGES } from '../../config/constants';
+import { LOG } from '../../config/constants';
 
 const KakaoRedirectHandler = () => {
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ const KakaoRedirectHandler = () => {
 
         navigate('/');
       } catch (error) {
-        console.error(MESSAGES.ERROR.USER.GET_INFO_FAILED, error);
+        console.error(LOG.ERR.USER.GET_INFO, error);
         navigate('/login');
       }
     };

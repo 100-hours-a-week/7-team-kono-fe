@@ -1,6 +1,6 @@
 import api from './clients';
 import { API_ENDPOINTS } from '../config/apiEndpoints';
-import { MESSAGES } from '../config/constants';
+import { LOG } from '../config/constants';
 
 export type Transaction = {
   transactionId: string;
@@ -18,7 +18,7 @@ export const getTransactions = async (): Promise<Transaction[]> => {
     const res = await api.get(API_ENDPOINTS.GET_TRANSACTION);
     return res.data.data;
   } catch (error) {
-    console.error(MESSAGES.ERROR.TRANSACTIONS.GET_HISTORY_FAILED, error);
+    console.error(LOG.ERR.TRANSACTIONS.GET_HISTORY, error);
     return [];
   }
 };
@@ -30,10 +30,7 @@ export const getTransactionsByType = async (
     const transactions = await getTransactions();
     return transactions.filter((transaction) => transaction.orderType === type);
   } catch (error) {
-    console.error(
-      MESSAGES.ERROR.TRANSACTIONS.GET_HISTORY_BY_TYPE_FAILED,
-      error,
-    );
+    console.error(LOG.ERR.TRANSACTIONS.GET_HISTORY_BY_TYPE, error);
     return [];
   }
 };

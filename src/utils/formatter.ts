@@ -1,5 +1,5 @@
 import { parseISO, format } from 'date-fns';
-import { MESSAGES } from '../config/constants';
+import { LOG } from '../config/constants';
 
 export const formatCurrency = (
   value: number,
@@ -59,7 +59,7 @@ export const formatVolume = (value: number): string => {
 export const formatDate = (date: string | Date) => {
   try {
     if (date === null || date === undefined || date === '') {
-      return MESSAGES.ERROR.DATE_NOT_FOUND;
+      return '-';
     }
 
     let dateObj: Date;
@@ -79,14 +79,14 @@ export const formatDate = (date: string | Date) => {
     }
 
     if (isNaN(dateObj.getTime())) {
-      console.error(MESSAGES.ERROR.INVALID_DATE, date);
-      return MESSAGES.ERROR.INVALID_DATE;
+      console.error(LOG.ERR.GENERAL.INVALID_DATE, date);
+      return LOG.ERR.GENERAL.INVALID_DATE;
     }
 
     return format(dateObj, 'yyyy.MM.dd HH:mm');
   } catch (error) {
-    console.error(MESSAGES.ERROR.FORMAT_DATE_FAILED, error);
-    return MESSAGES.ERROR.FORMAT_DATE_FAILED;
+    console.error(LOG.ERR.GENERAL.FORMAT_DATE, error);
+    return LOG.ERR.GENERAL.FORMAT_DATE;
   }
 };
 
