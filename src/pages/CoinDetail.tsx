@@ -6,9 +6,14 @@ import TradingViewWidget from '../components/TradingViewWidget';
 import PriceInfo from '../components/PriceInfo';
 import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
 import { formatAmount, formatCurrency } from '../utils/formatter';
-import { isFavoriteCoin, addFavorite, removeFavorite } from '../api/favorite';
-import { getCoinName } from '../api/coin';
-import { getQuantityByTicker } from '../api/wallet';
+import {
+  isFavoriteCoin,
+  addFavorite,
+  removeFavorite,
+} from '../services/favorite';
+import { getCoinName } from '../services/coin';
+import { getQuantityByTicker } from '../services/wallet';
+import { MESSAGES } from '../config/constants';
 
 interface CoinData {
   id: string;
@@ -67,8 +72,8 @@ export default function CoinDetail() {
 
         setCoin(exampleCoin);
         setLoading(false);
-      } catch (err) {
-        setError('코인 정보를 불러오는 중 오류가 발생했습니다.');
+      } catch (error) {
+        setError(MESSAGES.ERROR.COINS.GET_DETAIL_FAILED);
         setLoading(false);
       }
     };
@@ -112,7 +117,7 @@ export default function CoinDetail() {
         }
       }
     } catch (error) {
-      console.error('Failed to toggle favorite:', error);
+      console.error(MESSAGES.ERROR.FAVORITES.TOGGLE_FAILED, error);
     }
   }, [isFavorite, symbolToUse]);
 

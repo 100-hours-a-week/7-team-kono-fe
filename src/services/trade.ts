@@ -1,5 +1,6 @@
 import api from './clients';
 import { API_ENDPOINTS } from '../config/apiEndpoints';
+import { MESSAGES } from '../config/constants';
 
 export type OrderType = 'sell' | 'buy';
 
@@ -41,7 +42,7 @@ export const marketBuy = async (
 
     return null;
   } catch (error) {
-    console.error(`시장가 매수 오류 (${ticker}):`, error);
+    console.error(MESSAGES.ERROR.TRANSACTIONS.MARKET_BUY_FAILED, error);
     return null;
   }
 };
@@ -67,7 +68,7 @@ export const marketSell = async (
 
     return null;
   } catch (error) {
-    console.error(`시장가 매도 오류 (${ticker}):`, error);
+    console.error(MESSAGES.ERROR.TRANSACTIONS.MARKET_SELL_FAILED, error);
     return null;
   }
 };

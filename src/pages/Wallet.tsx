@@ -6,8 +6,9 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { FaHistory } from 'react-icons/fa';
 import { ROUTES } from '../config/routes';
 import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
-import { getBalance, getHoldingCoins } from '../api/wallet';
+import { getBalance, getHoldingCoins } from '../services/wallet';
 import { formatCurrency } from '../utils/formatter';
+import { MESSAGES } from '../config/constants';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -70,7 +71,7 @@ const Wallet = () => {
         const tickerList = coins.map((coin) => coin.ticker);
         setTickers(tickerList);
       } catch (error) {
-        console.error('Error fetching holding coins:', error);
+        console.error(MESSAGES.ERROR.WALLET.GET_HOLDING_COIN_FAILED, error);
         setError('코인 정보를 불러오는데 실패했습니다.');
         setHoldingCoins([]);
         setTickers([]);

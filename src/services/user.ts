@@ -1,6 +1,7 @@
 import axios from 'axios';
 import api from './clients';
 import { API_ENDPOINTS } from '../config/apiEndpoints';
+import { MESSAGES } from '../config/constants';
 
 interface ProfileData {
   nickname: string;
@@ -27,7 +28,7 @@ export const getUserProfile = async (): Promise<ProfileData> => {
 
     return response.data;
   } catch (error) {
-    console.error('사용자 프로필 정보를 가져오는 중 오류 발생:', error);
+    console.error(MESSAGES.ERROR.USER.GET_PROFILE_FAILED, error);
     return {
       nickname: '사용자',
       profileImageUrl: 'https://via.placeholder.com/150',
@@ -67,7 +68,7 @@ export const updateProfileImage = async (
       profileImageUrl: updateResponse.data.data.profileImageUrl,
     };
   } catch (error) {
-    console.error('프로필 이미지 업데이트 중 오류 발생:', error);
+    console.error(MESSAGES.ERROR.USER.UPDATE_PROFILE_IMAGE_FAILED, error);
     throw error;
   }
 };
@@ -107,7 +108,7 @@ export const getBalance = async (): Promise<number> => {
 
     return response.data.balance;
   } catch (error) {
-    console.error('잔액 조회 중 오류 발생:', error);
+    console.error(MESSAGES.ERROR.WALLETS.GET_BALANCE_FAILED, error);
     return 0;
   }
 };
@@ -116,7 +117,7 @@ export const withdrawUser = async (): Promise<void> => {
   try {
     await api.delete(API_ENDPOINTS.WITHDRAW);
   } catch (error) {
-    console.error('회원탈퇴 처리 중 오류 발생:', error);
+    console.error(MESSAGES.ERROR.USER.WITHDRAW_FAILED, error);
     throw error;
   }
 };

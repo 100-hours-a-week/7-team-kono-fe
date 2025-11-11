@@ -1,11 +1,16 @@
 import { useState, useEffect, useRef } from 'react';
 import Header from '../components/layout/Header';
-import { getRanksAllMe, getRanksDaily, getRanksDailyMe } from '../api/ranking';
-import { getRanksAll } from '../api/ranking';
+import {
+  getRanksAllMe,
+  getRanksDaily,
+  getRanksDailyMe,
+} from '../services/ranking';
+import { getRanksAll } from '../services/ranking';
 import { format } from 'date-fns';
 import { formatCurrency } from '../utils/formatter';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
+import { MESSAGES } from '../config/constants';
 
 interface Rank {
   nickname: string;
@@ -67,7 +72,7 @@ export default function Ranking() {
       setDailyUpdatedAt(dailyRanks[0].updatedAt);
       setAllUpdatedAt(allRanks[0].updatedAt);
     } catch (error) {
-      console.error('Failed to fetch rankings:', error);
+      console.error(MESSAGES.ERROR.RANKINGS.GET_INFO_FAILED, error);
     } finally {
       setIsLoading(false);
     }

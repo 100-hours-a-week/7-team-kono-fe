@@ -6,8 +6,9 @@ import React, {
   ReactNode,
 } from 'react';
 import axios from 'axios';
-import api from '../api/clients';
+import api from '../services/clients';
 import { API_ENDPOINTS } from '../config/apiEndpoints';
+import { MESSAGES } from '../config/constants';
 
 axios.defaults.withCredentials = true;
 
@@ -30,7 +31,9 @@ interface AuthContextType {
   updateUser: (userData: Partial<User>) => void;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | undefined>(
+  undefined,
+);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
@@ -58,29 +61,27 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         setUser(null);
       }
       setError(null);
-    } catch (err) {
-      console.error('사용자 정보 로드 실패:', err);
+    } catch (error) {
+      console.error(MESSAGES.ERROR.USER.GET_INFO_FAILED, error);
 
-      if (axios.isAxiosError(err)) {
-        if (err.response) {
-          console.error('오류 상태 코드:', err.response.status);
-          console.error('오류 응답 데이터:', err.response.data);
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          console.error(
+            MESSAGES.ERROR.AUTH.RESPONSE_ERROR,
+            error.response.status,
+            error.response.data,
+          );
 
-          if (err.response.status === 401 || err.response.status === 403) {
+          if (error.response.status === 401 || error.response.status === 403) {
             setUser(null);
           }
-        } else if (err.request) {
-          console.error('서버에서 응답이 없음:', err.request);
-          console.error('요청 내용:', {
-            method: 'GET',
-            url: '/api/v1/users/me',
-            withCredentials: true,
-          });
+        } else if (error.request) {
+          console.error(MESSAGES.ERROR.AUTH.NETWORK_ERROR, error.request);
         } else {
-          console.error('요청 설정 중 오류 발생:', err.message);
+          console.error(MESSAGES.ERROR.AUTH.REQUEST_ERROR, error.message);
         }
 
-        if (err.code === 'ERR_NETWORK' && isInitialLoad && !isRetrying) {
+        if (error.code === 'ERR_NETWORK' && isInitialLoad && !isRetrying) {
           setIsRetrying(true);
           setTimeout(() => {
             loadUserInfo(false);
@@ -145,8 +146,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       setUser(null);
 
       await api.post(API_ENDPOINTS.LOGOUT);
-    } catch (err) {
-      console.error('서버 로그아웃 요청 실패:', err);
+    } catch (error) {
+      console.error(MESSAGES.ERROR.USER.LOGOUT_FAILED, error);
     } finally {
       window.location.href = '/login';
     }
@@ -159,9 +160,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       setUser(null);
 
       window.location.href = '/login';
-    } catch (err) {
-      console.error('회원탈퇴 요청 실패:', err);
-      throw err;
+    } catch (error) {
+      console.error(MESSAGES.ERROR.USER.WITHDRAW_FAILED, error);
+      throw error;
     }
   };
 

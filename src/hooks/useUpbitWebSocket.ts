@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
+import { API_ENDPOINTS } from '../config/apiEndpoints';
+import { MESSAGES } from '../config/constants';
 
 interface TickerData {
   type: string;
@@ -39,8 +41,7 @@ export function useUpbitWebSocket(symbols: string[] = ['BTC']) {
   useEffect(() => {
     const symbolsToUse = symbols.length > 0 ? symbols : ['BTC'];
 
-    // socket.current = new WebSocket('wss://api.upbit.com/websocket/v1');
-    socket.current = new WebSocket('wss://api.playcono.com/ws/');
+    socket.current = new WebSocket(API_ENDPOINTS.GET_WS_URL);
 
     socket.current.onopen = function () {
       setIsConnected(true);
@@ -73,8 +74,7 @@ export function useUpbitWebSocket(symbols: string[] = ['BTC']) {
             }));
           }
         } catch (error) {
-          console.error('JSON 파싱 오류:', error);
-          console.error('원본 데이터:', reader.result);
+          console.error(MESSAGES.ERROR.JSON_PARSE_FAILED, error);
         }
       };
 

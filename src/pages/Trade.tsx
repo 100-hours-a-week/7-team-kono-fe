@@ -3,10 +3,11 @@ import { useParams, useNavigate } from 'react-router-dom';
 import TradeConfirmModal from '../components/modal/TradeConfirmModal';
 import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
 import { formatAmount, formatCurrency } from '../utils/formatter';
-import { getCoinName } from '../api/coin';
-import { getBalance } from '../api/wallet';
-import { getQuantityByTicker } from '../api/wallet';
+import { getCoinName } from '../services/coin';
+import { getBalance } from '../services/wallet';
+import { getQuantityByTicker } from '../services/wallet';
 import Header from '../components/layout/Header.tsx';
+import { MESSAGES } from '../config/constants.ts';
 
 type TradeType = 'buy' | 'sell';
 
@@ -66,14 +67,14 @@ export default function Trade() {
 
   useEffect(() => {
     if (!ticker) {
-      console.error('ticker is missing');
+      console.error(MESSAGES.ERROR.TICKER_MISSING);
       setError('코인 정보가 없습니다.');
       setLoading(false);
       return;
     }
 
     if (type !== 'buy' && type !== 'sell') {
-      console.error('Invalid type:', type);
+      console.error(MESSAGES.ERROR.INVALID_TRADE_TYPE, type);
       setError('잘못된 거래 유형입니다.');
       setLoading(false);
       return;
@@ -101,7 +102,7 @@ export default function Trade() {
 
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching coin data:', error);
+        console.error(MESSAGES.ERROR.COINS.GET_INFO_FAILED, error);
         setError('코인 정보를 불러오는 중 오류가 발생했습니다.');
         setLoading(false);
       }

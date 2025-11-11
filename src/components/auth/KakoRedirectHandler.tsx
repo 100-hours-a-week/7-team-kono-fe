@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { API_ENDPOINTS } from '../../config/apiEndpoints';
+import { MESSAGES } from '../../config/constants';
 
 const KakaoRedirectHandler = () => {
   const navigate = useNavigate();
@@ -8,13 +10,16 @@ const KakaoRedirectHandler = () => {
   useEffect(() => {
     const getUserInfo = async () => {
       try {
-        await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/users`, {
-          withCredentials: true,
-        });
+        await axios.get(
+          `${import.meta.env.VITE_API_URL}${API_ENDPOINTS.GET_USER}`,
+          {
+            withCredentials: true,
+          },
+        );
 
         navigate('/');
       } catch (error) {
-        console.error('사용자 정보 로드 실패:', error);
+        console.error(MESSAGES.ERROR.USER.GET_INFO_FAILED, error);
         navigate('/login');
       }
     };

@@ -5,7 +5,8 @@ import Toast from '../common/Toast';
 import PurchaseCompleteModal from './PurchaseCompleteModal';
 import { useNavigate } from 'react-router-dom';
 import { formatAmount, formatCurrency } from '../../utils/formatter';
-import { marketBuy, marketSell } from '../../api/trade';
+import { marketBuy, marketSell } from '../../services/trade';
+import { MESSAGES } from '../../config/constants';
 
 interface TradeConfirmModalProps {
   isOpen: boolean;
@@ -52,7 +53,7 @@ export default function TradeConfirmModal({
       onClose();
       setShowComplete(true);
     } catch (error) {
-      console.error('거래 실패:', error);
+      console.error(MESSAGES.ERROR.TRANSACTIONS.TRANSACTION_FAILED, error);
       setShowToast(true);
     } finally {
       setIsProcessing(false);

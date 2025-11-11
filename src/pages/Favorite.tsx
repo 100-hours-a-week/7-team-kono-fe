@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { IoIosClose } from 'react-icons/io';
 import Header from '../components/layout/Header';
 import { formatAmount } from '../utils/formatter';
-import { getFavoriteList } from '../api/favorite';
+import { getFavoriteList } from '../services/favorite';
 import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
+import { MESSAGES } from '../config/constants';
 
 export default function Favorites() {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ export default function Favorites() {
         setFavoriteList(favorites);
         setIsLoading(false);
       } catch (error) {
-        console.error('Failed to fetch favorites:', error);
+        console.error(MESSAGES.ERROR.FAVORITES.GET_LIST_FAILED, error);
         setIsLoading(false);
       }
     };

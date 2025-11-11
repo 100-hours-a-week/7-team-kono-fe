@@ -3,9 +3,10 @@ import {
   getUserProfile,
   updateProfileImage,
   updateNickname,
-} from '../api/user';
+} from '../services/user';
 import { toast } from 'react-toastify';
 import { useAuth } from '../contexts/AuthContext';
+import { MESSAGES } from '../config/constants';
 
 interface ProfileData {
   nickname: string;
@@ -52,8 +53,8 @@ const Profile: React.FC = () => {
           setNickname(dummyProfile.nickname);
           setError(true);
         }
-      } catch (err) {
-        console.error('프로필 로드 중 오류 발생:', err);
+      } catch (error) {
+        console.error(MESSAGES.ERROR.USER.GET_PROFILE_FAILED, error);
 
         setProfile(dummyProfile);
         setNickname(dummyProfile.nickname);
@@ -91,9 +92,9 @@ const Profile: React.FC = () => {
       }
 
       toast.success('프로필 이미지가 업데이트되었습니다.');
-    } catch (err) {
+    } catch (error) {
       toast.error('이미지 업로드에 실패했습니다.');
-      console.error(err);
+      console.error(MESSAGES.ERROR.USER.UPDATE_PROFILE_IMAGE_FAILED, error);
     } finally {
       setImageUploading(false);
     }
@@ -138,7 +139,10 @@ const Profile: React.FC = () => {
         default:
           toast.error(`[${status}] ${message}`);
       }
-      console.error('닉네임 변경 실패:', { status, message });
+      console.error(MESSAGES.ERROR.USER.UPDATE_NICKNAME_FAILED, {
+        status,
+        message,
+      });
     }
   };
 

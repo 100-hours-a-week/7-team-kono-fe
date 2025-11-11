@@ -20,8 +20,9 @@ import Login from './pages/Login.tsx';
 import Layout from './components/layout/Layout';
 import AuthLayout from './components/layout/AuthLayout';
 import KakoRedirectHandler from './components/auth/KakoRedirectHandler.tsx';
-
 import * as Sentry from '@sentry/react';
+import { MockAuthProvider } from './contexts/MockAuthProvider.tsx';
+const isLocalMode = import.meta.env.VITE_LOCAL_MODE === 'true';
 
 Clarity.init('r1aim0c7qk');
 Clarity.consent();
@@ -142,9 +143,15 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ThemeProvider>
-      <AuthProvider>
-        <RouterProvider router={router} />
-      </AuthProvider>
+      {isLocalMode ? (
+        <MockAuthProvider>
+          <RouterProvider router={router} />
+        </MockAuthProvider>
+      ) : (
+        <AuthProvider>
+          <RouterProvider router={router} />
+        </AuthProvider>
+      )}
     </ThemeProvider>
   </React.StrictMode>,
 );

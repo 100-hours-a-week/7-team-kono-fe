@@ -1,5 +1,6 @@
 import api from './clients';
 import { API_ENDPOINTS } from '../config/apiEndpoints';
+import { MESSAGES } from '../config/constants';
 
 interface Rank {
   nickname: string;
@@ -24,7 +25,7 @@ export const getRanksDaily = async (): Promise<RankDaily[]> => {
     const res = await api.get(API_ENDPOINTS.GET_RANK_DAILY);
     return res.data.data;
   } catch (error) {
-    console.error('Failed to get daily ranks:', error);
+    console.error(MESSAGES.ERROR.RANKINGS.GET_DAILY_FAILED, error);
     return [];
   }
 };
@@ -34,7 +35,7 @@ export const getRanksDailyMe = async (): Promise<RankDaily[]> => {
     const res = await api.get(API_ENDPOINTS.GET_RANK_DAILY_ME);
     return res.data.data;
   } catch (error) {
-    console.error('Failed to get user daily rank:', error);
+    console.error(MESSAGES.ERROR.RANKINGS.GET_USER_DAILY_FAILED, error);
     return [];
   }
 };
@@ -44,7 +45,7 @@ export const getRanksAll = async (): Promise<Rank[]> => {
     const res = await api.get(API_ENDPOINTS.GET_RANK_ALL);
     return res.data.data;
   } catch (error) {
-    console.error('Failed to get ranks:', error);
+    console.error(MESSAGES.ERROR.RANKINGS.GET_ALL_FAILED, error);
     return [];
   }
 };
@@ -54,7 +55,7 @@ export const getRanksAllMe = async (): Promise<Rank[]> => {
     const res = await api.get(API_ENDPOINTS.GET_RANK_ALL_ME);
     return res.data.data;
   } catch (error) {
-    console.error('Failed to get user ranks:', error);
+    console.error(MESSAGES.ERROR.RANKINGS.GET_USER_ALL_FAILED, error);
     return [];
   }
 };

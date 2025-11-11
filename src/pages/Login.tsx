@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import KakaoLoginButton from '../assets/images/kakao_login_medium_wide.png';
 import konoLogo from '../assets/kono_logo.svg';
 import { useAuth } from '../contexts/AuthContext';
+import { MESSAGES } from '../config/constants';
 
 declare global {
   interface Window {
@@ -74,7 +75,7 @@ const Login: React.FC = () => {
 
   const handleKakaoLogin = () => {
     if (!isKakaoInitialized) {
-      console.error('Kakao SDK not initialized yet');
+      console.error(MESSAGES.ERROR.KAKAO.SDK_NOT_INITIALIZED);
       return;
     }
 
@@ -83,7 +84,7 @@ const Login: React.FC = () => {
       localStorage.setItem('redirectAfterLogin', prevPath);
       window.location.href = `${import.meta.env.VITE_API_URL}/oauth2/authorization/kakao`;
     } catch (error) {
-      console.error('Failed to initiate Kakao login:', error);
+      console.error(MESSAGES.ERROR.KAKAO.INITIATE_FAILED, error);
     }
   };
 

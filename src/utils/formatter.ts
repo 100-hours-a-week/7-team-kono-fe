@@ -1,4 +1,5 @@
 import { parseISO, format } from 'date-fns';
+import { MESSAGES } from '../config/constants';
 
 export const formatCurrency = (
   value: number,
@@ -58,7 +59,7 @@ export const formatVolume = (value: number): string => {
 export const formatDate = (date: string | Date) => {
   try {
     if (date === null || date === undefined || date === '') {
-      return '날짜 없음';
+      return MESSAGES.ERROR.DATE_NOT_FOUND;
     }
 
     let dateObj: Date;
@@ -78,14 +79,14 @@ export const formatDate = (date: string | Date) => {
     }
 
     if (isNaN(dateObj.getTime())) {
-      console.error('유효하지 않은 날짜:', date);
-      return '유효하지 않은 날짜';
+      console.error(MESSAGES.ERROR.INVALID_DATE, date);
+      return MESSAGES.ERROR.INVALID_DATE;
     }
 
     return format(dateObj, 'yyyy.MM.dd HH:mm');
   } catch (error) {
-    console.error('날짜 형식 변환 오류:', error);
-    return '날짜 형식 오류';
+    console.error(MESSAGES.ERROR.FORMAT_DATE_FAILED, error);
+    return MESSAGES.ERROR.FORMAT_DATE_FAILED;
   }
 };
 
