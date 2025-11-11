@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { formatCurrency, formatPriceChange } from '../utils/formatter';
+import { useTranslation } from 'react-i18next';
 
 interface TickerDataItem {
   trade_price: number;
@@ -22,11 +23,13 @@ interface PriceInfoProps {
 }
 
 const PriceInfo = memo(({ symbol, tickerData, name }: PriceInfoProps) => {
+  const { t } = useTranslation();
+
   if (!tickerData || !tickerData[`KRW-${symbol}`]) {
     return (
       <div className="p-4 border-b flex items-center justify-center h-24 dark:bg-gray-800 dark:text-white dark:border-gray-700">
         <div className="text-center text-gray-500 dark:text-gray-400">
-          데이터를 불러오는 중...
+          {t('common.loading')}
         </div>
       </div>
     );

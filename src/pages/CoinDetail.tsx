@@ -233,7 +233,7 @@ export default function CoinDetail() {
             className="flex-1 py-3 bg-red-500 text-white rounded-xl font-medium"
             onClick={() => navigate(`/coins/${ticker}/buy`)}
           >
-            매수
+            {t('trade.buy')}
           </button>
           <button
             className={`flex-1 py-3 text-white rounded-xl font-medium ${
@@ -241,7 +241,7 @@ export default function CoinDetail() {
             }`}
             onClick={() => navigate(`/coins/${ticker}/sell`)}
           >
-            매도
+            {t('trade.sell')}
           </button>
         </div>
       </div>

@@ -132,12 +132,12 @@ export default function Favorites() {
                   </span>
                 </div>
                 <div className="text-sm text-gray-500">
-                  거래대금 {formatAmount(coin.accPrice)}
+                  {t('discover.sortVolume')} {formatAmount(coin.accPrice)}
                 </div>
               </div>
               <div className="text-right">
                 <div className="font-medium">
-                  {coin.price.toLocaleString()} 원
+                  {coin.price.toLocaleString()} {t('common.krw')}
                 </div>
                 <div
                   className={`text-sm ${

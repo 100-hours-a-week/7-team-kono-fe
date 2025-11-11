@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { MdWallet } from 'react-icons/md';
 import { FaCompass } from 'react-icons/fa';
 import { ROUTES } from '../../config/routes';
@@ -8,6 +9,7 @@ import { FaCrown } from 'react-icons/fa';
 import { IoMdSettings } from 'react-icons/io';
 
 const BottomNavigation: React.FC = () => {
+  const { t } = useTranslation();
   const location = useLocation();
   const currentPath = location.pathname;
   const pathMappings = {
@@ -75,31 +77,31 @@ const BottomNavigation: React.FC = () => {
             to={ROUTES.WALLET}
             category="wallet"
             icon={MdWallet}
-            label="지갑"
+            label={t('pages.wallet')}
           />
           <NavItem
             to={ROUTES.DISCOVER}
             category="discover"
             icon={FaCompass}
-            label="탐색"
+            label={t('pages.discover')}
           />
           <NavItem
             to={ROUTES.FAVORITE}
             category="favorite"
             icon={FaHeart}
-            label="관심종목"
+            label={t('pages.favorites')}
           />
           <NavItem
             to={ROUTES.RANKING}
             category="ranking"
             icon={FaCrown}
-            label="랭킹"
+            label={t('pages.rankings')}
           />
           <NavItem
             to={ROUTES.SETTINGS}
             category="settings"
             icon={IoMdSettings}
-            label="설정"
+            label={t('pages.settings')}
           />
         </ul>
       </nav>

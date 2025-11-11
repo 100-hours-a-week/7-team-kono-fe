@@ -70,14 +70,14 @@ export default function Trade() {
   useEffect(() => {
     if (!ticker) {
       console.error(LOG.ERR.GENERAL.TICKER_MISSING);
-      setError('코인 정보가 없습니다.');
+      setError(t('coin.noInfo'));
       setLoading(false);
       return;
     }
 
     if (type !== 'buy' && type !== 'sell') {
       console.error(LOG.ERR.GENERAL.INVALID_TRADE_TYPE, type);
-      setError('잘못된 거래 유형입니다.');
+      setError(t('coin.invalidTradeType'));
       setLoading(false);
       return;
     }
@@ -105,13 +105,13 @@ export default function Trade() {
         setLoading(false);
       } catch (error) {
         console.error(LOG.ERR.COINS.GET_INFO, error);
-        setError('코인 정보를 불러오는 중 오류가 발생했습니다.');
+        setError(t('coin.failedLoad'));
         setLoading(false);
       }
     };
 
     fetchCoinData();
-  }, [ticker, type]);
+  }, [ticker, type, t]);
 
   const handleAmountChange = (value: string) => {
     if (/^\d*\.?\d*$/.test(value) || value === '') {
@@ -178,12 +178,12 @@ export default function Trade() {
   const handleOpenModal = () => {
     validateAmount();
     if (!displayAmount || !coin || !price) {
-      alert('유효한 수량과 가격을 입력해주세요.');
+      alert(t('trade.enterValid'));
       return;
     }
 
     if (displayAmount !== '최대' && Number(displayAmount) < MIN_AMOUNT) {
-      alert(`최소 거래 금액은 ${formatCurrency(MIN_AMOUNT)}입니다.`);
+      alert(`${t('trade.minTradeAmount')} ${formatCurrency(MIN_AMOUNT)}`);
       setDisplayAmount(MIN_AMOUNT);
       setSubmitAmount(MIN_AMOUNT);
       setQuantity(MIN_AMOUNT / price);
@@ -196,7 +196,7 @@ export default function Trade() {
     return (
       <div className="flex flex-col min-h-screen">
         <div className="p-4 flex items-center">
-          <h1 className="text-lg font-bold ml-2">로딩 중...</h1>
+          <h1 className="text-lg font-bold ml-2">{t('common.loading')}</h1>
         </div>
         <div className="flex-1 flex items-center justify-center">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 dark:border-blue-400"></div>
@@ -209,18 +209,18 @@ export default function Trade() {
     return (
       <div className="flex flex-col min-h-screen">
         <div className="p-4 flex items-center">
-          <h1 className="text-lg font-bold ml-2">오류</h1>
+          <h1 className="text-lg font-bold ml-2">{t('common.error')}</h1>
         </div>
         <div className="flex-1 flex items-center justify-center p-4">
           <div className="text-center">
             <p className="text-red-500 mb-4 dark:text-red-400">
-              {error || '코인 정보를 불러오는데 실패했습니다.'}
+              {error || t('coin.failedLoad')}
             </p>
             <button
               className="px-4 py-2 bg-blue-500 text-white rounded-lg dark:bg-blue-400"
               onClick={() => navigate(-1)}
             >
-              돌아가기
+              {t('common.goBack')}
             </button>
           </div>
         </div>
@@ -231,7 +231,7 @@ export default function Trade() {
   return (
     <div className="flex flex-col min-h-screen">
       <Header
-        title={type === 'buy' ? '매수하기' : '매도하기'}
+        title={type === 'buy' ? t('trade.buying') : t('trade.selling')}
         centerTitle={false}
       />
 
@@ -261,7 +261,9 @@ export default function Trade() {
         <div className="flex justify-between items-center">
           <div>
             <div className="text-sm text-gray-500">
-              {type === 'buy' ? '보유 원화' : `보유 ${coin.ticker}`}
+              {type === 'buy'
+                ? t('wallet.cash')
+                : `${t('trade.holdings')} ${coin.ticker}`}
             </div>
             <div className="font-medium">
               {type === 'buy'
@@ -271,7 +273,9 @@ export default function Trade() {
           </div>
           {type === 'sell' && (
             <div className="text-right">
-              <div className="text-sm text-gray-500">평가 금액</div>
+              <div className="text-sm text-gray-500">
+                {t('trade.valuation')}
+              </div>
               <div className="font-medium">
                 {formatCurrency((coin.quantity || 0) * coin.price)}
               </div>
@@ -283,10 +287,10 @@ export default function Trade() {
       <div className="p-4 border-b dark:bg-gray-800 dark:text-white dark:border-gray-700">
         <div className="flex justify-between items-center mb-2">
           <div className="text-sm text-gray-500 dark:text-gray-400">
-            구매 금액
+            {t('trade.amount')}
           </div>
           <div className="text-sm text-gray-500 dark:text-gray-400">
-            {type === 'buy' ? '구매가능' : '판매가능'}{' '}
+            {type === 'buy' ? t('trade.available') : t('trade.sellable')}{' '}
             {formatCurrency(maxAmount)}{' '}
           </div>
         </div>
@@ -302,12 +306,12 @@ export default function Trade() {
             max={maxAmount}
           />
           <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">
-            원
+            {t('trade.krw')}
           </span>
         </div>
 
         <div className="mb-2 text-xs text-gray-500 dark:text-gray-400">
-          최소 거래 금액: {formatCurrency(MIN_AMOUNT)}
+          {t('trade.minAmount')}: {formatCurrency(MIN_AMOUNT)}
         </div>
 
         <div className="grid grid-cols-4 gap-2">
@@ -326,11 +330,11 @@ export default function Trade() {
       <div className="p-4 border-b dark:bg-gray-800 dark:text-white dark:border-gray-700">
         <div className="flex justify-between items-center">
           <div className="text-sm text-gray-500 dark:text-gray-400">
-            예상 수량
+            {t('trade.expectedQuantity')}
           </div>
           <div className="text-xl font-bold">
             {type === 'sell' && displayAmount === '최대'
-              ? '최대'
+              ? t('trade.max')
               : `${quantity.toFixed(8)} ${coin?.ticker}`}
           </div>
         </div>
@@ -338,10 +342,12 @@ export default function Trade() {
 
       <div className="p-4 border-b dark:bg-gray-800 dark:text-white dark:border-gray-700">
         <div className="flex justify-between items-center">
-          <div className="text-sm text-gray-500 dark:text-gray-400">총액</div>
+          <div className="text-sm text-gray-500 dark:text-gray-400">
+            {t('trade.total')}
+          </div>
           <div className="text-xl font-bold">
             {type === 'sell' && displayAmount === '최대'
-              ? '최대'
+              ? t('trade.max')
               : formatCurrency(Number(displayAmount) || 0)}
           </div>
         </div>
@@ -360,7 +366,7 @@ export default function Trade() {
           }`}
           onClick={handleOpenModal}
         >
-          {type === 'buy' ? '구매하기' : '판매하기'}
+          {type === 'buy' ? t('trade.confirmBuy') : t('trade.confirmSell')}
         </button>
       </div>
 
