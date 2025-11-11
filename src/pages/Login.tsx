@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import KakaoLoginButton from '../assets/images/kakao_login_medium_wide.png';
 import konoLogo from '../assets/kono_logo.svg';
 import { useAuth } from '../contexts/AuthContext';
@@ -12,6 +13,7 @@ declare global {
 }
 
 const Login: React.FC = () => {
+  const { t } = useTranslation();
   const [isKakaoInitialized, setIsKakaoInitialized] = useState(false);
   const { isAuthenticated, loading } = useAuth();
   const navigate = useNavigate();
@@ -91,7 +93,7 @@ const Login: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        로딩 중...
+        {t('common.loading')}
       </div>
     );
   }
@@ -105,10 +107,15 @@ const Login: React.FC = () => {
       <div className="flex-1 flex items-end justify-center w-full mb-8">
         <div className="w-full max-w-md">
           <div className="flex flex-col items-center justify-center">
-            <img src={konoLogo} alt="코노 로고" className="w-3/4 mx-auto" />
-            <p className="text-center text-sm text-gray-500 mt-2">
-              코인 놀이터 <strong>코노</strong>에서 실전 투자 감각을 키워보세요
-            </p>
+            <img
+              src={konoLogo}
+              alt={t('auth.konoLogo')}
+              className="w-3/4 mx-auto"
+            />
+            <p
+              className="text-center text-sm text-gray-500 mt-2"
+              dangerouslySetInnerHTML={{ __html: t('auth.welcomeMessage') }}
+            />
           </div>
         </div>
       </div>
@@ -119,7 +126,7 @@ const Login: React.FC = () => {
         <div className="w-full max-w-md">
           <img
             src={KakaoLoginButton}
-            alt="카카오 로그인"
+            alt={t('auth.kakaoLogin')}
             className={`mx-auto cursor-pointer transition-opacity ${
               isKakaoInitialized
                 ? 'hover:opacity-90'
