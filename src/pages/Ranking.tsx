@@ -23,11 +23,11 @@ interface Rank {
   updatedAt: string;
 }
 
-type RankingPeriod = '일간' | '전체';
+type RankingPeriod = 'daily' | 'all';
 
 export default function Ranking() {
   const { t } = useTranslation();
-  const [activePeriod, setActivePeriod] = useState<RankingPeriod>('일간');
+  const [activePeriod, setActivePeriod] = useState<RankingPeriod>('daily');
   const [myUserSticky, setMyUserSticky] = useState<'bottom' | 'top' | null>(
     null,
   );
@@ -107,8 +107,8 @@ export default function Ranking() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const currentRanks = activePeriod === '일간' ? ranksDaily : ranks;
-  const currentMyRank = activePeriod === '일간' ? myRankDaily : myRank;
+  const currentRanks = activePeriod === 'daily' ? ranksDaily : ranks;
+  const currentMyRank = activePeriod === 'daily' ? myRankDaily : myRank;
 
   const topUsers = currentRanks.slice(0, 3);
   const otherUsers = currentRanks.slice(3);
@@ -129,7 +129,7 @@ export default function Ranking() {
       <Header title={t('pages.rankings')} />
 
       <div className="mx-4 mt-4 flex border-b bg-white sticky top-0 z-10 rounded-t-xl dark:bg-gray-800 dark:text-white dark:border-gray-700">
-        {(['일간', '전체'] as RankingPeriod[]).map((period) => (
+        {(['daily', 'all'] as RankingPeriod[]).map((period) => (
           <button
             key={period}
             className={`flex-1 py-3 text-center ${
@@ -139,7 +139,7 @@ export default function Ranking() {
             }`}
             onClick={() => setActivePeriod(period)}
           >
-            {period === '일간' ? t('rankings.daily') : t('rankings.allTime')}
+            {period === 'daily' ? t('rankings.daily') : t('rankings.allTime')}
           </button>
         ))}
       </div>
@@ -163,7 +163,7 @@ export default function Ranking() {
             <div className="mt-2 font-medium">{topUsers[1]?.nickname}</div>
             <div
               className={`text-xs ${
-                activePeriod === '일간'
+                activePeriod === 'daily'
                   ? (topUsers[1]?.profitRate ?? 0) === 0
                     ? 'text-gray-500'
                     : (topUsers[1]?.profitRate ?? 0) > 0
@@ -176,7 +176,7 @@ export default function Ranking() {
                       : 'text-blue-500'
               }`}
             >
-              {activePeriod === '일간'
+              {activePeriod === 'daily'
                 ? formatPercentage(topUsers[1]?.profitRate)
                 : `${(topUsers[1]?.profit ?? 0) > 0 ? '+' : (topUsers[1]?.profit ?? 0) < 0 ? '-' : ''}${formatCurrency(Math.abs(topUsers[1]?.profit ?? 0))}`}
             </div>
@@ -199,7 +199,7 @@ export default function Ranking() {
             <div className="mt-2 font-medium">{topUsers[0]?.nickname}</div>
             <div
               className={`text-xs ${
-                activePeriod === '일간'
+                activePeriod === 'daily'
                   ? (topUsers[0]?.profitRate ?? 0) === 0
                     ? 'text-gray-500'
                     : (topUsers[0]?.profitRate ?? 0) > 0
@@ -212,7 +212,7 @@ export default function Ranking() {
                       : 'text-blue-500'
               }`}
             >
-              {activePeriod === '일간'
+              {activePeriod === 'daily'
                 ? formatPercentage(topUsers[0]?.profitRate)
                 : `${(topUsers[0]?.profit ?? 0) > 0 ? '+' : (topUsers[0]?.profit ?? 0) < 0 ? '-' : ''}${formatCurrency(Math.abs(topUsers[0]?.profit ?? 0))}`}
             </div>
@@ -235,7 +235,7 @@ export default function Ranking() {
             <div className="mt-2 font-medium">{topUsers[2]?.nickname}</div>
             <div
               className={`text-xs ${
-                activePeriod === '일간'
+                activePeriod === 'daily'
                   ? (topUsers[2]?.profitRate ?? 0) === 0
                     ? 'text-gray-500'
                     : (topUsers[2]?.profitRate ?? 0) > 0
@@ -248,7 +248,7 @@ export default function Ranking() {
                       : 'text-blue-500'
               }`}
             >
-              {activePeriod === '일간'
+              {activePeriod === 'daily'
                 ? formatPercentage(topUsers[2]?.profitRate)
                 : `${(topUsers[2]?.profit ?? 0) > 0 ? '+' : (topUsers[2]?.profit ?? 0) < 0 ? '-' : ''}${formatCurrency(Math.abs(topUsers[2]?.profit ?? 0))}`}
             </div>
@@ -259,7 +259,7 @@ export default function Ranking() {
       <div className="bg-white p-4 border-b rounded-t-xl dark:bg-gray-800 dark:text-white mx-4 dark:border-gray-600">
         <div className="text-gray-500 text-sm dark:text-gray-400 flex flex-col">
           <span>
-            {activePeriod === '일간'
+            {activePeriod === 'daily'
               ? dailyUpdatedAt
                 ? `${t('rankings.asOf')}: ${format(new Date(dailyUpdatedAt), 'yyyy-MM-dd HH:mm')}`
                 : t('rankings.noUpdateInfo')
@@ -307,7 +307,7 @@ export default function Ranking() {
             </div>
             <div
               className={`text-sm ${
-                activePeriod === '일간'
+                activePeriod === 'daily'
                   ? (user?.profitRate ?? 0) === 0
                     ? 'text-gray-500'
                     : (user?.profitRate ?? 0) > 0
@@ -320,7 +320,7 @@ export default function Ranking() {
                       : 'text-blue-500'
               }`}
             >
-              {activePeriod === '일간'
+              {activePeriod === 'daily'
                 ? formatPercentage(user?.profitRate)
                 : `${(user?.profit ?? 0) > 0 ? '+' : (user?.profit ?? 0) < 0 ? '-' : ''}${formatCurrency(Math.abs(user?.profit ?? 0))}`}
             </div>

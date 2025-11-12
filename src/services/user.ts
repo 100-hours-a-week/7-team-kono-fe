@@ -30,7 +30,7 @@ export const getUserProfile = async (): Promise<ProfileData> => {
   } catch (error) {
     console.error(LOG.ERR.USER.GET_PROFILE, error);
     return {
-      nickname: '사용자',
+      nickname: 'User',
       profileImageUrl: 'https://via.placeholder.com/150',
     };
   }
@@ -95,7 +95,7 @@ export const updateNickname = async (
     }
     throw {
       status: 500,
-      message: '닉네임 변경에 실패했습니다.',
+      message: LOG.ERR.USER.UPDATE_NICKNAME,
     };
   }
 };

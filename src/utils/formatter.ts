@@ -138,11 +138,11 @@ export const formatAmount = (
   showUnit: boolean = true,
 ): string => {
   if (value >= 1_000_000_000_000) {
-    return `${Math.floor(value / 1_000_000_000_000)}${showUnit ? '조' : ''}`;
+    return `${Math.floor(value / 1_000_000_000_000)}${showUnit ? 'T' : ''}`;
   } else if (value >= 100_000_000) {
-    return `${Math.floor(value / 100_000_000)}${showUnit ? '억' : ''}`;
+    return `${Math.floor(value / 100_000_000)}${showUnit ? 'B' : ''}`;
   } else if (value >= 10_000) {
-    return `${Math.floor(value / 10_000)}${showUnit ? '만' : ''}`;
+    return `${Math.floor(value / 10_000)}${showUnit ? 'K' : ''}`;
   }
   return value.toLocaleString('ko-KR');
 };

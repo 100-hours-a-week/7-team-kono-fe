@@ -26,7 +26,7 @@ export default function Trade() {
   const navigate = useNavigate();
 
   const [coin, setCoin] = useState<CoinData | null>(null);
-  const [displayAmount, setDisplayAmount] = useState<number | '최대'>(0);
+  const [displayAmount, setDisplayAmount] = useState<number | 'max'>(0);
   const [submitAmount, setSubmitAmount] = useState<number | null>(null);
   const [price, setPrice] = useState<number>(0);
   const [loading, setLoading] = useState(true);
@@ -50,9 +50,9 @@ export default function Trade() {
         prevCoin ? { ...prevCoin, price: currentPrice } : null,
       );
 
-      if (type === 'sell' && displayAmount === '최대') {
+      if (type === 'sell' && displayAmount === 'max') {
         setQuantity(coin?.quantity || 0);
-      } else if (displayAmount && displayAmount !== '최대') {
+      } else if (displayAmount && displayAmount !== 'max') {
         const amount = Number(displayAmount);
         if (!isNaN(amount)) {
           setQuantity(amount / currentPrice);
@@ -134,7 +134,7 @@ export default function Trade() {
   };
 
   const validateAmount = () => {
-    if (displayAmount !== '최대') {
+    if (displayAmount !== 'max') {
       const currentAmount = Number(displayAmount);
 
       if (currentAmount > 0 && currentAmount < MIN_AMOUNT) {
@@ -153,7 +153,7 @@ export default function Trade() {
 
   const handlePercentChange = (percent: number) => {
     if (type === 'sell' && percent === 100) {
-      setDisplayAmount('최대');
+      setDisplayAmount('max');
       setSubmitAmount(null);
       setQuantity(coin?.quantity || 0);
     } else {
@@ -182,7 +182,7 @@ export default function Trade() {
       return;
     }
 
-    if (displayAmount !== '최대' && Number(displayAmount) < MIN_AMOUNT) {
+    if (displayAmount !== 'max' && Number(displayAmount) < MIN_AMOUNT) {
       alert(`${t('trade.minTradeAmount')} ${formatCurrency(MIN_AMOUNT)}`);
       setDisplayAmount(MIN_AMOUNT);
       setSubmitAmount(MIN_AMOUNT);
@@ -333,7 +333,7 @@ export default function Trade() {
             {t('trade.expectedQuantity')}
           </div>
           <div className="text-xl font-bold">
-            {type === 'sell' && displayAmount === '최대'
+            {type === 'sell' && displayAmount === 'max'
               ? t('trade.max')
               : `${quantity.toFixed(8)} ${coin?.ticker}`}
           </div>
@@ -346,7 +346,7 @@ export default function Trade() {
             {t('trade.total')}
           </div>
           <div className="text-xl font-bold">
-            {type === 'sell' && displayAmount === '최대'
+            {type === 'sell' && displayAmount === 'max'
               ? t('trade.max')
               : formatCurrency(Number(displayAmount) || 0)}
           </div>
@@ -375,13 +375,13 @@ export default function Trade() {
         onClose={() => setIsModalOpen(false)}
         ticker={coin.ticker || ''}
         amount={
-          type === 'sell' && displayAmount === '최대'
+          type === 'sell' && displayAmount === 'max'
             ? Number(maxAmount)
             : Number(submitAmount)
         }
         quantity={quantity}
         price={
-          type === 'sell' && displayAmount === '최대' ? coin.price : coin.price
+          type === 'sell' && displayAmount === 'max' ? coin.price : coin.price
         }
         tradeType={type as TradeType}
         name={coin.name}

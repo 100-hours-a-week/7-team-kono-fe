@@ -86,6 +86,7 @@ export const LOG = {
       INVALID_DATE: 'Invalid date.',
       TICKER_MISSING: 'Ticker information is missing.',
       INVALID_TRADE_TYPE: 'Invalid trade type.',
+      WEBSOCKET_CONNECTION: 'WebSocket connection error occurred.',
     },
   },
 } as const;

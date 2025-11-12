@@ -157,7 +157,7 @@ export default function CoinDetail() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      {/* 헤더 */}
+      {/* Header */}
       <Header
         title={coin.name}
         rightElement={
@@ -170,7 +170,7 @@ export default function CoinDetail() {
           </button>
         }
       />
-      {/* Google Analytics 스크립트 */}
+      {/* Google Analytics Script */}
       <script
         dangerouslySetInnerHTML={{
           __html: `

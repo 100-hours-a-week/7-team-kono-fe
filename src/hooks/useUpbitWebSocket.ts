@@ -82,7 +82,7 @@ export function useUpbitWebSocket(symbols: string[] = ['BTC']) {
     };
 
     socket.current.onerror = function (_error) {
-      setError('웹소켓 연결 오류가 발생했습니다.');
+      setError(LOG.ERR.GENERAL.WEBSOCKET_CONNECTION);
       setIsConnected(false);
     };
 
