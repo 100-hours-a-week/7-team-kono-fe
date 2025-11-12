@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { formatCurrency, formatPriceChange } from '../utils/formatter';
+import { formatCurrency, formatPriceChange } from '../../utils/formatter';
 import { useTranslation } from 'react-i18next';
 
 interface TickerDataItem {
