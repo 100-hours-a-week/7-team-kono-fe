@@ -21,12 +21,12 @@
     "loggingIn": "Logging in...",
     "loginRequired": "Login required",
     "goToLogin": "Go to login page",
-    "welcomeMessage": "Practice trading crypto with <strong>KONO</strong> - Your crypto playground! 🚀",
+    "welcomeMessage": "Practice trading crypto with <strong>KONO</strong> - Your crypto playground!",
     "konoLogo": "KONO Logo",
     "kakaoLogin": "Kakao Login",
     "deleteAccount": "Delete Account",
     "deleteAccountConfirm": "Are you sure you want to delete your account?",
-    "deleteAccountWarning": "All your data will be permanently deleted. This can't be undone! 😱"
+    "deleteAccountWarning": "All your data will be permanently deleted. This can't be undone!"
   },
   "pages": {
     "discover": "Discover",
