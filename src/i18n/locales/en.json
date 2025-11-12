@@ -30,7 +30,7 @@
   },
   "pages": {
     "discover": "Discover",
-    "favorites": "Favorites",
+    "favorites": "Favourites",
     "wallet": "Wallet",
     "rankings": "Rankings",
     "settings": "Settings",
@@ -103,8 +103,8 @@
     "asOf": "as of"
   },
   "favorites": {
-    "title": "Favorites",
-    "noFavorites": "No favorites yet!",
+    "title": "Favourites",
+    "noFavorites": "No favourites yet!",
     "searchPlaceholder": "Search coins",
     "exploreCoins": "Explore Coins"
   },
