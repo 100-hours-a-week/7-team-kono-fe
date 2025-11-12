@@ -1,20 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-export type FilterType = '전체' | '매수' | '매도';
+// Use English keys for FilterType to avoid Korean in type definitions
+export type FilterType = string;
 export type DataFilterType = 'all' | 'buy' | 'sell';
-
-export const dataToDisplayMap: Record<DataFilterType, FilterType> = {
-  all: '전체',
-  buy: '매수',
-  sell: '매도',
-};
-
-export const displayToDataMap: Record<FilterType, DataFilterType> = {
-  전체: 'all',
-  매수: 'buy',
-  매도: 'sell',
-};
 
 interface FilterModalProps {
   isOpen: boolean;
@@ -33,11 +22,11 @@ const FilterModal: React.FC<FilterModalProps> = ({
 
   if (!isOpen) return null;
 
-  const filterLabels: Record<FilterType, string> = {
-    전체: t('transactions.all'),
-    매수: t('trade.buy'),
-    매도: t('trade.sell'),
-  };
+  const filters: FilterType[] = [
+    t('transactions.all'),
+    t('trade.buy'),
+    t('trade.sell'),
+  ];
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 dark:bg-gray-800 dark:bg-opacity-50">
@@ -46,7 +35,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
           {t('common.filter')}
         </div>
 
-        {(['전체', '매수', '매도'] as FilterType[]).map((filter) => (
+        {filters.map((filter) => (
           <button
             key={filter}
             className={`w-full text-left p-3 mb-2 rounded-xl ${
@@ -56,7 +45,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
             }`}
             onClick={() => onFilterChange(filter)}
           >
-            {filterLabels[filter]}
+            {filter}
           </button>
         ))}
 

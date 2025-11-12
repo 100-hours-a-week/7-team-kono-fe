@@ -8,7 +8,7 @@ import { formatAmount } from '../utils/formatter';
 import { getCoins } from '../services/coin';
 import { LOG } from '../config/constants';
 
-type SortType = '거래대금' | '가격' | '등락률';
+type SortType = 'volume' | 'price' | 'change';
 
 interface Coin {
   id: string;
@@ -25,14 +25,14 @@ interface CoinInfo {
   coinName: string;
 }
 
-const SORT_TYPES: SortType[] = ['거래대금', '가격', '등락률'];
+const SORT_TYPES: SortType[] = ['volume', 'price', 'change'];
 
 const PLACEHOLDER = 'https://static.upbit.com/logos/BTC.png';
 
 export default function Discover() {
   const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeTab, setActiveTab] = useState<SortType>('거래대금');
+  const [activeTab, setActiveTab] = useState<SortType>('volume');
   const [coinInfo, setCoinInfo] = useState<CoinInfo[]>([]);
   const [tickers, setTickers] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -98,9 +98,9 @@ export default function Discover() {
 
   const sortedCoins = useMemo(() => {
     return [...filteredCoins].sort((a, b) => {
-      if (activeTab === '거래대금') {
+      if (activeTab === 'volume') {
         return b.accPrice - a.accPrice;
-      } else if (activeTab === '가격') {
+      } else if (activeTab === 'price') {
         return b.price - a.price;
       } else {
         return b.rateChange24h - a.rateChange24h;
@@ -188,6 +188,21 @@ function SortTabs({
   activeTab: SortType;
   onTabChange: (tab: SortType) => void;
 }) {
+  const { t } = useTranslation();
+
+  const getSortLabel = (tab: SortType) => {
+    switch (tab) {
+      case 'volume':
+        return t('discover.sortVolume');
+      case 'price':
+        return t('discover.sortPrice');
+      case 'change':
+        return t('discover.sortChange');
+      default:
+        return tab;
+    }
+  };
+
   return (
     <div className="flex mx-4 border-b bg-white sticky top-[116px] z-10 rounded-t-xl shadow-sm dark:bg-gray-800 dark:text-white dark:border-gray-700">
       {SORT_TYPES.map((tab) => (
@@ -200,7 +215,7 @@ function SortTabs({
           }`}
           onClick={() => onTabChange(tab)}
         >
-          {tab}
+          {getSortLabel(tab)}
         </button>
       ))}
     </div>
@@ -214,6 +229,8 @@ function CoinItem({
   coin: Coin;
   onClick: (ticker: string) => void;
 }) {
+  const { t } = useTranslation();
+
   return (
     <div
       className="p-4 border-b border-gray-200 bg-white flex items-center dark:border-gray-700 dark:bg-gray-800 dark:text-white last:border-0"
@@ -233,11 +250,13 @@ function CoinItem({
           <span className="text-gray-500 text-sm ml-2">{coin.ticker}</span>
         </div>
         <div className="text-sm text-gray-500">
-          거래대금 {formatAmount(coin.accPrice)}
+          {t('discover.sortVolume')} {formatAmount(coin.accPrice)}
         </div>
       </div>
       <div className="text-right">
-        <div className="font-medium">{coin.price.toLocaleString()} 원</div>
+        <div className="font-medium">
+          {coin.price.toLocaleString()} {t('common.krw')}
+        </div>
         <div
           className={`text-sm ${
             coin.rateChange24h >= 0 ? 'text-red-500' : 'text-blue-500'

@@ -3,8 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import Header from '../components/layout/Header';
-import TradingViewWidget from '../components/TradingViewWidget';
-import PriceInfo from '../components/PriceInfo';
+import TradingViewWidget from '../components/common/TradingViewWidget';
+import PriceInfo from '../components/common/PriceInfo';
 import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
 import { formatAmount, formatCurrency } from '../utils/formatter';
 import {

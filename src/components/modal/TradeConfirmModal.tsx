@@ -4,10 +4,10 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 import Toast from '../common/Toast';
 import PurchaseCompleteModal from './PurchaseCompleteModal';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { formatAmount, formatCurrency } from '../../utils/formatter';
 import { marketBuy, marketSell } from '../../services/trade';
-import { LOG } from '../../config/constants';
-import { useTranslation } from 'react-i18next';
+import { LOG, UI } from '../../config/constants';
 
 interface TradeConfirmModalProps {
   isOpen: boolean;
@@ -68,9 +68,10 @@ export default function TradeConfirmModal({
       'tradeToast',
       JSON.stringify({
         show: true,
-        message: t(
-          tradeType === 'buy' ? 'trade.buyCompleted' : 'trade.sellCompleted',
-        ),
+        message:
+          tradeType === 'buy'
+            ? t('trade.buyCompleted')
+            : t('trade.sellCompleted'),
         timestamp: Date.now(),
       }),
     );
@@ -140,20 +141,23 @@ export default function TradeConfirmModal({
                               : 'text-blue-500 dark:text-blue-400'
                           }`}
                         >
-                          {t(tradeType === 'buy' ? 'trade.buy' : 'trade.sell')}
+                          {tradeType === 'buy'
+                            ? t('trade.buy')
+                            : t('trade.sell')}
                         </p>
                       </div>
 
                       <div className="space-y-4 mb-8">
                         <div className="flex justify-between items-center">
                           <span className="text-gray-500 dark:text-gray-400">
-                            1 {ticker} {t('trade.price')}
+                            1 {ticker} {t('trade.tickerPrice')}
                           </span>
                           <span>{formatCurrency(price || 0)}</span>
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-gray-500 dark:text-gray-400">
-                            {t('trade.expectedQuantity')} {ticker}
+                            {t('trade.estimatedQuantity')} {ticker}{' '}
+                            {t('trade.quantity')}
                           </span>
                           <span>
                             {formatAmount(quantity)} {ticker}
@@ -161,11 +165,10 @@ export default function TradeConfirmModal({
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-gray-500 dark:text-gray-400">
-                            {t('trade.totalExpected')}{' '}
-                            {t(
-                              tradeType === 'buy' ? 'trade.buy' : 'trade.sell',
-                            )}{' '}
-                            {t('trade.amount')}
+                            {t('trade.totalEstimatedAmount')}{' '}
+                            {tradeType === 'buy'
+                              ? t('trade.buyAmount')
+                              : t('trade.sellAmount')}
                           </span>
                           <span className="font-medium text-lg">
                             {formatCurrency(amount || 0)}
@@ -179,7 +182,7 @@ export default function TradeConfirmModal({
                           className="flex-1 py-4 rounded-xl bg-gray-100 font-medium text-gray-900 dark:bg-gray-700 dark:text-gray-100     "
                           onClick={onClose}
                         >
-                          {t('common.cancel')}
+                          {t('trade.close')}
                         </button>
                         <button
                           type="button"
@@ -193,11 +196,9 @@ export default function TradeConfirmModal({
                         >
                           {isProcessing
                             ? t('trade.processing')
-                            : t(
-                                tradeType === 'buy'
-                                  ? 'trade.buy'
-                                  : 'trade.sell',
-                              )}
+                            : tradeType === 'buy'
+                              ? t('trade.buy')
+                              : t('trade.sell')}
                         </button>
                       </div>
                     </div>
@@ -223,9 +224,11 @@ export default function TradeConfirmModal({
 
       <Toast
         show={showToast}
-        message={t(
-          tradeType === 'buy' ? 'trade.buyCompleted' : 'trade.sellCompleted',
-        )}
+        message={
+          tradeType === 'buy'
+            ? UI.OK.TRANSACTIONS.ORDER_COMPLETE_BUY
+            : UI.OK.TRANSACTIONS.ORDER_COMPLETE_SELL
+        }
         onClose={() => setShowToast(false)}
       />
     </>

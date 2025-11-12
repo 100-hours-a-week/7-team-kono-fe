@@ -18,6 +18,9 @@
   "auth": {
     "login": "Login",
     "logout": "Logout",
+    "loggingIn": "Logging in...",
+    "loginRequired": "Login required",
+    "goToLogin": "Go to login page",
     "welcomeMessage": "Practice trading crypto with <strong>KONO</strong> - Your crypto playground! 🚀",
     "konoLogo": "KONO Logo",
     "kakaoLogin": "Kakao Login",
@@ -40,6 +43,10 @@
     "sell": "Sell",
     "buying": "Buy",
     "selling": "Sell",
+    "completed": "Completed",
+    "estimatedPrice": "estimated price",
+    "estimatedQuantityOf": "Estimated {{ticker}} quantity",
+    "totalOrderAmount": "Total order amount",
     "quantity": "Quantity",
     "price": "Price",
     "total": "Total",
@@ -58,24 +65,30 @@
     "confirmBuy": "Buy",
     "confirmSell": "Sell",
     "processing": "Processing...",
-    "buyCompleted": "Purchase order completed! 🎉",
-    "sellCompleted": "Sell order completed! 💰",
+    "buyCompleted": "Purchase order completed!",
+    "sellCompleted": "Sell order completed!",
     "enterValid": "Please enter valid amount and price",
-    "minTradeAmount": "Minimum trade amount is"
+    "minTradeAmount": "Minimum trade amount is",
+    "close": "Close",
+    "tickerPrice": "price",
+    "estimatedQuantity": "Estimated",
+    "totalEstimatedAmount": "Total estimated",
+    "buyAmount": "buy amount",
+    "sellAmount": "sell amount"
   },
   "wallet": {
     "invested": "Invested",
     "cash": "Cash",
     "assetDistribution": "Asset Distribution",
     "myCoins": "My Coins",
-    "noCoins": "No coins yet! Time to start trading! 💰",
+    "noCoins": "No coins yet! Time to start trading!",
     "others": "Others",
     "failedLoad": "Failed to load coin data",
     "exploreCoins": "Explore Coins"
   },
   "transactions": {
     "history": "Trading History",
-    "noTrades": "No trades yet! 📊",
+    "noTrades": "No trades yet!",
     "firstTrade": "Ready to make your first trade?",
     "date": "Date",
     "all": "All",
@@ -91,7 +104,7 @@
   },
   "favorites": {
     "title": "Favorites",
-    "noFavorites": "No favorites yet! ⭐",
+    "noFavorites": "No favorites yet!",
     "searchPlaceholder": "Search coins",
     "exploreCoins": "Explore Coins"
   },
@@ -102,7 +115,10 @@
     "sortPrice": "Price",
     "sortChange": "Change",
     "noResults": "No results found",
-    "failedLoad": "Failed to load coins"
+    "failedLoad": "Failed to load coins",
+    "high": "High",
+    "low": "Low",
+    "volume": "Volume"
   },
   "coin": {
     "info": "Coin Info",
@@ -128,6 +144,6 @@
     "developerInfo": "Developer Info",
     "appVersion": "App Version",
     "account": "Account",
-    "buyBeer": "Buy us a beer! 🍺"
+    "buyBeer": "Buy us a beer!"
   }
 }

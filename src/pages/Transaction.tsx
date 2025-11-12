@@ -14,7 +14,9 @@ import { LOG } from '../config/constants';
 export default function Transaction() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [activeFilter, setActiveFilter] = useState<FilterType>('전체');
+  const [activeFilter, setActiveFilter] = useState<FilterType>(
+    t('transactions.all'),
+  );
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [transactions, setTransactions] = useState<TransactionType[]>([]);
   const [loading, setLoading] = useState(true);
@@ -41,8 +43,11 @@ export default function Transaction() {
   }, [t]);
 
   const filteredTransactions = transactions.filter((transaction) => {
-    if (activeFilter === '전체') return true;
-    return transaction.orderType === (activeFilter === '매수' ? 'buy' : 'sell');
+    if (activeFilter === t('transactions.all')) return true;
+    return (
+      transaction.orderType ===
+      (activeFilter === t('trade.buy') ? 'buy' : 'sell')
+    );
   });
 
   const toggleFilterModal = () => {
@@ -137,7 +142,9 @@ export default function Transaction() {
                       : 'bg-blue-100 text-blue-500 dark:bg-blue-900 dark:text-blue-400'
                   }`}
                 >
-                  {transaction.orderType === 'buy' ? '매수' : '매도'}
+                  {transaction.orderType === 'buy'
+                    ? t('trade.buy')
+                    : t('trade.sell')}
                 </div>
               </div>
 

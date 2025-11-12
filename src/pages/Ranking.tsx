@@ -271,7 +271,7 @@ export default function Ranking() {
             onClick={fetchRanks}
             className="text-blue-500 hover:text-blue-600 text-sm"
           >
-            새로고침
+            Refresh
           </button> */}
         </div>
       </div>

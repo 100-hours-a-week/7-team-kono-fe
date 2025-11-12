@@ -15,19 +15,19 @@ interface TradingViewWidgetProps {
 }
 
 const INTERVALS = [
-  { label: '1분', value: '1' },
-  { label: '5분', value: '5' },
-  { label: '15분', value: '15' },
-  { label: '30분', value: '30' },
-  { label: '1시간', value: '60' },
-  { label: '4시간', value: '240' },
+  { label: '1m', value: '1' },
+  { label: '5m', value: '5' },
+  { label: '15m', value: '15' },
+  { label: '30m', value: '30' },
+  { label: '1h', value: '60' },
+  { label: '4h', value: '240' },
 ];
 
 const TIME_RANGES = [
-  { label: '일', value: 'D' },
-  { label: '주', value: 'W' },
-  { label: '월', value: 'M' },
-  { label: '년', value: 'Y' },
+  { label: 'D', value: 'D' },
+  { label: 'W', value: 'W' },
+  { label: 'M', value: 'M' },
+  { label: 'Y', value: 'Y' },
 ];
 
 const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({
@@ -153,12 +153,12 @@ const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({
   return (
     <div className="flex flex-col w-full h-full rounded-lg overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
       <div className="flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
-        {/* 심볼 정보 */}
+        {/* Symbol info */}
         <div className="font-medium text-gray-800 dark:text-white mr-2">
           {getSymbolInfo()}
         </div>
 
-        {/* 범위 선택 탭 */}
+        {/* Time range selection tabs */}
         <div className="flex">
           {TIME_RANGES.map((range) => (
             <button
@@ -175,7 +175,7 @@ const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({
           ))}
         </div>
 
-        {/* 인터벌 선택기 (드롭다운) */}
+        {/* Interval selector (dropdown) */}
         <Disclosure as="div" className="relative">
           {({ open }) => (
             <>
@@ -225,7 +225,7 @@ const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({
         </Disclosure>
       </div>
 
-      {/* 차트 컨테이너 */}
+      {/* Chart container */}
       <div className="relative flex-1" style={{ minHeight: '300px' }}>
         {loading && (
           <div className="absolute inset-0 flex items-center justify-center bg-gray-50 dark:bg-gray-800 bg-opacity-75 dark:bg-opacity-75 z-10">
@@ -244,7 +244,7 @@ const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({
         </div>
       </div>
 
-      {/* 로고를 가리는 오버레이 */}
+      {/* Logo overlay to hide TradingView branding */}
       <div
         className="absolute bottom-0 right-0 w-20 h-20 z-10"
         style={{

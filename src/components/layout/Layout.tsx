@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Header from './Header';
 import BottomNavigation from './BottomNavigation';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 
 const Layout: React.FC = () => {
+  const { t } = useTranslation();
   const { isAuthenticated, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -36,7 +38,7 @@ const Layout: React.FC = () => {
     return (
       <div className="flex flex-col min-h-screen max-w-[430px] w-full mx-auto relative overflow-y-auto bg-white dark:bg-gray-900 text-mainText dark:text-white justify-center items-center">
         <div className="text-center">
-          <p className="mb-2">로딩 중...</p>
+          <p className="mb-2">{t('common.loading')}</p>
         </div>
       </div>
     );
@@ -48,7 +50,7 @@ const Layout: React.FC = () => {
     return (
       <div className="flex flex-col min-h-screen max-w-[430px] w-full mx-auto relative overflow-y-auto bg-white dark:bg-gray-900 text-mainText dark:text-white justify-center items-center">
         <div className="text-center">
-          <p className="mb-2">로그인 처리 중...</p>
+          <p className="mb-2">{t('auth.loggingIn')}</p>
         </div>
       </div>
     );
@@ -58,12 +60,12 @@ const Layout: React.FC = () => {
     return (
       <div className="flex flex-col min-h-screen max-w-[430px] w-full mx-auto relative overflow-y-auto bg-white dark:bg-gray-900 text-mainText dark:text-white justify-center items-center">
         <div className="text-center">
-          <p className="mb-2">로그인이 필요한 페이지입니다</p>
+          <p className="mb-2">{t('auth.loginRequired')}</p>
           <button
             onClick={() => navigate('/login')}
             className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
           >
-            로그인 페이지로 이동
+            {t('auth.goToLogin')}
           </button>
         </div>
       </div>

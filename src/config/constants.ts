@@ -119,6 +119,8 @@ export const UI = {
     },
     TRANSACTIONS: {
       HISTORY: 'Transaction history loaded!',
+      ORDER_COMPLETE_BUY: 'Buy order completed!',
+      ORDER_COMPLETE_SELL: 'Sell order completed!',
     },
     RANKINGS: {
       DAILY: 'Daily leaderboard loaded!',

@@ -24,10 +24,11 @@ export const ROUTES = {
   SETTINGS: '/settings',
 };
 
+// Nav items use i18n keys - labels should be translated in components
 export const NAV_ITEMS = [
-  { label: '지갑', path: ROUTES.WALLET },
-  { label: '탐색', path: ROUTES.DISCOVER },
-  { label: '관심', path: ROUTES.FAVORITE },
-  { label: '랭킹', path: ROUTES.RANKING },
-  { label: '설정', path: ROUTES.SETTINGS },
+  { labelKey: 'pages.wallet', path: ROUTES.WALLET },
+  { labelKey: 'pages.discover', path: ROUTES.DISCOVER },
+  { labelKey: 'pages.favorites', path: ROUTES.FAVORITE },
+  { labelKey: 'pages.rankings', path: ROUTES.RANKING },
+  { labelKey: 'pages.settings', path: ROUTES.SETTINGS },
 ];

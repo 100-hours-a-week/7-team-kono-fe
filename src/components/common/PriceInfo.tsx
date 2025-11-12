@@ -80,19 +80,25 @@ const PriceInfo = memo(({ symbol, tickerData, name }: PriceInfoProps) => {
 
         <div className="flex justify-between mt-2 text-sm">
           <div>
-            <span className="text-gray-500 dark:text-gray-400">고가</span>
+            <span className="text-gray-500 dark:text-gray-400">
+              {t('discover.high')}
+            </span>
             <span className="ml-1 text-red-500 dark:text-red-400">
               {formatCurrency(data.high_price, '', false)}
             </span>
           </div>
           <div>
-            <span className="text-gray-500 dark:text-gray-400">저가</span>
+            <span className="text-gray-500 dark:text-gray-400">
+              {t('discover.low')}
+            </span>
             <span className="ml-1 text-blue-500 dark:text-blue-400">
               {formatCurrency(data.low_price, '', false)}
             </span>
           </div>
           <div>
-            <span className="text-gray-500 dark:text-gray-400">거래량</span>
+            <span className="text-gray-500 dark:text-gray-400">
+              {t('discover.volume')}
+            </span>
             <span className="ml-1">
               {data.acc_trade_volume_24h.toFixed(2)} {symbol}
             </span>
