@@ -93,60 +93,60 @@ export const LOG = {
 export const UI = {
   OK: {
     AUTH: {
-      SIGNUP: '🎉 Welcome to KONO! Let the trading begin!',
-      LOGIN: '👋 Welcome back, trader!',
-      LOGOUT: '👋 See you later! Happy trading!',
+      SIGNUP: 'Welcome to KONO! Let the trading begin!',
+      LOGIN: 'Welcome back, trader!',
+      LOGOUT: 'See you later! Happy trading!',
     },
     USER: {
-      GET_INFO: 'Got your info! Looking good! 😎',
-      UPDATE_PROFILE: '✨ Profile updated! You look amazing!',
-      UPDATE_NICKNAME: '🎯 Nickname changed! Fresh new you!',
-      UPDATE_PROFILE_IMAGE: '📸 New profile pic is fire! 🔥',
-      DELETE_ACCOUNT: "👋 Account deleted. We'll miss you!",
+      GET_INFO: 'Got your info! Looking good!',
+      UPDATE_PROFILE: 'Profile updated! You look amazing!',
+      UPDATE_NICKNAME: 'Nickname changed! Fresh new you!',
+      UPDATE_PROFILE_IMAGE: 'New profile pic is fire!',
+      DELETE_ACCOUNT: "Account deleted. We'll miss you!",
     },
     COINS: {
-      LIST: '💰 Coins loaded! Time to explore!',
-      DETAILS: '📊 Coin details ready!',
+      LIST: 'Coins loaded! Time to explore!',
+      DETAILS: 'Coin details ready!',
     },
     FAVORITES: {
-      ADD: '⭐ Added to favorites! Smart choice!',
-      REMOVE: '💔 Removed from favorites!',
+      ADD: 'Added to favorites! Smart choice!',
+      REMOVE: 'Removed from favorites!',
     },
     WALLETS: {
-      CASH: '💵 Cash balance loaded!',
-      COINS: '🪙 Your crypto stash is ready!',
+      CASH: 'Cash balance loaded!',
+      COINS: 'Your crypto stash is ready!',
     },
     TRANSACTIONS: {
-      HISTORY: '📜 Transaction history loaded!',
+      HISTORY: 'Transaction history loaded!',
     },
     RANKINGS: {
-      DAILY: '🏆 Daily leaderboard loaded!',
-      TOTAL: '👑 All-time rankings loaded!',
+      DAILY: 'Daily leaderboard loaded!',
+      TOTAL: 'All-time rankings loaded!',
     },
   },
   ERR: {
     AUTH: {
-      UNAUTHORIZED: '🔒 Oops! Authentication failed. Please login again.',
+      UNAUTHORIZED: 'Oops! Authentication failed. Please login again.',
     },
     USER: {
-      LOGOUT: '😅 Logout failed. Try again?',
-      WITHDRAW: '⚠️ Account deletion failed. Please try again.',
-      WITHDRAW_UNAUTHORIZED: '🔐 Please login first!',
-      WITHDRAW_FORBIDDEN: "🚫 You don't have permission to do that.",
-      UPDATE_PROFILE_IMAGE: '📷 Image upload failed. Try another one?',
+      LOGOUT: 'Logout failed. Try again?',
+      WITHDRAW: 'Account deletion failed. Please try again.',
+      WITHDRAW_UNAUTHORIZED: 'Please login first!',
+      WITHDRAW_FORBIDDEN: "You don't have permission to do that.",
+      UPDATE_PROFILE_IMAGE: 'Image upload failed. Try another one?',
       UPDATE_PROFILE_IMAGE_INVALID:
-        '🖼️ Please upload an image file (JPG, PNG, etc.)',
-      UPDATE_NICKNAME_REQUIRED: "✏️ Nickname can't be empty!",
-      UPDATE_NICKNAME: '😕 Nickname update failed. Try again?',
+        'Please upload an image file (JPG, PNG, etc.)',
+      UPDATE_NICKNAME_REQUIRED: "Nickname can't be empty!",
+      UPDATE_NICKNAME: 'Nickname update failed. Try again?',
     },
     COINS: {
-      FETCH: '💔 Failed to load coin data. Refresh?',
+      FETCH: 'Failed to load coin data. Refresh?',
     },
     FAVORITES: {
-      TOGGLE: '⭐ Oops! Favorite toggle failed.',
+      TOGGLE: 'Oops! Favorite toggle failed.',
     },
     TRANSACTIONS: {
-      TRANSACTION: '😬 Transaction failed. Please try again!',
+      TRANSACTION: 'Transaction failed. Please try again!',
     },
   },
 } as const;
