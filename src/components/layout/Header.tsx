@@ -19,9 +19,7 @@ const Header: React.FC<HeaderProps> = ({ override }) => {
   const location = useLocation();
   const { t } = useTranslation();
 
-  // Route-based configuration
   const getHeaderConfig = () => {
-    // If override is provided, use it
     if (override) {
       return {
         title: override.title || '',
@@ -33,7 +31,6 @@ const Header: React.FC<HeaderProps> = ({ override }) => {
 
     const path = location.pathname;
 
-    // Wallet page with history button
     if (path === '/wallet') {
       return {
         title: t('pages.wallet'),
@@ -46,7 +43,6 @@ const Header: React.FC<HeaderProps> = ({ override }) => {
       };
     }
 
-    // Map routes to titles
     const routeMap: Record<string, string> = {
       '/discover': 'pages.discover',
       '/favorites': 'pages.favorites',
@@ -64,10 +60,9 @@ const Header: React.FC<HeaderProps> = ({ override }) => {
       };
     }
 
-    // Dynamic routes - these will be overridden by pages with specific content
     if (path.startsWith('/coins/')) {
       return {
-        title: '', // Will be overridden with coin name
+        title: '',
         rightElement: null,
         centerTitle: true,
       };
@@ -91,9 +86,9 @@ const Header: React.FC<HeaderProps> = ({ override }) => {
   const { title, rightElement, centerTitle } = getHeaderConfig();
 
   return (
-    <header className="w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700 dark:text-white sticky top-0 z-30">
+    <header className="fixed top-0 left-0 right-0 w-full max-w-[430px] mx-auto bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700 dark:text-white z-30">
       {/* Inner container - max width constraint */}
-      <div className="max-w-[430px] mx-auto h-14 px-4 flex items-center justify-between">
+      <div className="h-14 px-4 flex items-center justify-between">
         <div className="flex items-center">
           <button
             onClick={() => navigate(-1)}

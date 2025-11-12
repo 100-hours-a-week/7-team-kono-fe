@@ -73,12 +73,12 @@ const Layout: React.FC = () => {
   }
 
   return (
-    <div
-      className="flex flex-col min-h-screen w-full mx-auto relative overflow-hidden bg-white dark:bg-gray-900 text-mainText dark:text-white"
-      style={{ maxWidth: '430px' }}
-    >
+    <div className="flex flex-col justify-center min-h-screen w-full bg-white dark:bg-gray-900 text-mainText dark:text-white">
       <Header />
-      <main className="flex-1 py-16">
+      <main
+        className="flex-1 w-full mx-auto py-16"
+        style={{ maxWidth: '430px' }}
+      >
         <Outlet />
       </main>
       <BottomNavigation />
