@@ -1,20 +1,7 @@
 import { memo } from 'react';
 import { formatCurrency, formatPriceChange } from '../../utils/formatter';
 import { useTranslation } from 'react-i18next';
-
-interface TickerDataItem {
-  trade_price: number;
-  signed_change_rate: number;
-  change: string;
-  acc_trade_price_24h: number;
-  high_price: number;
-  low_price: number;
-  [key: string]: any;
-}
-
-interface TickerDataMap {
-  [key: string]: TickerDataItem;
-}
+import type { TickerDataItem, TickerDataMap } from '../../types';
 
 interface PriceInfoProps {
   symbol: string;

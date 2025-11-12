@@ -1,9 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
-// Use English keys for FilterType to avoid Korean in type definitions
-export type FilterType = string;
-export type DataFilterType = 'all' | 'buy' | 'sell';
+import type { FilterType } from '../../types';
 
 interface FilterModalProps {
   isOpen: boolean;

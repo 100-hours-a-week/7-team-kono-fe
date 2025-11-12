@@ -1,24 +1,7 @@
 import api from './clients';
 import { API_ENDPOINTS } from '../config/apiEndpoints';
 import { LOG } from '../config/constants';
-
-interface Rank {
-  nickname: string;
-  profileImageUrl: string;
-  badgeImageUrl?: string;
-  totalAssets: number;
-  rank: number;
-  updatedAt: string;
-}
-
-interface RankDaily {
-  nickname: string;
-  profileImageUrl: string;
-  badgeImageUrl?: string;
-  profileRate: number;
-  rank: number;
-  updatedAt: string;
-}
+import type { Rank, RankDaily } from '../types';
 
 export const getRanksDaily = async (): Promise<RankDaily[]> => {
   try {

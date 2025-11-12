@@ -1,17 +1,7 @@
 import api from './clients';
 import { API_ENDPOINTS } from '../config/apiEndpoints';
 import { LOG } from '../config/constants';
-
-export type Transaction = {
-  transactionId: string;
-  orderType: string;
-  coinName: string;
-  ticker: string;
-  orderQuantity: number;
-  orderPrice: number;
-  orderAmount: number;
-  createdAt: string;
-};
+import type { Transaction } from '../types';
 
 export const getTransactions = async (): Promise<Transaction[]> => {
   try {

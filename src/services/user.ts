@@ -2,25 +2,11 @@ import axios from 'axios';
 import api from './clients';
 import { API_ENDPOINTS } from '../config/apiEndpoints';
 import { LOG } from '../config/constants';
-
-interface ProfileData {
-  nickname: string;
-  profileImageUrl: string;
-}
-
-interface ProfileUpdateResponse {
-  message: string;
-  data: {
-    nickname: string;
-    profileImageUrl: string;
-    createdAt: string;
-  };
-}
-
-interface ErrorResponse {
-  status: number;
-  message: string;
-}
+import type {
+  ProfileData,
+  ProfileUpdateResponse,
+  ErrorResponse,
+} from '../types';
 
 export const getUserProfile = async (): Promise<ProfileData> => {
   try {

@@ -5,11 +5,7 @@ import React, {
   useEffect,
   ReactNode,
 } from 'react';
-
-type ThemeContextType = {
-  darkMode: boolean;
-  toggleDarkMode: () => void;
-};
+import type { ThemeContextType } from '../types';
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 

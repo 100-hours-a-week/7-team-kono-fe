@@ -1,27 +1,7 @@
 import api from './clients';
 import { API_ENDPOINTS } from '../config/apiEndpoints';
 import { LOG } from '../config/constants';
-
-export type OrderType = 'sell' | 'buy';
-
-export interface OrderRequest {
-  ticker: string;
-  orderType: OrderType;
-  orderAmount?: number;
-  orderQuantity?: number;
-}
-
-export interface OrderResponse {
-  id: string;
-  ticker: string;
-  type: OrderType;
-  price: number;
-  quantity: number;
-  total: number;
-  fee?: number;
-  timestamp: string;
-  status: 'pending' | 'completed' | 'failed';
-}
+import type { OrderType, OrderRequest, OrderResponse } from '../types';
 
 export const marketBuy = async (
   ticker: string,

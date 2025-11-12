@@ -8,17 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { formatAmount, formatCurrency } from '../../utils/formatter';
 import { marketBuy, marketSell } from '../../services/trade';
 import { LOG, UI } from '../../config/constants';
-
-interface TradeConfirmModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  ticker: string;
-  amount: number | undefined;
-  price: number | null;
-  quantity: number;
-  tradeType: 'buy' | 'sell';
-  name: string;
-}
+import type { TradeConfirmModalProps } from '../../types';
 
 export default function TradeConfirmModal({
   isOpen,

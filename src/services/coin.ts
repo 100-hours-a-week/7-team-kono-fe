@@ -2,8 +2,6 @@ import api from './clients';
 import { API_ENDPOINTS } from '../config/apiEndpoints';
 import { LOG } from '../config/constants';
 
-export type OrderType = 'buy' | 'sell';
-
 export const getCoinName = async (ticker: string): Promise<string | null> => {
   try {
     const response = await api.get(API_ENDPOINTS.GET_COIN_DETAIL(ticker));

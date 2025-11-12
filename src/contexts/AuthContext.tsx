@@ -9,27 +9,9 @@ import axios from 'axios';
 import api from '../services/clients';
 import { API_ENDPOINTS } from '../config/apiEndpoints';
 import { LOG } from '../config/constants';
+import type { User, AuthContextType } from '../types';
 
 axios.defaults.withCredentials = true;
-
-interface User {
-  id: number;
-  nickname: string;
-  profileImageUrl: string;
-  kakaoId?: number;
-  cashBalance?: number;
-}
-
-interface AuthContextType {
-  user: User | null;
-  loading: boolean;
-  error: string | null;
-  login: () => void;
-  logout: () => void;
-  withdraw: () => void;
-  isAuthenticated: boolean;
-  updateUser: (userData: Partial<User>) => void;
-}
 
 export const AuthContext = createContext<AuthContextType | undefined>(
   undefined,
