@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import KakaoLoginButton from '../assets/images/kakao_login_medium_wide.png';
-import konoLogo from '../assets/kono_logo.svg';
+import konoLogo from '../assets/images/kono_logo.svg';
 import { useAuth } from '../contexts/AuthContext';
 import { LOG } from '../config/constants';
 
