@@ -2,7 +2,6 @@ import { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { IoIosClose } from 'react-icons/io';
-import Header from '../components/layout/Header';
 import { formatAmount } from '../utils/formatter';
 import { getFavoriteList } from '../services/favorite';
 import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
@@ -80,7 +79,6 @@ export default function Favorites() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Header title={t('pages.favorites')} />
       <div className="p-4 sticky top-0 z-10 rounded-full mb-4">
         <div className="relative">
           <input

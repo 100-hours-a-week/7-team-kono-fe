@@ -104,11 +104,11 @@ const router = createBrowserRouter([
             element: <Discover />,
           },
           {
-            path: 'favorite',
+            path: 'favorites',
             element: <Favorite />,
           },
           {
-            path: 'ranking',
+            path: 'rankings',
             element: <Ranking />,
           },
           {
@@ -124,7 +124,7 @@ const router = createBrowserRouter([
             element: <Profile />,
           },
           {
-            path: 'transaction',
+            path: 'transactions',
             element: <Transaction />,
           },
           {

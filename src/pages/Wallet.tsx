@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import Header from '../components/layout/Header';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { FaHistory } from 'react-icons/fa';
 import { ROUTES } from '../config/routes';
 import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
 import { getBalance, getHoldingCoins } from '../services/wallet';
@@ -237,21 +235,8 @@ const Wallet = () => {
     cutout: '70%',
   };
 
-  const goToTransaction = () => {
-    navigate(ROUTES.TRANSACTION);
-  };
-
   return (
     <div className="flex flex-col min-h-screen">
-      <Header
-        title={t('pages.wallet')}
-        rightElement={
-          <button onClick={goToTransaction}>
-            <FaHistory className="mr-1 text-xl text-gray-500 dark:text-white" />
-          </button>
-        }
-      />
-
       <div className="mx-4 mt-4 p-4 bg-white rounded-xl shadow-sm dark:bg-gray-800 dark:text-white border border-gray-200 dark:border-gray-700">
         <div className="text-2xl font-bold">
           {formatCurrency(totalAsset, 'KRW', true, false)}

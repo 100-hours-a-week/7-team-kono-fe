@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import Header from '../components/layout/Header';
 import { ROUTES } from '../config/routes';
 import {
   FaGithub,
@@ -107,8 +106,6 @@ const Settings = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Header title={t('pages.settings')} />
-
       <div className="mx-4 my-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
         <div className="p-4 flex items-center">
           {darkMode ? (

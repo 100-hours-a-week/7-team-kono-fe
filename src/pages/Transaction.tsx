@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { FaFilter } from 'react-icons/fa';
-import Header from '../components/layout/Header';
 import FilterModal, { FilterType } from '../components/modal/FilterModal';
 import { formatDate, formatCurrency } from '../utils/formatter';
 import {
@@ -57,7 +56,6 @@ export default function Transaction() {
   if (loading) {
     return (
       <div className="flex flex-col min-h-screen">
-        <Header title={t('pages.transactions')} />
         <div className="flex-1 flex items-center justify-center">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
         </div>
@@ -68,7 +66,6 @@ export default function Transaction() {
   if (error) {
     return (
       <div className="flex flex-col min-h-screen">
-        <Header title={t('pages.transactions')} />
         <div className="flex-1 flex items-center justify-center p-4">
           <div className="text-center">
             <p className="text-red-500 mb-4">{error}</p>
@@ -95,8 +92,6 @@ export default function Transaction() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Header title={t('pages.transactions')} />
-
       <div className="mx-4 mt-4 bg-white p-4 border-b flex justify-between rounded-t-xl dark:bg-gray-800 dark:text-white dark:border-gray-700">
         <div className="flex items-center">
           <span className="text-sm text-gray-500 mr-2">

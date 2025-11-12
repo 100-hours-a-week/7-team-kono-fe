@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import Header from '../components/layout/Header';
 import {
   getRanksAllMe,
   getRanksDaily,
@@ -116,7 +115,6 @@ export default function Ranking() {
   if (isLoading && currentRanks.length === 0) {
     return (
       <div className="flex flex-col min-h-screen">
-        <Header title={t('pages.rankings')} />
         <div className="flex-1 flex items-center justify-center">
           <div className="text-gray-500">{t('common.loading')}</div>
         </div>
@@ -126,8 +124,6 @@ export default function Ranking() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Header title={t('pages.rankings')} />
-
       <div className="mx-4 mt-4 flex border-b bg-white sticky top-0 z-10 rounded-t-xl dark:bg-gray-800 dark:text-white dark:border-gray-700">
         {(['daily', 'all'] as RankingPeriod[]).map((period) => (
           <button

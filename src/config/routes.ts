@@ -17,10 +17,10 @@ export const ROUTES = {
   },
 
   WALLET: '/wallet',
-  TRANSACTION: '/transaction',
+  TRANSACTION: '/transactions',
   DISCOVER: '/discover',
-  FAVORITE: '/favorite',
-  RANKING: '/ranking',
+  FAVORITE: '/favorites',
+  RANKING: '/rankings',
   SETTINGS: '/settings',
 };
 

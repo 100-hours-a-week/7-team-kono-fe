@@ -2,7 +2,6 @@ import { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { IoIosClose } from 'react-icons/io';
-import Header from '../components/layout/Header';
 import useUpbitWebSocket from '../hooks/useUpbitWebSocket';
 import { formatAmount } from '../utils/formatter';
 import { getCoins } from '../services/coin';
@@ -126,8 +125,6 @@ export default function Discover() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Header title={t('pages.discover')} />
-
       <SearchBar
         searchTerm={searchTerm}
         onSearch={handleSearch}

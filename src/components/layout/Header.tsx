@@ -1,18 +1,95 @@
 import { IoIosArrowBack } from 'react-icons/io';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { FaHistory } from 'react-icons/fa';
+import { ROUTES } from '../../config/routes';
 
-interface HeaderProps {
+export interface HeaderOverride {
   title?: string;
   rightElement?: React.ReactNode;
   centerTitle?: boolean;
 }
 
-const Header: React.FC<HeaderProps> = ({
-  title,
-  rightElement,
-  centerTitle = true,
-}) => {
+interface HeaderProps {
+  override?: HeaderOverride;
+}
+
+const Header: React.FC<HeaderProps> = ({ override }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { t } = useTranslation();
+
+  // Route-based configuration
+  const getHeaderConfig = () => {
+    // If override is provided, use it
+    if (override) {
+      return {
+        title: override.title || '',
+        rightElement: override.rightElement || null,
+        centerTitle:
+          override.centerTitle !== undefined ? override.centerTitle : true,
+      };
+    }
+
+    const path = location.pathname;
+
+    // Wallet page with history button
+    if (path === '/wallet') {
+      return {
+        title: t('pages.wallet'),
+        rightElement: (
+          <button onClick={() => navigate(ROUTES.TRANSACTION)}>
+            <FaHistory className="mr-1 text-xl text-gray-500 dark:text-white" />
+          </button>
+        ),
+        centerTitle: true,
+      };
+    }
+
+    // Map routes to titles
+    const routeMap: Record<string, string> = {
+      '/discover': 'pages.discover',
+      '/favorites': 'pages.favorites',
+      '/rankings': 'pages.rankings',
+      '/settings': 'pages.settings',
+      '/profile': 'pages.profile',
+      '/transactions': 'pages.transactions',
+    };
+
+    if (routeMap[path]) {
+      return {
+        title: t(routeMap[path]),
+        rightElement: null,
+        centerTitle: true,
+      };
+    }
+
+    // Dynamic routes - these will be overridden by pages with specific content
+    if (path.startsWith('/coins/')) {
+      return {
+        title: '', // Will be overridden with coin name
+        rightElement: null,
+        centerTitle: true,
+      };
+    }
+
+    if (path.startsWith('/trade/')) {
+      return {
+        title: t('pages.trade'),
+        rightElement: null,
+        centerTitle: true,
+      };
+    }
+
+    return {
+      title: '',
+      rightElement: null,
+      centerTitle: true,
+    };
+  };
+
+  const { title, rightElement, centerTitle } = getHeaderConfig();
+
   return (
     <header className="w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700 dark:text-white sticky top-0 z-30">
       {/* Inner container - max width constraint */}
@@ -38,7 +115,7 @@ const Header: React.FC<HeaderProps> = ({
           </h1>
         )}
 
-        {/* Right spacing */}
+        {/* Right element */}
         <div className="w-10 h-10 flex items-center justify-center">
           {rightElement}
         </div>
