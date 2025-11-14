@@ -124,7 +124,7 @@ export default function Discover() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col h-full bg-white dark:bg-gray-950">
       <SearchBar
         searchTerm={searchTerm}
         onSearch={handleSearch}
@@ -161,7 +161,7 @@ function SearchBar({
         <input
           type="text"
           placeholder={placeholder}
-          className="w-full p-3 bg-white dark:bg-gray-800 rounded-full px-6"
+          className="w-full p-3 bg-gray-200 dark:bg-gray-800 rounded-full px-6"
           value={searchTerm}
           onChange={onSearch}
         />
@@ -170,7 +170,7 @@ function SearchBar({
             className="absolute right-3 top-1/2 transform -translate-y-1/2 "
             onClick={onClear}
           >
-            <IoIosClose className="text-2xl bg-gray-800" />
+            <IoIosClose className="text-2xl text-gray-700" />
           </button>
         )}
       </div>

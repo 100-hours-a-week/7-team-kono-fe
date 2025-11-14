@@ -36,7 +36,7 @@ const Layout: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex flex-col min-h-screen max-w-[430px] w-full mx-auto relative overflow-y-auto bg-white dark:bg-gray-900 text-mainText dark:text-white justify-center items-center">
+      <div className="flex flex-col max-w-[430px] w-full mx-auto relative overflow-y-auto bg-white dark:bg-gray-900 text-mainText dark:text-white justify-center items-center">
         <div className="text-center">
           <p className="mb-2">{t('common.loading')}</p>
         </div>
@@ -78,7 +78,7 @@ const Layout: React.FC = () => {
   );
 
   return (
-    <div className="flex flex-col w-full max-w-[430px] mx-auto bg-white dark:bg-gray-900 text-mainText dark:text-white">
+    <div className="flex flex-col w-full h-full max-w-[430px] mx-auto bg-white dark:bg-gray-900 text-mainText dark:text-white">
       {!hasCustomHeader && <Header />}
       <main className="flex-1 w-full">
         <Outlet />

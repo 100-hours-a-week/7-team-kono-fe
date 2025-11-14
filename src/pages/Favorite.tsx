@@ -78,13 +78,13 @@ export default function Favorites() {
   );
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col h-full bg-white dark:bg-gray-950">
       <div className="p-4 z-10 rounded-full">
         <div className="relative">
           <input
             type="text"
             placeholder={t('favorites.searchPlaceholder')}
-            className="w-full p-3 bg-white dark:bg-gray-800 rounded-full px-6 dark:text-white"
+            className="w-full p-3 bg-gray-200 dark:bg-gray-800 rounded-full px-6 dark:text-white"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -93,7 +93,7 @@ export default function Favorites() {
               className="absolute right-3 top-1/2 transform -translate-y-1/2"
               onClick={() => setSearchTerm('')}
             >
-              <IoIosClose className="text-2xl" />
+              <IoIosClose className="text-2xl text-gray-700" />
             </button>
           )}
         </div>

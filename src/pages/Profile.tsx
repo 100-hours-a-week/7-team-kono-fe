@@ -164,7 +164,7 @@ const Profile: React.FC = () => {
   const displayProfile = profile || dummyProfile;
 
   return (
-    <div className="p-4 max-w-md mx-auto">
+    <div className="p-4 max-w-md mx-auto h-full bg-white dark:bg-gray-950">
       {error && (
         <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
           <p className="text-center">{t('profile.errorLoading')}</p>

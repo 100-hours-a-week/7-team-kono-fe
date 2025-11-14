@@ -236,7 +236,7 @@ const Wallet = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col h-full bg-white dark:bg-gray-950">
       <div className="mx-4 mt-4 p-4 bg-white rounded-xl shadow-sm dark:bg-gray-800 dark:text-white border border-gray-200 dark:border-gray-700">
         <div className="text-2xl font-bold">
           {formatCurrency(totalAsset, 'KRW', true, false)}

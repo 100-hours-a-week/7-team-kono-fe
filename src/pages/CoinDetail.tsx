@@ -156,7 +156,7 @@ export default function CoinDetail() {
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col h-full bg-white dark:bg-gray-950">
       <Header
         title={coin.name}
         rightElement={
@@ -215,7 +215,10 @@ export default function CoinDetail() {
         </div>
       )}
 
-      <div className="fixed bottom-16 left-0 right-0 max-w-[430px] mx-auto p-4 bg-white dark:bg-gray-900">
+      {/* Button space */}
+      <div className="h-16"></div>
+
+      <div className="fixed bottom-16 left-0 right-0 max-w-[430px] mx-auto px-4 py-2 backdrop-blur-lg bg-gradient-to-t from-white/80 via-white/40 to-transparent dark:from-gray-950/80 dark:via-gray-950/40 dark:to-transparent">
         <div className="flex space-x-4">
           <button
             className="flex-1 py-3 bg-red-500 text-white rounded-xl font-medium"

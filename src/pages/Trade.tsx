@@ -229,7 +229,7 @@ export default function Trade() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col h-full bg-white dark:bg-gray-950">
       <Header centerTitle={false} />
 
       <div className="p-4 border-b dark:bg-gray-800 dark:text-white dark:border-gray-700">

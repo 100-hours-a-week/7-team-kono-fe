@@ -123,8 +123,8 @@ export default function Ranking() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <div className="mx-4 mt-4 flex border-b bg-white sticky top-0 z-10 rounded-t-xl dark:bg-gray-800 dark:text-white dark:border-gray-700">
+    <div className="flex flex-col h-full bg-white dark:bg-gray-950">
+      <div className="mx-4 mt-4 flex border-b sticky top-0 z-10 rounded-t-xl dark:bg-gray-800 dark:text-white dark:border-gray-700">
         {(['daily', 'all'] as RankingPeriod[]).map((period) => (
           <button
             key={period}

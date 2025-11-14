@@ -105,7 +105,7 @@ const Settings = () => {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col bg-white dark:bg-gray-950">
       <div className="mx-4 my-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
         <div className="p-4 flex items-center">
           {darkMode ? (
