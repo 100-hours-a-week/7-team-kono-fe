@@ -277,17 +277,7 @@ export default function Ranking() {
           <div
             key={user.rank}
             ref={user === currentMyRank ? myUserRef : null}
-            className={`flex items-center p-4 border-b dark:border-gray-700 ${
-              user === currentMyRank
-                ? `${
-                    myUserSticky === 'top'
-                      ? 'sticky top-0 z-10 bg-blue-50 dark:bg-blue-900'
-                      : myUserSticky === 'bottom'
-                        ? 'sticky bottom-0 z-10 bg-blue-50 dark:bg-blue-900'
-                        : ''
-                  }`
-                : ''
-            }`}
+            className="flex items-center p-4 border-b dark:border-gray-700 last:border-b-0"
           >
             <div className="w-8 text-center font-bold mr-4">{user.rank}</div>
             <LazyLoadImage

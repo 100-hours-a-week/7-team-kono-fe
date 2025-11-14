@@ -76,7 +76,7 @@ export default function TradeConfirmModal({
   };
 
   return (
-    <>
+    <div>
       <Transition.Root show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-50" onClose={onClose}>
           <Transition.Child
@@ -104,7 +104,7 @@ export default function TradeConfirmModal({
               >
                 <Dialog.Panel
                   ref={panelRef}
-                  className="relative w-full max-w-[410px] transform bg-white rounded-t-3xl transition-all mx-auto overflow-hidden dark:bg-gray-800 dark:text-white"
+                  className="relative w-full max-w-[400px] transform bg-white rounded-t-3xl transition-all dark:bg-gray-800 dark:text-white"
                 >
                   {/* Close button */}
                   <button
@@ -115,7 +115,7 @@ export default function TradeConfirmModal({
                   </button>
 
                   {/* Scrollable content area */}
-                  <div className="max-h-[80vh] overflow-y-auto">
+                  <div className="max-h-[80vh]">
                     <div className="px-6 pb-8">
                       <div className="text-center my-8">
                         <Dialog.Title
@@ -221,6 +221,6 @@ export default function TradeConfirmModal({
         }
         onClose={() => setShowToast(false)}
       />
-    </>
+    </div>
   );
 }

@@ -105,20 +105,20 @@ const Settings = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col">
       <div className="mx-4 my-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
         <div className="p-4 flex items-center">
           {darkMode ? (
-            <FaMoon className="text-gray-500 dark:text-gray-400 text-xl mr-3" />
+            <FaMoon className="text-gray-500 dark:text-gray-400 text-xl mr-2" />
           ) : (
-            <FaSun className="text-gray-500 dark:text-gray-400 text-xl mr-3" />
+            <FaSun className="text-gray-500 dark:text-gray-400 text-xl mr-2" />
           )}
           <span className="flex-1">{t('settings.darkMode')}</span>
           <DarkModeToggle />
         </div>
       </div>
 
-      <div className="mx-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm mb-4 border border-gray-200 dark:border-gray-700">
+      <div className="mx-4 mb-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm  border border-gray-200 dark:border-gray-700">
         <button
           onClick={() => navigate('/profile')}
           className="w-full text-left p-4 flex items-center"
@@ -183,7 +183,7 @@ const Settings = () => {
         </button>
       </div>
 
-      <div className="mx-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm mb-4 border border-gray-200 dark:border-gray-700">
+      <div className="mx-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
         <button
           onClick={handleDeleteAccount}
           className="flex items-center w-full text-left p-4 text-red-500"
@@ -226,7 +226,7 @@ const Settings = () => {
         </div>
       </Modal>
 
-      <div className="mt-auto p-4 text-center text-xs text-gray-500 dark:text-gray-400">
+      <div className=" p-4 text-center text-xs text-gray-500 dark:text-gray-400">
         <p>© 2025 KONO. All rights reserved.</p>
         <p className="mt-1">Made with full heart by Team Secret JuJu</p>
       </div>

@@ -86,10 +86,6 @@ export default function Transaction() {
     setShowFilterModal(false);
   };
 
-  const goToCoinDetail = (ticker: string) => {
-    navigate(`/coins/${ticker}`);
-  };
-
   return (
     <div className="flex flex-col min-h-screen">
       <div className="mx-4 mt-4 bg-white p-4 border-b flex justify-between rounded-t-xl dark:bg-gray-800 dark:text-white dark:border-gray-700">
@@ -110,7 +106,6 @@ export default function Transaction() {
             <div
               key={transaction.transactionId}
               className="p-4 border-b bg-white dark:bg-gray-800 dark:text-white dark:border-gray-700"
-              onClick={() => goToCoinDetail(transaction.ticker)}
             >
               <div className="flex justify-between items-start mb-2">
                 <div className="flex items-center">

@@ -72,13 +72,15 @@ const Layout: React.FC = () => {
     );
   }
 
+  const customHeaderRoutes = ['/coins/'];
+  const hasCustomHeader = customHeaderRoutes.some((route) =>
+    location.pathname.startsWith(route),
+  );
+
   return (
-    <div className="flex flex-col justify-center min-h-screen w-full bg-white dark:bg-gray-900 text-mainText dark:text-white">
-      <Header />
-      <main
-        className="flex-1 w-full mx-auto py-16"
-        style={{ maxWidth: '430px' }}
-      >
+    <div className="flex flex-col w-full max-w-[430px] mx-auto bg-white dark:bg-gray-900 text-mainText dark:text-white">
+      {!hasCustomHeader && <Header />}
+      <main className="flex-1 w-full">
         <Outlet />
       </main>
       <BottomNavigation />

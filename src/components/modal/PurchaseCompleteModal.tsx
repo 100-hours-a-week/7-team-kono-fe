@@ -54,7 +54,7 @@ export default function PurchaseCompleteModal({
               leaveFrom="opacity-100 translate-y-0"
               leaveTo="opacity-0 translate-y-full"
             >
-              <Dialog.Panel className="relative w-full max-w-[410px] bg-white rounded-t-3xl mx-auto dark:bg-gray-800 dark:text-white">
+              <Dialog.Panel className="relative w-full max-w-[400px] bg-white rounded-t-3xl mx-auto dark:bg-gray-800 dark:text-white">
                 <button
                   onClick={onClose}
                   className="absolute right-4 top-4 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"

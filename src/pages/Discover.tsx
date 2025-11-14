@@ -156,21 +156,21 @@ function SearchBar({
   placeholder: string;
 }) {
   return (
-    <div className="p-4 sticky top-0 z-10 rounded-xl mb-4">
+    <div className="p-4 z-10 rounded-xl">
       <div className="relative">
         <input
           type="text"
           placeholder={placeholder}
-          className="w-full p-3 bg-gray-100 dark:bg-gray-800 rounded-full px-6"
+          className="w-full p-3 bg-white dark:bg-gray-800 rounded-full px-6"
           value={searchTerm}
           onChange={onSearch}
         />
         {searchTerm && (
           <button
-            className="absolute right-3 top-1/2 transform -translate-y-1/2"
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 "
             onClick={onClear}
           >
-            <IoIosClose className="text-2xl" />
+            <IoIosClose className="text-2xl bg-gray-800" />
           </button>
         )}
       </div>
@@ -201,7 +201,7 @@ function SortTabs({
   };
 
   return (
-    <div className="flex mx-4 border-b bg-white sticky top-[116px] z-10 rounded-t-xl shadow-sm dark:bg-gray-800 dark:text-white dark:border-gray-700">
+    <div className="flex mx-4 border-b bg-white top-[116px] z-10 rounded-t-xl shadow-sm dark:bg-gray-800 dark:text-white dark:border-gray-700">
       {SORT_TYPES.map((tab) => (
         <button
           key={tab}

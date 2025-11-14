@@ -33,7 +33,7 @@ const Chart = memo(({ ticker }: { ticker: string }) => {
   const symbol = `UPBIT:${ticker}KRW`;
 
   return (
-    <div className="w-full h-[400px] border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
+    <div className="w-full h-[400px] bg-gray-50 dark:bg-gray-800">
       <TradingViewWidget symbol={symbol} />
     </div>
   );
@@ -128,7 +128,7 @@ export default function CoinDetail() {
       <div className="flex flex-col min-h-screen">
         <Header title={t('common.loading')} />
         <div className="flex-1 flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 dark:border-blue-400"></div>
+          <div className="animate-spin rounded-full h-12 w-12"></div>
         </div>
       </div>
     );
@@ -156,8 +156,7 @@ export default function CoinDetail() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
-      {/* Header */}
+    <div className="flex flex-col">
       <Header
         title={coin.name}
         rightElement={
@@ -169,17 +168,6 @@ export default function CoinDetail() {
             )}
           </button>
         }
-      />
-      {/* Google Analytics Script */}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'YOUR-GA-ID');
-          `,
-        }}
       />
 
       <PriceInfo
@@ -227,7 +215,7 @@ export default function CoinDetail() {
         </div>
       )}
 
-      <div className="p-4 mt-auto">
+      <div className="fixed bottom-16 left-0 right-0 max-w-[430px] mx-auto p-4 bg-white dark:bg-gray-900">
         <div className="flex space-x-4">
           <button
             className="flex-1 py-3 bg-red-500 text-white rounded-xl font-medium"

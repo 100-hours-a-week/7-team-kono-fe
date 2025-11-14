@@ -79,12 +79,12 @@ export default function Favorites() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <div className="p-4 sticky top-0 z-10 rounded-full mb-4">
+      <div className="p-4 z-10 rounded-full">
         <div className="relative">
           <input
             type="text"
             placeholder={t('favorites.searchPlaceholder')}
-            className="w-full p-3 bg-gray-100 dark:bg-gray-800 rounded-full px-6 dark:text-white"
+            className="w-full p-3 bg-white dark:bg-gray-800 rounded-full px-6 dark:text-white"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />

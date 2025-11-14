@@ -14,7 +14,7 @@ const PriceInfo = memo(({ symbol, tickerData, name }: PriceInfoProps) => {
 
   if (!tickerData || !tickerData[`KRW-${symbol}`]) {
     return (
-      <div className="p-4 border-b flex items-center justify-center h-24 dark:bg-gray-800 dark:text-white dark:border-gray-700">
+      <div className="p-4 flex items-center justify-center h-24 ">
         <div className="text-center text-gray-500 dark:text-gray-400">
           {t('common.loading')}
         </div>
@@ -34,7 +34,7 @@ const PriceInfo = memo(({ symbol, tickerData, name }: PriceInfoProps) => {
         : 'text-gray-500 dark:text-gray-400';
 
   return (
-    <div className="p-4 border-b dark:bg-gray-800 dark:text-white dark:border-gray-700">
+    <div className="p-4 dark:bg-gray-800 dark:text-white">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center">
           <img

@@ -243,15 +243,6 @@ const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({
           ></div>
         </div>
       </div>
-
-      {/* Logo overlay to hide TradingView branding */}
-      <div
-        className="absolute bottom-0 right-0 w-20 h-20 z-10"
-        style={{
-          background: darkMode ? '#1e293b' : '#ffffff',
-          borderTopLeftRadius: '8px',
-        }}
-      />
     </div>
   );
 };

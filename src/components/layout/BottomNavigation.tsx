@@ -70,7 +70,7 @@ const BottomNavigation: React.FC = () => {
   };
 
   return (
-    <footer className="fixed bottom-0 left-0 right-0 max-w-[430px] w-full mx-auto backdrop-blur-md bg-white/70 dark:bg-black/40 border-t border-gray-200/30 dark:border-gray-700/30 z-10">
+    <footer className="sticky bottom-0 left-0 right-0 max-w-[430px] w-full mx-auto backdrop-blur-md bg-white/70 dark:bg-black/40 z-10">
       <nav className="max-w-[430px] mx-auto">
         <ul className="flex h-16 w-full">
           <NavItem

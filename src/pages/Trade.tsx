@@ -230,10 +230,7 @@ export default function Trade() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Header
-        title={type === 'buy' ? t('trade.buying') : t('trade.selling')}
-        centerTitle={false}
-      />
+      <Header centerTitle={false} />
 
       <div className="p-4 border-b dark:bg-gray-800 dark:text-white dark:border-gray-700">
         <div className="flex items-center mb-4">
@@ -340,7 +337,7 @@ export default function Trade() {
         </div>
       </div>
 
-      <div className="p-4 border-b dark:bg-gray-800 dark:text-white dark:border-gray-700">
+      <div className="p-4 dark:bg-gray-800 dark:text-white">
         <div className="flex justify-between items-center">
           <div className="text-sm text-gray-500 dark:text-gray-400">
             {t('trade.total')}
